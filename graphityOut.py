@@ -3,9 +3,10 @@
 import sys 	
 import os 
 import py2neo
+from pydotplus.graphviz import Node
 import networkx as nx
 import numpy as np
-from graphityUtils import gimmeDatApiName, getAllAttributes
+from graphityUtils import gimmeDatApiName, getAllAttributes, stringScore
 
 
 # TODO update this parser
@@ -83,6 +84,9 @@ def toNeo(graphity, mySha1, myFileSize, myBinType):
 def fromNeo():
 	pass
 	
+
+# TODO add sqlite interface, just for fun
+
 
 # print functions, their APIs and strings to the commandline, enhancements needed
 def printGraph(graphity):
@@ -216,7 +220,17 @@ def printGraphInfo(graphity, debug):
 	
 	print "Found %d calls to GetProcAddress\n." % gpaCount
 	
+	# Strings w/o associated node, evaluated
+	#for item in debug['stringsNoRef']:
+	#	print stringScore(item), ";", item
+	#	
+	#for item in debug['stringsDangling']:
+	#	print stringScore(item), ";", item
+	
+	# Finding: > 0.04 makes sense
+	
 	# TODO number of nodes w strings/apis vs. nodes w/o
+	
 	
 	
 # Graph plotting with pydotplus from within NetworkX, format is dot 
@@ -224,7 +238,7 @@ def plotSeGraph(graphity):
 
 	pydotMe = nx.drawing.nx_pydot.to_pydot(graphity)
 	for node in pydotMe.get_nodes():
-		
+	
 		finalString = ''
 		if node.get('calls') != '[]' or node.get('strings') != '[]':
 
@@ -264,8 +278,18 @@ def plotSeGraph(graphity):
 			node.set_fillcolor('lightpink1')
 			node.set_style('filled,setlinewidth(3.0)')
 			node.set_label(finalString)
-
-	# TODO add info about sample to graph
+	
+	
+	allAtts = getAllAttributes(sys.argv[1])
+	graphinfo = "SAMPLE " + allAtts['filename'] + "\nType: " + allAtts['filetype'] + "\nSize: " + str(allAtts['filesize']) + "\nMD5: " + allAtts['md5'] + "\nImphash:\t\t" + allAtts['imphash'] + "\nCompilation time:\t" + allAtts['compilationts'] + "\nEntrypoint section:\t" + allAtts['sectionep'] 
+	
+	titleNode = Node()
+	titleNode.set_label(graphinfo)
+	titleNode.set_shape('rectangle')
+	titleNode.set_fillcolor('red')
+	titleNode.set_style('filled')
+	pydotMe.add_node(titleNode)
+	
 	graphname = os.path.basename(sys.argv[1]) + ".png"
 	try:
 		# TODO pydotplus throws an error sometimes (Error: /tmp/tmp6XgKth: syntax error in line 92 near '[') look into pdp code to see why

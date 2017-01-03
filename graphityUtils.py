@@ -11,25 +11,21 @@ import math
 # returns the sole API name
 
 def gimmeDatApiName(wholeString):
-	# TODO do something smarter here one day.. 
-	if '.dll_' in wholeString:
-		apiName = wholeString.split('.dll_')[1].replace(']','')
-		return apiName
-	elif '.DLL_' in wholeString:
-		apiName = wholeString.split('.DLL_')[1].replace(']','')
-		return apiName
-	elif '.SYS_' in wholeString:
-		apiName = wholeString.split('.SYS_')[1].replace(']','')
-		return apiName
-	elif '.exe_' in wholeString:
-		apiName = wholeString.split('.exe_')[1].replace(']','')
-		return apiName
-	elif 'sym._' in wholeString:
-		apiName = wholeString.split('sym._')[1].replace(']','')
-		return apiName
-	else:
-		print "DAT API STRING was malformed or something, pls check %s" % wholeString
-		return wholeString
+	
+	separators = ['.dll_', '.sys_', '.exe_', '.sym_']
+
+	for sep in separators:
+
+		if sep in wholeString:
+			apiName = wholeString.split(sep)[1].replace(']','')
+			return apiName
+
+		elif sep.upper() in wholeString:
+			apiName = wholeString.split(sep.upper())[1].replace(']','')
+			return apiName
+	
+	return wholeString	
+
 
 # checks whether a string is pure ascii
 
@@ -39,6 +35,67 @@ def is_ascii(myString):
 		return True
 	except UnicodeDecodeError:
 		return False
+		
+# String evaluation		
+
+def stringScore(seString):
+
+	# english language character frequencies
+	freqs = {
+		'a': 0.0651738,
+		'b': 0.0124248,
+		'c': 0.0217339,
+		'd': 0.0349835,
+		'e': 0.1041442,
+		'f': 0.0197881,
+		'g': 0.0158610,
+		'h': 0.0492888,
+		'i': 0.0558094,
+		'j': 0.0109033,
+		'k': 0.0150529,
+		'l': 0.0331490,
+		'm': 0.0202124,
+		'n': 0.0564513,
+		'o': 0.0596302,
+		'p': 0.0137645,
+		'q': 0.0058606,
+		'r': 0.0497563,
+		's': 0.0515760,
+		't': 0.0729357,
+		'u': 0.0225134,
+		'v': 0.0182903,
+		'w': 0.0271272,
+		'x': 0.0013692,
+		'y': 0.0145984,
+		'z': 0.0017836,
+		' ': 0.0500000,
+		'0': 0.0500000,
+		'1': 0.0500000,
+		'2': 0.0500000,
+		'3': 0.0500000,
+		'4': 0.0500000,
+		'5': 0.0500000,
+		'6': 0.0500000,
+		'7': 0.0500000,
+		'8': 0.0500000,
+		'9': 0.0500000,
+		'.': 0.0400000,
+		'_': 0.0400000
+	}
+
+	score = 0
+	
+	for i in seString:
+		ch = i.lower()
+		if ch in freqs:
+			score += freqs[ch]
+	
+	if len(seString) > 15:
+		return score / float(len(seString)/2)
+ 
+	return score / float(len(seString))
+
+
 
 # SAMPLE ATTRIBUTE GETTERS
 
