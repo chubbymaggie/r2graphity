@@ -232,6 +232,55 @@ def printGraphInfo(graphity, debug):
 	# TODO number of nodes w strings/apis vs. nodes w/o
 	
 	
+def dumpGraphInfoCsv(graphity, debug, csvfile):
+	
+	# 	filename, filetype, filesize, md5, compilationtime, addressep, sectionep, tlssections, originalfilename, sectioncount, sectiondata, functionstotal, refslocal, refsglobalvar, refsunknown, apitotal, apimisses, stringsreferenced, stringsdangling, stringsnoref
+
+	final = []
+	allAtts = getAllAttributes(sys.argv[1])
+	if os.path.isfile(csvfile):
+		dumpfile = open(csvfile, 'a')
+	else:
+		try:
+			dumpfile = open(csvfile, 'w')
+			dumpfile.write("filename;filetype;filesize;md5;imphash;compilationtime;addressep;sectionep;tlssections;originalfilename;sectioncount;secname1;secname2;secname3;secname4;secname5;secname6;secsize1;secsize2;secsize3;secsize4;secsize5;secsize6;secent1;secent2;secent3;secent4;secent5;secent6;functionstotal;refslocal;refsglobalvar;refsunknown;apitotal;apimisses;stringsreferenced;stringsdangling;stringsnoref")
+			dumpfile.write("\n")
+		except:
+			print "ERROR couldn't create the csv dump file"
+			return
+	
+
+	final.append(allAtts['filename'])
+	final.append(allAtts['filetype'].replace(',',''))
+	final.append(str(allAtts['filesize']))
+	final.append(allAtts['md5'])
+	final.append(allAtts['imphash'])
+	final.append(allAtts['compilationts']) 
+	final.append(hex(allAtts['addressep']))
+	final.append(allAtts['sectionep'])
+	final.append(str(allAtts['tlssections']))
+	final.append(allAtts['originalfilename'])
+	final.append(str(allAtts['sectioncount']))
+	
+	secStuff = allAtts['sectioninfo'][:6] + allAtts['sectioninfo'][12:18] + allAtts['sectioninfo'][24:30]
+	final = final + secStuff
+	#print ";".join(map(str, secStuff)) + ";"
+
+	final.append(debug['functions'])
+	final.append(debug['refsFunctions'])
+	final.append(debug['refsGlobalVar'])
+	final.append(debug['refsUnrecognized'])
+	final.append(debug['apiTotal'])
+	final.append(debug['apiMisses'])
+	final.append(debug['stringsReferencedTotal'])
+	final.append(debug['stringsDanglingTotal'])
+	final.append(debug['stringsNoRefTotal'])
+	
+	theline = ";".join(map(str, final)) + "\n"
+	
+	dumpfile.write(theline)
+	dumpfile.close()
+	
 	
 # Graph plotting with pydotplus from within NetworkX, format is dot 
 def plotSeGraph(graphity):
@@ -273,8 +322,8 @@ def plotSeGraph(graphity):
 			node.set_label(label)
 		
 		elif finalString != '':
-			# TODO add address of node as title
-			# finalString = str(node) + '\n' + finalString
+			nodeaddr = node.to_string().split()[0]			# dirrty hack ^^
+			finalString = nodeaddr + "\n" + finalString
 			node.set_fillcolor('lightpink1')
 			node.set_style('filled,setlinewidth(3.0)')
 			node.set_label(finalString)

@@ -96,6 +96,19 @@ def stringScore(seString):
 	return score / float(len(seString))
 
 
+# Check for PE header, return false if not a PE
+def check_pe_header(filepath):
+	try:
+		pe = pefile.PE(filepath)
+		if (pe.DOS_HEADER.e_magic == int(0x5a4d) and pe.NT_HEADERS.Signature == int(0x4550)):
+			return True
+	except (pefile.PEFormatError):
+		return False
+	except(Exception) as e:
+		print("LOG - PE Parsing Error: %s - %s" % (str(e), filepath))
+		return False
+	return False
+	
 
 # SAMPLE ATTRIBUTE GETTERS
 

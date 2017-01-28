@@ -10,8 +10,8 @@ from time import time
 from datetime import datetime
 from argparse import ArgumentParser
 from base64 import b64decode
-from graphityOut import toNeo, fromNeo, printGraph, printGraphInfo, plotSeGraph
-from graphityUtils import gimmeDatApiName, sha1hash, getAllAttributes, is_ascii, Hvalue
+from graphityOut import toNeo, fromNeo, printGraph, printGraphInfo, plotSeGraph, dumpGraphInfoCsv
+from graphityUtils import gimmeDatApiName, sha1hash, getAllAttributes, is_ascii, Hvalue, check_pe_header
 import graphityFunc
 
 
@@ -530,17 +530,18 @@ if __name__ == '__main__':
 	
 	parser = ArgumentParser()
 	parser.add_argument("input", help="Tool requires an input file, batch processing not yet implemented")
-	parser.add_argument("-a", "--all", action="store_true", help="Perform all analysis options - graph creation, printing the graph, printing the graph info, plotting, behavior scanning and Neo4j parsing")
+	#parser.add_argument("-a", "--all", action="store_true", help="Perform all analysis options - graph creation, printing the graph, printing the graph info, plotting, behavior scanning and Neo4j parsing")
 	parser.add_argument("-p", "--printing", action="store_true", help="Print the graph as text, as in, nodes with respective content")
 	parser.add_argument("-i", "--info", action="store_true", help="Print info and stats of the graph")
 	parser.add_argument("-l", "--plotting", action="store_true", help="Plotting the graph via pyplot")
 	parser.add_argument("-b", "--behavior", action="store_true", help="Scan for behaviors listed in graphityFunc.py")
 	parser.add_argument("-n", "--neodump", action="store_true", help="Dump graph to Neo4j (configured to flush previous data from Neo, might wanna change that)") 
+	parser.add_argument("-c", "--csvdump", help="Dump info data to a given csv file, appends a line per sample")
 	
 	args = parser.parse_args()
 	
 	
-	if args.input:
+	if args.input and check_pe_header(input):
 	
 		R2PY = r2pipe.open(args.input)
 	
@@ -630,27 +631,37 @@ if __name__ == '__main__':
 					if not False in hit['patterns'].values():
 						print "For %s found %s" % (patty, str(hit['patterns']))
 			bench['behavior_end'] = time()
+			
+		if args.csvdump:
+			# CSVDUMP
+			print '* %s Dumping graph info to indicated csv file ' % str(datetime.now())
+			bench['csv_start'] = time()
+			dumpGraphInfoCsv(graphity, debug, args.csvdump)
+			bench['csv_end'] = time()
 							
 			# TODO calculate dispersion for 2-n anchor addresses	
 			# TODO handling of LoadLib/GetPAddr. for "hiding something" question, follow GetProc return value
+			
 	
-	print '* %s Stuffs all finished ' % str(datetime.now())
+		print '* %s Stuffs all finished ' % str(datetime.now())
 	
-	# TIME
-	print "\n__..--*** I WANNA BE A BENCHMARK WHEN I GROW UP ***--..__"
-	print "__ %5f R2 Analysis" % (bench['r2_end'] - bench['r2_start'])
-	print "__ %5f Graph construction" % (bench['graph_end'] - bench['r2_end'])
+		# TIME
+		print "\n__..--*** I WANNA BE A BENCHMARK WHEN I GROW UP ***--..__"
+		print "__ %5f R2 Analysis" % (bench['r2_end'] - bench['r2_start'])
+		print "__ %5f Graph construction" % (bench['graph_end'] - bench['r2_end'])
 	
-	if 'printing_start' in bench:
-		print "__ %5f Printing" % (bench['printing_end'] - bench['printing_start'])
-	if 'info_start' in bench:
-		print "__ %5f Info" % (bench['info_end'] - bench['info_start'])
-	if 'plotting_start' in bench:
-		print "__ %5f Plotting" % (bench['plotting_end'] - bench['plotting_start'])
-	if 'behavior_start' in bench:
-		print "__ %5f Behavior" % (bench['behavior_end'] - bench['behavior_start'])
-	if 'neo_start' in bench:
-		print "__ %5f Neo4j" % (bench['neo_end'] - bench['neo_start'])
+		if 'printing_start' in bench:
+			print "__ %5f Printing" % (bench['printing_end'] - bench['printing_start'])
+		if 'info_start' in bench:
+			print "__ %5f Info" % (bench['info_end'] - bench['info_start'])
+		if 'plotting_start' in bench:
+			print "__ %5f Plotting" % (bench['plotting_end'] - bench['plotting_start'])
+		if 'behavior_start' in bench:
+			print "__ %5f Behavior" % (bench['behavior_end'] - bench['behavior_start'])
+		if 'neo_start' in bench:
+			print "__ %5f Neo4j" % (bench['neo_end'] - bench['neo_start'])
+		if 'csv_start' in bench:
+			print "__ %5f CSV dump" % (bench['csv_end'] - bench['csv_start'])
 	
 	
 	
