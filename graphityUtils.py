@@ -105,7 +105,7 @@ def check_pe_header(filepath):
 	except (pefile.PEFormatError):
 		return False
 	except(Exception) as e:
-		print("LOG - PE Parsing Error: %s - %s" % (str(e), filepath))
+		print("LOG - PE Parsing Error, sure this is a PE file?")
 		return False
 	return False
 	

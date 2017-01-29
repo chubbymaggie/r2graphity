@@ -541,7 +541,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	
 	
-	if args.input and check_pe_header(input):
+	if args.input and check_pe_header(args.input):
 	
 		R2PY = r2pipe.open(args.input)
 	
