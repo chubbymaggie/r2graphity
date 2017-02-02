@@ -232,12 +232,12 @@ def printGraphInfo(graphity, debug):
 	# TODO number of nodes w strings/apis vs. nodes w/o
 	
 	
-def dumpGraphInfoCsv(graphity, debug, csvfile):
+def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	
 	# 	filename, filetype, filesize, md5, compilationtime, addressep, sectionep, tlssections, originalfilename, sectioncount, sectiondata, functionstotal, refslocal, refsglobalvar, refsunknown, apitotal, apimisses, stringsreferenced, stringsdangling, stringsnoref
 
 	final = []
-	allAtts = getAllAttributes(sys.argv[1])
+	#allAtts = getAllAttributes(sys.argv[1])
 	if os.path.isfile(csvfile):
 		dumpfile = open(csvfile, 'a')
 	else:

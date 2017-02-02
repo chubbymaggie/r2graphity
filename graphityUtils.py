@@ -5,6 +5,7 @@ import pydeep
 import pefile
 import time
 import math
+import struct
 
 
 # receives a string, containing a symbol a la radare2
@@ -98,12 +99,22 @@ def stringScore(seString):
 
 # Check for PE header, return false if not a PE
 def check_pe_header(filepath):
+
 	try:
-		pe = pefile.PE(filepath)
-		if (pe.DOS_HEADER.e_magic == int(0x5a4d) and pe.NT_HEADERS.Signature == int(0x4550)):
-			return True
-	except (pefile.PEFormatError):
+
+		fp = open(filepath, 'rb')
+		if (fp.read(2) == 'MZ'):
+			fp.read(58)
+			peoff = struct.unpack('i', fp.read(4))
+			advance = peoff[0] - 64
+			fp.read(advance)
+			if (fp.read(2) == 'PE'):
+				fp.close()
+				return True
+
+		fp.close()
 		return False
+
 	except(Exception) as e:
 		print("LOG - PE Parsing Error, sure this is a PE file?")
 		return False

@@ -529,7 +529,7 @@ if __name__ == '__main__':
 	global R2PY
 	
 	parser = ArgumentParser()
-	parser.add_argument("input", help="Tool requires an input file, batch processing not yet implemented")
+	parser.add_argument("input", help="Tool requires an input file or directory; directory, i.e. batch processing, only possible and feasible for csvdump option")
 	#parser.add_argument("-a", "--all", action="store_true", help="Perform all analysis options - graph creation, printing the graph, printing the graph info, plotting, behavior scanning and Neo4j parsing")
 	parser.add_argument("-p", "--printing", action="store_true", help="Print the graph as text, as in, nodes with respective content")
 	parser.add_argument("-i", "--info", action="store_true", help="Print info and stats of the graph")
@@ -540,8 +540,50 @@ if __name__ == '__main__':
 	
 	args = parser.parse_args()
 	
+	# Batch processing options: csvdump, neodump, TBC
 	
-	if args.input and check_pe_header(args.input):
+	if args.input and os.path.isdir(args.input):
+		
+		for (dirpath, dirnames, filenames) in os.walk(args.input):
+			for filename in filenames:
+				filepath = os.path.join(dirpath, filename)
+					
+				if check_pe_header(filepath):
+					
+					print '* %s Parsing %s ' % (str(datetime.now()), filename)
+					R2PY = r2pipe.open(filepath)
+					allAtts = getAllAttributes(filepath)
+	
+					R2PY.cmd("e asm.lines = false")
+					R2PY.cmd("e asm.fcnlines = false")
+						
+					R2PY.cmd("e anal.autoname= false")
+					R2PY.cmd("e anal.jmptbl = true")
+					R2PY.cmd("e anal.hasnext = true")
+					R2PY.cmd("aaa")
+					R2PY.cmd("afr")
+					R2PY.cmd("afr @@ sym*")
+
+					# GRAPH CREATION
+					graphity, debug = createSeGraph()
+	
+					# DLL PROCESSING
+					if 'DLL' in allAtts['filetype']:
+						analyzeExports(graphity)
+	
+					# thunkPruning
+					thunkPruning(graphity)
+	
+					# handler tagging
+					tagCallbacks(graphity)
+		
+					if args.csvdump:
+						# CSVDUMP
+						print '* %s Dumping graph info to indicated csv file ' % str(datetime.now())
+						dumpGraphInfoCsv(graphity, debug, allAtts, args.csvdump)
+						
+	
+	elif args.input and check_pe_header(args.input):
 	
 		R2PY = r2pipe.open(args.input)
 	
@@ -553,15 +595,15 @@ if __name__ == '__main__':
 		print '* %s R2 started analysis ' % str(datetime.now())
 		
 		bench['r2_start'] = time()
-		R2PY.cmd("e scr.color = false")
-		R2PY.cmd("e asm.bytes = false")
+		#R2PY.cmd("e scr.color = false")
+		#R2PY.cmd("e asm.bytes = false")
 		R2PY.cmd("e asm.lines = false")
 		R2PY.cmd("e asm.fcnlines = false")
-		R2PY.cmd("e asm.xrefs = false")
-		R2PY.cmd("e asm.lbytes = false")
-		R2PY.cmd("e asm.indentspace = 0")
+		#R2PY.cmd("e asm.xrefs = false")
+		#R2PY.cmd("e asm.lbytes = false")
+		#R2PY.cmd("e asm.indentspace = 0")
+		
 		R2PY.cmd("e anal.autoname= false")
-	
 		R2PY.cmd("e anal.jmptbl = true")
 		R2PY.cmd("e anal.hasnext = true")
 	
@@ -632,12 +674,7 @@ if __name__ == '__main__':
 						print "For %s found %s" % (patty, str(hit['patterns']))
 			bench['behavior_end'] = time()
 			
-		if args.csvdump:
-			# CSVDUMP
-			print '* %s Dumping graph info to indicated csv file ' % str(datetime.now())
-			bench['csv_start'] = time()
-			dumpGraphInfoCsv(graphity, debug, args.csvdump)
-			bench['csv_end'] = time()
+		
 							
 			# TODO calculate dispersion for 2-n anchor addresses	
 			# TODO handling of LoadLib/GetPAddr. for "hiding something" question, follow GetProc return value
@@ -663,6 +700,7 @@ if __name__ == '__main__':
 		if 'csv_start' in bench:
 			print "__ %5f CSV dump" % (bench['csv_end'] - bench['csv_start'])
 	
-	
+	else:
+		print "Potentially not a PE file %s" % args.input
 	
 	
