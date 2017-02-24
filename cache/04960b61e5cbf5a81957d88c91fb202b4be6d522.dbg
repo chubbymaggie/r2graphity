@@ -1,0 +1,660 @@
+(dp0
+S'stringsReferencedTotal'
+p1
+I121
+sS'functions'
+p2
+I161
+sS'stringsDanglingTotal'
+p3
+I0
+sS'stringsDangling'
+p4
+(lp5
+sS'apiTotal'
+p6
+I152
+sS'refsGlobalVar'
+p7
+I10
+sS'refsUnrecognized'
+p8
+I0
+sS'apiMisses'
+p9
+I0
+sS'xsectionsize'
+p10
+I32768
+sS'refsFunctions'
+p11
+I541
+sS'stringsNoRefTotal'
+p12
+I311
+sS'stringsNoRef'
+p13
+(lp14
+S'!This program cannot be run in DOS mode. \\\\ r \\\\ r \\\\ n$'
+p15
+aS'3 \\\\ bRichm'
+p16
+aS'.text'
+p17
+aS'`.rdata'
+p18
+aS'@.data'
+p19
+aS' \\\\ fSVW'
+p20
+aS'u \\\\ ej \\\\ ahp'
+p21
+aS'B \\\\ bPh'
+p22
+aS' \\\\ fj \\\\ bh'
+p23
+aS'D \\\\ n \\\\ aP'
+p24
+aS'E \\\\ bPh$'
+p25
+aS'E \\\\ fPh>'
+p26
+aS'M \\\\ bQh'
+p27
+aS'M \\\\ bQh \\\\ f'
+p28
+aS'j2h@'
+p29
+aS'u%jd'
+p30
+aS'h %@'
+p31
+aS'u \\\\ vh`'
+p32
+aS't \\\\ rh`'
+p33
+aS'D$ \\\\ b_'
+p34
+aS'tzVS'
+p35
+aS' \\\\ aGIt%'
+p36
+aS't/Ku'
+p37
+aS' \\\\ aGKu'
+p38
+aS'It \\\\ n3 \\\\ t \\\\ a'
+p39
+aS'L$ \\\\ br'
+p40
+aS' \\\\ aj \\\\ bP'
+p41
+aS'E \\\\ b^_'
+p42
+aS'E \\\\ b^_'
+p43
+aS'E \\\\ b^_'
+p44
+aS'E \\\\ b^_'
+p45
+aS'E \\\\ b^_'
+p46
+aS'E \\\\ b^_'
+p47
+aS'E \\\\ b^_'
+p48
+aS'E \\\\ b^_'
+p49
+aS'v \\\\ f@P'
+p50
+aS'v \\\\ b@P'
+p51
+aS'L$ \\\\ bj \\\\ n^'
+p52
+aS'D \\\\ b \\\\ aY'
+p53
+aS'_9=H'
+p54
+aS'YYh,'
+p55
+aS't$ \\\\ b;t$ \\\\ fs \\\\ r'
+p56
+aS'tG3 \\\\ nD$ \\\\ bW'
+p57
+aS' \\\\ aGJu'
+p58
+aS'|$ \\\\ bV'
+p59
+aS'GIt#'
+p60
+aS'XSVW'
+p61
+aS'9D$ \\\\ bt'
+p62
+aS't$ \\\\ b;5@'
+p63
+aS'F \\\\ fu"'
+p64
+aS'Yu \\\\ aV'
+p65
+aS' t \\\\ rj'
+p66
+aS'E \\\\ b_WPS'
+p67
+aS'E \\\\ f9} \\\\ f_t'
+p68
+aS'HHtpHHtl'
+p69
+aS' Yt \\\\ tf'
+p70
+aS'RPWV'
+p71
+aS'u \\\\ bVj '
+p72
+aS'u \\\\ bVj0'
+p73
+aS'u \\\\ bVj '
+p74
+aS'E \\\\ n#E \\\\ f'
+p75
+aS'<f9-'
+p76
+aS'PUj?'
+p77
+aS'PUj?'
+p78
+aS'<+t \\\\ b:'
+p79
+aS'| \\\\ a<9'
+p80
+aS'>:uNFV'
+p81
+aS'| \\\\ a<9'
+p82
+aS'>:u#FV'
+p83
+aS'| \\\\ a<9'
+p84
+aS'Qf9='
+p85
+aS'WQPWS'
+p86
+aS',f9='
+p87
+aS'WWSj'
+p88
+aS'WWWj'
+p89
+aS'l$ \\\\ bV3'
+p90
+aS'Z9 \\\\ a}'
+p91
+aS'M \\\\ bt '
+p92
+aS'<"u%'
+p93
+aS'F<"t'
+p94
+aS'>"u \\\\ rF'
+p95
+aS' \\\\ n< v'
+p96
+aS'u \\\\ bj \\\\ t'
+p97
+aS't9UW'
+p98
+aS'?=t"U'
+p99
+aS'u \\\\ bj \\\\ t'
+p100
+aS'QQS3'
+p101
+aS'PSSW'
+p102
+aS'u \\\\ bj \\\\ b'
+p103
+aS'8"uD'
+p104
+aS'8"uF@'
+p105
+aS'8"u,'
+p106
+aS'@@f9'
+p107
+aS'SS@SSPVSS'
+p108
+aS't#SSUP'
+p109
+aS't$$VSS'
+p110
+aS't \\\\ n@8'
+p111
+aS' \\\\ vUWV'
+p112
+aS'DSUVWh'
+p113
+aS'u \\\\ bj \\\\ e'
+p114
+aS' \\\\ bu \\\\ vP'
+p115
+aS'_^]['
+p116
+aS'9D$ \\\\ bh'
+p117
+aS'SVWUj'
+p118
+aS't.;t$$t('
+p119
+aS' \\\\ f_^['
+p120
+aS'R \\\\ f9Q \\\\ bu'
+p121
+aS'k \\\\ fY['
+p122
+aS'VC20XC00U'
+p123
+aS' \\\\ bSVWU'
+p124
+aS'tEVU'
+p125
+aS't3x<'
+p126
+aS' \\\\ bA=@'
+p127
+aS'M \\\\ bSV'
+p128
+aS'j?I_'
+p129
+aS'M \\\\ b!9'
+p130
+aS'M \\\\ b!y'
+p131
+aS';Q \\\\ buH'
+p132
+aS'M \\\\ b!Q'
+p133
+aS'u \\\\ t9} \\\\ f'
+p134
+aS';J \\\\ buc'
+p135
+aS'M \\\\ b \\\\ tY'
+p136
+aS'ulSj'
+p137
+aS'pD#U'
+p138
+aS'j #M'
+p139
+aS'j?^;'
+p140
+aS';J \\\\ bua'
+p141
+aS';J \\\\ bud'
+p142
+aS'M \\\\ v})'
+p143
+aS'M \\\\ bSVW'
+p144
+aS'D \\\\ vE \\\\ b'
+p145
+aS';_ \\\\ buH'
+p146
+aS'M \\\\ b!Y'
+p147
+aS';Y \\\\ bu \\\\ '
+p148
+aS'M \\\\ b \\\\ tY'
+p149
+aS'] \\\\ f)u'
+p150
+aS';O \\\\ buG'
+p151
+aS'M \\\\ b!Y'
+p152
+aS';K \\\\ bu \\\\ '
+p153
+aS'M \\\\ b \\\\ t9'
+p154
+aS'M \\\\ b \\\\ ty'
+p155
+aS'X_^['
+p156
+aS'VWss'
+p157
+aS'M \\\\ bS; \\\\ r'
+p158
+aS' t \\\\ fj'
+p159
+aS'E \\\\ f9}'
+p160
+aS'+M \\\\ f;M'
+p161
+aS'+E \\\\ f;E'
+p162
+aS'9} \\\\ bt_j'
+p163
+aS'X9E \\\\ buL'
+p164
+aS' \\\\ tA \\\\ bt \\\\ r'
+p165
+aS'Yu!j'
+p166
+aS'Yu \\\\ bj'
+p167
+aS'w \\\\ br \\\\ a;D$ \\\\ fv'
+p168
+aS'D$ \\\\ f3'
+p169
+aS';T$ \\\\ fw \\\\ br'
+p170
+aS';D$ \\\\ bv \\\\ b+D$'
+p171
+aS'Vt \\\\ nP'
+p172
+aS't&:a'
+p173
+aS'u \\\\ e950'
+p174
+aS'<8=u'
+p175
+aS'#D$ \\\\ b'
+p176
+aS'0B=@'
+p177
+aS'rKE \\\\ b'
+p178
+aS' \\\\ rt \\\\ fHt'
+p179
+aS't7SW'
+p180
+aS'    '
+p181
+aS'VWuBh<'
+p182
+aS'tPh '
+p183
+aS'E \\\\ b^_'
+p184
+aS'E \\\\ b^_'
+p185
+aS'E \\\\ b^_'
+p186
+aS'E \\\\ b^_'
+p187
+aS'E \\\\ b^_'
+p188
+aS'E \\\\ b^_'
+p189
+aS'E \\\\ b^_'
+p190
+aS'E \\\\ b^_'
+p191
+aS'It \\\\ bIu'
+p192
+aS't$ \\\\ fW'
+p193
+aS'u+Vj \\\\ b'
+p194
+aS'F \\\\ r@t'
+p195
+aS't$ \\\\ f3'
+p196
+aS'~&WP'
+p197
+aS't/WWUPj'
+p198
+aS'uFWWj'
+p199
+aS'"WWSh'
+p200
+aS'9} u \\\\ b'
+p201
+aS'E WW'
+p202
+aS'tMWWS'
+p203
+aS't@9}'
+p204
+aS't$ \\\\ bW'
+p205
+aS'0SVW'
+p206
+aS'_u@W'
+p207
+aS'PWPSS'
+p208
+aS'PWPSS'
+p209
+aS'9] u \\\\ b'
+p210
+aS't \\\\ t9]'
+p211
+aS' \\\\ t: \\\\ br'
+p212
+aS' \\\\ t: \\\\ br \\\\ b:'
+p213
+aS'tySS'
+p214
+aS't-VW'
+p215
+aS'QQSVW3'
+p216
+aS'9} \\\\ btUj='
+p217
+aS't@9u \\\\ bt;'
+p218
+aS'uT9} \\\\ ft'
+p219
+aS'Y+E \\\\ bY'
+p220
+aS'8<=t'
+p221
+aS'u \\\\ bj \\\\ t'
+p222
+aS'^][_'
+p223
+aS' \\\\ $ \\\\ bUV'
+p224
+aS'wDVSU'
+p225
+aS'9E \\\\ ft'
+p226
+aS'9U \\\\ ft \\\\ fA'
+p227
+aS'Yt \\\\ vVP'
+p228
+aS' \\\\ at! \\\\ n'
+p229
+aS'u \\\\ tIu'
+p230
+aS'FGQPS'
+p231
+aS'u \\\\ tIu'
+p232
+aS'SVWu'
+p233
+aS'^}%95<'
+p234
+aS'~ \\\\ vVS'
+p235
+aS'E \\\\ bPW'
+p236
+aS' (8PX \\\\ a \\\\ b'
+p237
+aS'700WP \\\\ a'
+p238
+aS' \\\\ b`h````'
+p239
+aS'ppxxxx \\\\ b \\\\ a \\\\ b'
+p240
+aS'(null)'
+p241
+aS'(null)'
+p242
+aS'runtime error '
+p243
+aS'SING error \\\\ r \\\\ n'
+p244
+aS'R6028 \\\\ r \\\\ n- unable to initialize heap \\\\ r \\\\ n'
+p245
+aS'R6026 \\\\ r \\\\ n- not enough space for stdio initialization \\\\ r \\\\ n'
+p246
+aS'R6024 \\\\ r \\\\ n- not enough space for _onexit/atexit table \\\\ r \\\\ n'
+p247
+aS'R6018 \\\\ r \\\\ n- unexpected heap error \\\\ r \\\\ n'
+p248
+aS'R6016 \\\\ r \\\\ n- not enough space for thread data \\\\ r \\\\ n'
+p249
+aS'R6009 \\\\ r \\\\ n- not enough space for environment \\\\ r \\\\ n'
+p250
+aS'R6002 \\\\ r \\\\ n- floating point not loaded \\\\ r \\\\ n'
+p251
+aS'KERNEL32.DLL'
+p252
+aS'ADVAPI32.dll'
+p253
+aS'USER32.dll'
+p254
+aS'WS2_32.dll'
+p255
+aS'GetCurrentProcess'
+p256
+aS'SetEnvironmentVariableA'
+p257
+aS'CompareStringW'
+p258
+aS'CreateThread'
+p259
+aS'FlushFileBuffers'
+p260
+aS'LCMapStringW'
+p261
+aS'LCMapStringA'
+p262
+aS'SetStdHandle'
+p263
+aS'LoadLibraryA'
+p264
+aS'CreateProcessA'
+p265
+aS'lstrcpyA'
+p266
+aS'GetModuleFileNameA'
+p267
+aS'CopyFileA'
+p268
+aS'GetTickCount'
+p269
+aS'CompareStringA'
+p270
+aS'Sleep'
+p271
+aS'GetProcAddress'
+p272
+aS'GetOEMCP'
+p273
+aS'GetACP'
+p274
+aS'GetCPInfo'
+p275
+aS'GetStringTypeW'
+p276
+aS'GetStringTypeA'
+p277
+aS'MultiByteToWideChar'
+p278
+aS'SetFilePointer'
+p279
+aS'GetLastError'
+p280
+aS'HeapReAlloc'
+p281
+aS'GetTimeZoneInformation'
+p282
+aS'GetSystemTime'
+p283
+aS'GetLocalTime'
+p284
+aS'ExitProcess'
+p285
+aS'TerminateProcess'
+p286
+aS'GetModuleHandleA'
+p287
+aS'GetStartupInfoA'
+p288
+aS'GetCommandLineA'
+p289
+aS'GetVersion'
+p290
+aS'HeapAlloc'
+p291
+aS'WideCharToMultiByte'
+p292
+aS'UnhandledExceptionFilter'
+p293
+aS'FreeEnvironmentStringsA'
+p294
+aS'FreeEnvironmentStringsW'
+p295
+aS'GetEnvironmentStrings'
+p296
+aS'GetEnvironmentStringsW'
+p297
+aS'SetHandleCount'
+p298
+aS'GetStdHandle'
+p299
+aS'GetFileType'
+p300
+aS'HeapDestroy'
+p301
+aS'HeapCreate'
+p302
+aS'VirtualFree'
+p303
+aS'HeapFree'
+p304
+aS'RtlUnwind'
+p305
+aS'WriteFile'
+p306
+aS'VirtualAlloc'
+p307
+aS'CloseHandle'
+p308
+aS'OpenProcessToken'
+p309
+aS'LookupPrivilegeValueA'
+p310
+aS'AdjustTokenPrivileges'
+p311
+aS'RegOpenKeyExA'
+p312
+aS'RegSetValueExA'
+p313
+aS'GetUserNameA'
+p314
+aS'FindWindowA'
+p315
+aS'GetWindow'
+p316
+aS'SendMessageA'
+p317
+aS'GetDesktopWindow'
+p318
+aS'GetForegroundWindow'
+p319
+aS'ExitWindowsEx'
+p320
+aS'MessageBoxA'
+p321
+aS'ACTION %s'
+p322
+aS'IkePlayerInfo Development: 1.5'
+p323
+aS'rifleman-01.kit'
+p324
+aS'mp_plt1_asl.atr'
+p325
+as.

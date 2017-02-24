@@ -10,7 +10,7 @@ from time import time
 from datetime import datetime
 from argparse import ArgumentParser
 from base64 import b64decode
-from graphityOut import toNeo, fromNeo, printGraph, printGraphInfo, plotSeGraph, dumpGraphInfoCsv
+from graphityOut import toNeo, printGraph, printGraphInfo, plotSeGraph, dumpGraphInfoCsv, toPickle, fromPickle
 from graphityUtils import gimmeDatApiName, sha1hash, getAllAttributes, is_ascii, Hvalue, check_pe_header
 import graphityFunc
 
@@ -247,7 +247,7 @@ def hasXref(vaddr):
 	
 
 # Creating the NetworkX graph, nodes are functions, edges are calls or callbacks
-def createSeGraph():
+def createRawGraph():
 
 	graphity = nx.DiGraph()
 	debugDict = {}
@@ -257,7 +257,8 @@ def createSeGraph():
 		functionList=json.loads(functions)
 	else:
 		functionList = []
-	
+
+	# figuring out code section size total	
 	sectionsList = getCodeSections()
 	
 	xlen = 0
@@ -271,6 +272,16 @@ def createSeGraph():
 	refsUnrecognized = 0
 	refsFunc = 0
 	debugDict['functions'] = len(functionList)
+	
+	### NetworkX Graph Structure ###
+	
+	# FUNCTION as node, attributes: function address, size, calltype, list of calls, list of strings, count of calls; type[Callback, Export], alias (e.g. export name)
+	# FUNCTIoN REFERENCE as edge (function address -> target address), attributes: ref offset (at)
+	# CALLBACK REFERENCE as edge (currently for threads and Windows hooks)
+	# API CALLS (list attribute of function node): address, API name
+	# STRINGS (list attribute of function node): address, string
+	
+	####
 	
 	for item in functionList:
 		
@@ -524,13 +535,61 @@ def scanNodeForApi(anchor, seNode, patternNum):
 					break
 					
 
+# super graph creation function, radare-analyses the sample, puts together all of the graph and debug info
+def graphMagix(filepath, allAtts):
+
+	global R2PY 
+	print '* %s R2 started analysis ' % str(datetime.now())
+	
+	if (os.path.isfile("cache/" + allAtts['sha1'] + ".txt") and os.path.isfile("cache/" + allAtts['sha1'] + ".dbg")):
+		graphity, debug = fromPickle(allAtts['sha1'])
+		
+	else:	
+		BENCH['r2_start'] = time()
+	
+		R2PY = r2pipe.open(filepath)
+
+		R2PY.cmd("e asm.lines = false")
+		R2PY.cmd("e asm.fcnlines = false")
+		R2PY.cmd("e anal.autoname= false")
+		R2PY.cmd("e anal.jmptbl = true")
+		R2PY.cmd("e anal.hasnext = true")
+		R2PY.cmd("aaa")
+		R2PY.cmd("afr")
+		R2PY.cmd("afr @@ sym*")
+
+		BENCH['r2_end'] = time()
+		print '* %s R2 finished analysis' % str(datetime.now())
+	
+		# GRAPH CREATION
+		graphity, debug = createRawGraph()
+
+		# DLL PROCESSING
+		if 'DLL' in allAtts['filetype']:
+			analyzeExports(graphity)
+
+		# thunkPruning
+		thunkPruning(graphity)
+
+		# handler tagging
+		tagCallbacks(graphity)
+
+		BENCH['graph_end'] = time()
+	
+		# graph and debug info caching to save parsing time, potentially
+		toPickle(graphity, debug, allAtts['sha1'])
+		
+	return graphity, debug
+	
+	
 if __name__ == '__main__':
 
-	global R2PY
+	#global R2PY
+	global BENCH
+	BENCH = {}
 	
 	parser = ArgumentParser()
 	parser.add_argument("input", help="Tool requires an input file or directory; directory, i.e. batch processing, only possible and feasible for csvdump option")
-	#parser.add_argument("-a", "--all", action="store_true", help="Perform all analysis options - graph creation, printing the graph, printing the graph info, plotting, behavior scanning and Neo4j parsing")
 	parser.add_argument("-p", "--printing", action="store_true", help="Print the graph as text, as in, nodes with respective content")
 	parser.add_argument("-i", "--info", action="store_true", help="Print info and stats of the graph")
 	parser.add_argument("-l", "--plotting", action="store_true", help="Plotting the graph via pyplot")
@@ -551,120 +610,69 @@ if __name__ == '__main__':
 				if check_pe_header(filepath):
 					
 					print '* %s Parsing %s ' % (str(datetime.now()), filename)
-					R2PY = r2pipe.open(filepath)
+					
 					allAtts = getAllAttributes(filepath)
-	
-					R2PY.cmd("e asm.lines = false")
-					R2PY.cmd("e asm.fcnlines = false")
-						
-					R2PY.cmd("e anal.autoname= false")
-					R2PY.cmd("e anal.jmptbl = true")
-					R2PY.cmd("e anal.hasnext = true")
-					R2PY.cmd("aaa")
-					R2PY.cmd("afr")
-					R2PY.cmd("afr @@ sym*")
-
-					# GRAPH CREATION
-					graphity, debug = createSeGraph()
-	
-					# DLL PROCESSING
-					if 'DLL' in allAtts['filetype']:
-						analyzeExports(graphity)
-	
-					# thunkPruning
-					thunkPruning(graphity)
-	
-					# handler tagging
-					tagCallbacks(graphity)
+					graphity, debug = graphMagix(filepath, allAtts)
 		
 					if args.csvdump:
 						# CSVDUMP
-						print '* %s Dumping graph info to indicated csv file ' % str(datetime.now())
 						dumpGraphInfoCsv(graphity, debug, allAtts, args.csvdump)
+						print '* %s Dumping graph info to indicated csv file ' % str(datetime.now())
 						
+					if args.neodump:
+						# TO NEO STUFF
+						toNeo(graphity, allAtts)
+						print '* %s Dumped to Neo4J ' % str(datetime.now())
 	
 	elif args.input and check_pe_header(args.input):
-	
-		R2PY = r2pipe.open(args.input)
-	
-		# benchmarking :P
-		bench = {}
+		
+		# ATTRIBUTES: md5, sha1, filename, filetype, ssdeep, filesize, imphash, compilationts, addressep, sectionep, 
+		# sectioncount, sectioninfo, tlssections, originalfilename
 		
 		allAtts = getAllAttributes(args.input)
+		graphity, debug = graphMagix(args.input, allAtts)
 
-		print '* %s R2 started analysis ' % str(datetime.now())
 		
-		bench['r2_start'] = time()
-		#R2PY.cmd("e scr.color = false")
-		#R2PY.cmd("e asm.bytes = false")
-		R2PY.cmd("e asm.lines = false")
-		R2PY.cmd("e asm.fcnlines = false")
-		#R2PY.cmd("e asm.xrefs = false")
-		#R2PY.cmd("e asm.lbytes = false")
-		#R2PY.cmd("e asm.indentspace = 0")
+		# TODO decide what to do with dangling strings/APIs (string filtering with frequency analysis?)
 		
-		R2PY.cmd("e anal.autoname= false")
-		R2PY.cmd("e anal.jmptbl = true")
-		R2PY.cmd("e anal.hasnext = true")
-	
-		#loadZigs()
-		R2PY.cmd("aaa")
-		R2PY.cmd("afr")
-		R2PY.cmd("afr @@ sym*")
-
-		bench['r2_end'] = time()
-		print '* %s R2 finished analysis' % str(datetime.now())
 		
-		# GRAPH CREATION
-		graphity, debug = createSeGraph()
-	
-		# DLL PROCESSING
-		if 'DLL' in allAtts['filetype']:
-			analyzeExports(graphity)
-	
-		# thunkPruning
-		thunkPruning(graphity)
-	
-		# handler tagging
-		tagCallbacks(graphity)
-
-		bench['graph_end'] = time()
+		#othergraph, otherdebug = fromPickle(allAtts['sha1'])
 		
 		if args.printing:
 			# PRINT GRAPH TO CMDLINE
 			print "* %s Printing the graph - nodes and node attributes" % str(datetime.now())
-			bench['printing_start'] = time()
+			BENCH['printing_start'] = time()
 			printGraph(graphity)
-			bench['printing_end'] = time()
+			BENCH['printing_end'] = time()
 	
 		if args.info:	
 			# PRINT GRAPH INFO
-			bench['info_start'] = time()
+			BENCH['info_start'] = time()
 			printGraphInfo(graphity, debug)
-			bench['info_end'] = time()
+			BENCH['info_end'] = time()
 	
 		if args.plotting:
 			# GRAPH PLOTTING STUFF
 			#try:
 			print '* %s Plotting routine starting ' % str(datetime.now())
-			bench['plotting_start'] = time()
+			BENCH['plotting_start'] = time()
 			plotSeGraph(graphity)
-			bench['plotting_end'] = time()
+			BENCH['plotting_end'] = time()
 			print '* %s Plotting routine finished ' % str(datetime.now())
 			#except:
 			#	print '* %s Cant plot this with pydot, too big ' % str(datetime.now())
 
 		if args.neodump:
 			# TO NEO STUFF
-			bench['neo_start'] = time()		
-			toNeo(graphity, allAtts['sha1'], allAtts['filesize'], allAtts['filetype'])
-			bench['neo_end'] = time()
+			BENCH['neo_start'] = time()		
+			toNeo(graphity, allAtts)
+			BENCH['neo_end'] = time()
 			print '* %s Dumped to Neo4J ' % str(datetime.now())
 	
 		if args.behavior:	
 			# BEHAVIOR	
 			print '* %s Scanning for API patterns ' % str(datetime.now())
-			bench['behavior_start'] = time()
+			BENCH['behavior_start'] = time()
 			allThePatterns = graphityFunc.funcDict
 	
 			for patty in allThePatterns:
@@ -672,7 +680,7 @@ if __name__ == '__main__':
 				for hit in findings:
 					if not False in hit['patterns'].values():
 						print "For %s found %s" % (patty, str(hit['patterns']))
-			bench['behavior_end'] = time()
+			BENCH['behavior_end'] = time()
 			
 		
 							
@@ -684,21 +692,24 @@ if __name__ == '__main__':
 	
 		# TIME
 		print "\n__..--*** I WANNA BE A BENCHMARK WHEN I GROW UP ***--..__"
-		print "__ %5f R2 Analysis" % (bench['r2_end'] - bench['r2_start'])
-		print "__ %5f Graph construction" % (bench['graph_end'] - bench['r2_end'])
+		
+		if 'r2_start' in BENCH:
+			print "__ %5f R2 Analysis" % (BENCH['r2_end'] - BENCH['r2_start'])
+		if 'graph_end' in BENCH:
+			print "__ %5f Graph construction" % (BENCH['graph_end'] - BENCH['r2_end'])
 	
-		if 'printing_start' in bench:
-			print "__ %5f Printing" % (bench['printing_end'] - bench['printing_start'])
-		if 'info_start' in bench:
-			print "__ %5f Info" % (bench['info_end'] - bench['info_start'])
-		if 'plotting_start' in bench:
-			print "__ %5f Plotting" % (bench['plotting_end'] - bench['plotting_start'])
-		if 'behavior_start' in bench:
-			print "__ %5f Behavior" % (bench['behavior_end'] - bench['behavior_start'])
-		if 'neo_start' in bench:
-			print "__ %5f Neo4j" % (bench['neo_end'] - bench['neo_start'])
-		if 'csv_start' in bench:
-			print "__ %5f CSV dump" % (bench['csv_end'] - bench['csv_start'])
+		if 'printing_start' in BENCH:
+			print "__ %5f Printing" % (BENCH['printing_end'] - BENCH['printing_start'])
+		if 'info_start' in BENCH:
+			print "__ %5f Info" % (BENCH['info_end'] - BENCH['info_start'])
+		if 'plotting_start' in BENCH:
+			print "__ %5f Plotting" % (BENCH['plotting_end'] - BENCH['plotting_start'])
+		if 'behavior_start' in BENCH:
+			print "__ %5f Behavior" % (BENCH['behavior_end'] - BENCH['behavior_start'])
+		if 'neo_start' in BENCH:
+			print "__ %5f Neo4j" % (BENCH['neo_end'] - BENCH['neo_start'])
+		if 'csv_start' in BENCH:
+			print "__ %5f CSV dump" % (BENCH['csv_end'] - BENCH['csv_start'])
 	
 	else:
 		print "Potentially not a PE file %s" % args.input

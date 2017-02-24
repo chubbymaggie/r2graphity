@@ -272,7 +272,6 @@ def getSectionInfo(pe):
 	return secinfo
 	
 	
-	
 def getAllAttributes(path):
 	
 	allAtts = {}
@@ -297,6 +296,13 @@ def getAllAttributes(path):
 			allAtts['originalfilename'] = getOriginalFilename(pe)
 	
 	except (pefile.PEFormatError):
-		pass
+		allAtts['imphash'] = ''
+		allAtts['compilationts'] = ''
+		allAtts['addressep'] = ''
+		allAtts['sectionep'] = ''
+		allAtts['sectioncount'] = ''
+		allAtts['sectioninfo'] = ''
+		allAtts['tlssections'] = ''
+		allAtts['originalfilename'] = ''
 	
 	return allAtts

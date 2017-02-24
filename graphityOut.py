@@ -6,78 +6,103 @@ import py2neo
 from pydotplus.graphviz import Node
 import networkx as nx
 import numpy as np
+import pickle
 from graphityUtils import gimmeDatApiName, getAllAttributes, stringScore
 
 
-# TODO update this parser
-def toNeo(graphity, mySha1, myFileSize, myBinType):
+def toNeo(graphity, allAtts):
 
 	# GRAPH DB STUFF - NEO4J
 	# receives the NetworkX graph and accompanying sample data
 	# pushes the graph to Neo4J
 	
+	### NetworkX Graph Structure ###
+	
+	# FUNCTION as node, attributes: function address, size, calltype, list of calls, list of strings, count of calls; type[Callback, Export], alias (e.g. export name)
+	# FUNCTIoN REFERENCE as edge (function address -> target address), attributes: ref offset (at)
+	# CALLBACK REFERENCE as edge (currently for threads and Windows hooks)
+	# API CALLS (list attribute of function node): address, API name
+	# STRINGS (list attribute of function node): address, string
+	
+	####
+	
 	py2neo.authenticate("localhost:7474", "neo4j", "neo4j")
 	neoGraph = py2neo.Graph("http://localhost:7474/")
+	neoSelector = py2neo.NodeSelector(neoGraph)
 	
-	# flush of the DB, DEACTIVATE for mass storing of samples
-	neoGraph.delete_all()
+	# flush of the DB, for test purposes
+	# neoGraph.delete_all()
 	
-	# create node for binary information
-	sampleNode = py2neo.Node("SAMPLE", sha1=mySha1, fileSize=myFileSize, binType=myBinType)
-	neoGraph.create(sampleNode)
+	mySha1 = allAtts['sha1']
+	
+	if neoSelector.select("SAMPLE", sha1=mySha1).first():
+		print "Graph for sample %s already exists in Neo4j instance!" % mySha1
+	
+	else:
+	
+		# create master node for binary information
+		sampleNode = py2neo.Node("SAMPLE", sha1=mySha1, fileSize=allAtts['filesize'], binType=allAtts['filetype'], imphash=allAtts['imphash'], compilation=allAtts['compilationts'], addressEp=allAtts['addressep'], sectionEp=allAtts['sectionep'], sectionCount=allAtts['sectioncount'], originalFilename=allAtts['originalfilename'])
+		neoGraph.create(sampleNode)
 
-	# parsing of the NetworkX graph - functions, APIs and strings are all Neo4j nodes
-	for nxNode in graphity.nodes(data=True):
-	
-		funcAddress = nxNode[0]
-		funcCalltype = nxNode[1]['calltype']
-		funcSize = nxNode[1]['size']
-	
-		functionNode = py2neo.Node("FUNCTION", mySha1, address=funcAddress, callType=funcCalltype, funcSize=funcSize)
-		neoGraph.create(functionNode)
-	
-		stringList = nxNode[1]['strings']
 		
-		for stringData in stringList:
-			strRefAddress = stringData[0]
-			theString = stringData[1]
+		# parsing of the NetworkX graph - functions, APIs and strings are all Neo4j nodes
+		for nxNode in graphity.nodes(data=True):
+	
+			funcAddress = nxNode[0]
+			funcCalltype = nxNode[1]['calltype']
+			funcSize = nxNode[1]['size']
+			funcType = ''
+			funcAlias = ''
+			if nxNode[1].get('type') : funcType = nxNode[1]['type']
+			if nxNode[1].get('alias') : funcAlias = nxNode[1]['alias']
 		
-			# TODO think about string attributes to store, e.g. entropy, len
-			try:
+			# sha1 serves as link to master node, but also as node identifier in combination with the function address
+			# TODO for saving memory, explore possibility of replacing sha1 with an index, as sha info is held in master node anyway
+			functionNode = py2neo.Node("FUNCTION", sample=mySha1, address=funcAddress, callType=funcCalltype, funcSize=funcSize, funcType=funcType, alias=funcAlias)
+			neoGraph.create(functionNode)
+	
+			stringList = nxNode[1]['strings']
+		
+			for stringData in stringList:
+				strRefAddress = stringData[0]
+				theString = stringData[1]
+		
+				# TODO think about string attributes to store, e.g. entropy, len
+				try:
 			
-				# create string node or merge if string already exists, add relationship
-				stringNode = py2neo.Node("STRING", string=theString)
-				# TODO try this using Subgraph class, less interaction with DB server
-				neoGraph.merge(stringNode)
+					# create string node or merge if string already exists, add relationship
+					stringNode = py2neo.Node("STRING", string=theString)
+					# TODO try this using Subgraph class, less interaction with DB server
+					neoGraph.merge(stringNode)
 		
-				stringRel = py2neo.Relationship(functionNode, "references_string", stringNode, address=strRefAddress)
-				neoGraph.create(stringRel)
+					stringRel = py2neo.Relationship(functionNode, "references_string", stringNode, address=strRefAddress)
+					neoGraph.create(stringRel)
 				
-			except:
-				print "ERROR with this string %s" % theString
+				except:
+					print "ERROR with this string %s" % theString
 			
-		callsList = nxNode[1]['calls']
+			callsList = nxNode[1]['calls']
 		
-		for callData in callsList:
-			callRefAddress = callData[0]
-			callApiName = callData[1]
+			for callData in callsList:
+				callRefAddress = callData[0]
+				callApiName = callData[1]
 		
-			# create API node or merge if API already exists, add relationship
-			apiNode = py2neo.Node("API", apiname=callApiName)
-			neoGraph.merge(apiNode)
+				# create API node or merge if API already exists, add relationship
+				apiNode = py2neo.Node("API", apiname=callApiName)
+				neoGraph.merge(apiNode)
 		
-			apiRel = py2neo.Relationship(functionNode, "calls_api", apiNode, address=callRefAddress)
-			neoGraph.create(apiRel)
+				apiRel = py2neo.Relationship(functionNode, "calls_api", apiNode, address=callRefAddress)
+				neoGraph.create(apiRel)
 	
-	for from_node, to_node, properties in graphity.edges(data=True):
-		# TODO regarding find_one: This method is intended to be used with a unique constraint and does not fail if more than one matching node is found
-		# TODO look into NodeSelector instead of find_one
+		for from_node, to_node, properties in graphity.edges(data=True):
+			
+			realFromNode = neoSelector.select("FUNCTION", sample=mySha1, address=from_node).first()
+			realToNode = neoSelector.select("FUNCTION", sample=mySha1, address=to_node).first()
 		
-		realFromNode = neoGraph.find_one("FUNCTION", property_key="address", property_value=from_node)
-		realToNode = neoGraph.find_one("FUNCTION", property_key="address", property_value=to_node)
-		
-		funcCallsFunc =  py2neo.Relationship(realFromNode, "calls_sub", realToNode)
-		neoGraph.create(funcCallsFunc)
+			funcCallsFunc =  py2neo.Relationship(realFromNode, "calls_sub", realToNode)
+			neoGraph.create(funcCallsFunc)
+	
+	
 
 	
 # fetching NetworkX graph from Neo, still to do
@@ -85,8 +110,24 @@ def fromNeo():
 	pass
 	
 
-# TODO add sqlite interface, just for fun
+# dump entire NetworkX graph to text file, supposed to work as a cache at some point to save parsing time
+def toPickle(graphity, debug, sha1):
+	
+	dumpfile = "cache/" + sha1 + ".txt"
+	debugfile = "cache/" + sha1 + ".dbg"
+	pickle.dump(graphity, open(dumpfile, 'w'))
+	pickle.dump(debug, open(debugfile, 'w'))
 
+
+# load graph and its debug info from cache, identified by SHA1
+def fromPickle(sha1):
+	
+	dumpfile = "cache/" + sha1 + ".txt"
+	debugfile = "cache/" + sha1 + ".dbg"
+	graphity = pickle.load(open(dumpfile))
+	debug = pickle.load(open(debugfile))
+	return graphity, debug
+	
 
 # print functions, their APIs and strings to the commandline, enhancements needed
 def printGraph(graphity):
@@ -118,6 +159,7 @@ def printGraphInfo(graphity, debug):
 	print "Type: " + allAtts['filetype'] 
 	print "Size: " + str(allAtts['filesize'])
 	print "MD5: " + allAtts['md5']
+	print "SHA1: " + allAtts['sha1']
 	print nx.info(graphity)
 	
 	# GRAPH PARSING INFO
@@ -142,7 +184,7 @@ def printGraphInfo(graphity, debug):
 	print "TLS section count:\t" + str(allAtts['tlssections']) 
 	print "Original filename:\t" + allAtts['originalfilename']
 	print "Section count:\t\t" + str(allAtts['sectioncount'])
-	print "Section details:" #+ str(allAtts['sectioninfo'])
+	print "Section details:" 
 	
 	i=0
 	while i < allAtts['sectioncount'] and i < 12:
@@ -234,16 +276,15 @@ def printGraphInfo(graphity, debug):
 	
 def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	
-	# 	filename, filetype, filesize, md5, compilationtime, addressep, sectionep, tlssections, originalfilename, sectioncount, sectiondata, functionstotal, refslocal, refsglobalvar, refsunknown, apitotal, apimisses, stringsreferenced, stringsdangling, stringsnoref
+	# 	filename, filetype, filesize, codesectionsize, md5, compilationtime, addressep, sectionep, tlssections, originalfilename, sectioncount, sectiondata, functionstotal, refslocal, refsglobalvar, refsunknown, apitotal, apimisses, stringsreferenced, stringsdangling, stringsnoref, ratiofunc, ratioapi, ratiostring, getproc, createthreat, memalloc
 
 	final = []
-	#allAtts = getAllAttributes(sys.argv[1])
 	if os.path.isfile(csvfile):
 		dumpfile = open(csvfile, 'a')
 	else:
 		try:
 			dumpfile = open(csvfile, 'w')
-			dumpfile.write("filename;filetype;filesize;md5;imphash;compilationtime;addressep;sectionep;tlssections;originalfilename;sectioncount;secname1;secname2;secname3;secname4;secname5;secname6;secsize1;secsize2;secsize3;secsize4;secsize5;secsize6;secent1;secent2;secent3;secent4;secent5;secent6;functionstotal;refslocal;refsglobalvar;refsunknown;apitotal;apimisses;stringsreferenced;stringsdangling;stringsnoref")
+			dumpfile.write("filename;filetype;filesize;codesecsize;md5;imphash;compilationtime;addressep;sectionep;tlssections;originalfilename;sectioncount;secname1;secname2;secname3;secname4;secname5;secname6;secsize1;secsize2;secsize3;secsize4;secsize5;secsize6;secent1;secent2;secent3;secent4;secent5;secent6;functionstotal;refslocal;refsglobalvar;refsunknown;apitotal;apimisses;stringsreferenced;stringsdangling;stringsnoref;ratiofunc;ratioapi;ratiostring;getproc;createthread;memalloc")
 			dumpfile.write("\n")
 		except:
 			print "ERROR couldn't create the csv dump file"
@@ -253,6 +294,7 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	final.append(allAtts['filename'])
 	final.append(allAtts['filetype'].replace(',',''))
 	final.append(str(allAtts['filesize']))
+	final.append(str(debug['xsectionsize']))
 	final.append(allAtts['md5'])
 	final.append(allAtts['imphash'])
 	final.append(allAtts['compilationts']) 
@@ -275,8 +317,38 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	final.append(debug['stringsReferencedTotal'])
 	final.append(debug['stringsDanglingTotal'])
 	final.append(debug['stringsNoRefTotal'])
+
+	# Ratios: functions, APIs, strings per kilobyte of code section
+	kilobytes = (float(debug['xsectionsize']) / 1000.0)
+	if kilobytes > 0:
+		final.append(str(float(debug['functions']) / kilobytes))
+		final.append(str(float(debug['apiTotal']) / kilobytes))
+		final.append(str(float(debug['stringsReferencedTotal']) / kilobytes))
+	else:
+		final.append('')
+		final.append('')
+		final.append('')
 	
-	theline = ";".join(map(str, final)) + "\n"
+	# Counting total calls to APIs of interest
+	allCalls = nx.get_node_attributes(graphity, 'calls')
+	gpaCount = 0
+	createThCount = 0
+	memAllocs = 0
+	
+	for function in allCalls:
+		for call in allCalls[function]:
+			if 'GetProcAddress' in call[1]:
+				gpaCount = gpaCount + 1
+			if 'CreateThread' in call[1]:
+				createThCount = createThCount + 1
+			if 'alloc' in call[1].lower():
+				memAllocs = memAllocs + 1
+	
+	final.append(str(gpaCount))
+	final.append(str(createThCount))
+	final.append(str(memAllocs))
+	
+	theline = ",".join(map(str, final)) + "\n"
 	
 	dumpfile.write(theline)
 	dumpfile.close()
@@ -329,6 +401,7 @@ def plotSeGraph(graphity):
 			node.set_label(finalString)
 	
 	
+	# TODO fix the sys.argv ref, ugly
 	allAtts = getAllAttributes(sys.argv[1])
 	graphinfo = "SAMPLE " + allAtts['filename'] + "\nType: " + allAtts['filetype'] + "\nSize: " + str(allAtts['filesize']) + "\nMD5: " + allAtts['md5'] + "\nImphash:\t\t" + allAtts['imphash'] + "\nCompilation time:\t" + allAtts['compilationts'] + "\nEntrypoint section:\t" + allAtts['sectionep'] 
 	
