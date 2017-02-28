@@ -1,89 +1,99 @@
-* 2016-10-22 13:24:10.468638 R2 started analysis 
-* 2016-10-22 13:24:12.779087 R2 finished analysis 
-* 2016-10-22 13:24:29.807223 Graph created with NetworkX 
-* 2016-10-22 13:24:40.600055 Graph extended with API calls, 850 calls in total, 0 dangling w/o function reference 
-* 2016-10-22 13:24:40.954323 Graph extended with string references 
-* 2016-10-22 13:24:41.076429 Printing the graph - nodes and node attributes
+* 2017-02-28 19:14:55.323687 Loading graph from cache under ./cache/[sha1].txt or .dbg
 .
 General graph info:
 SAMPLE ransom1
 Type: PE32 executable (GUI) Intel 80386, for MS Windows
 Size: 114688
 MD5: 9a7f87c91bf7e602055a5503e80e2313
+SHA1: 193f407a2f0c7e1eaa65c54cd9115c418881de42
 Name: 
 Type: DiGraph
-Number of nodes: 481
-Number of edges: 1306
-Average in degree:   2.7152
-Average out degree:   2.7152
+Number of nodes: 482
+Number of edges: 1293
+Average in degree:   2.6826
+Average out degree:   2.6826
 .
 Graph measurement data:
-   490 Total functions detected with 'aflj'
-  2502 Count of references to local functions
+   491 Total functions detected with 'aflj'
+  2078 Count of references to local functions
      0 Count of references to data section, global variables
      0 Count of references to unrecognized locations
-   850 Total API refs found via symbol xref check
+   844 Total API refs found via symbol xref check
      0 Count APIs w/o function xref
-   118 Total referenced Strings
+   115 Total referenced Strings
      0 Count of dangling strings (w/o function reference)
   1620 Count of strings w/o any reference
 .
+PE details:
+Imphash:		e58257679a7b694b926252a661453ab3
+Compilation time:	2016-02-23 08:07:31
+Entrypoint address:	0x6bed
+Entrypoint section:	.text|0
+TLS section count:	0
+Original filename:	
+Section count:		5
+Section details:
+   .text    81408 6.63818822145
+  .rdata    15872 6.6011769535
+   .data     3072 4.12824777917
+   .rsrc     7680 7.96772070636
+  .reloc     5632 5.19527889732
+.
 Fat node detection with out-degree centrality, count calls, count strings:
-0x4067f0 0.070833 23 2
-0x406bed 0.039583 12 0
-0x4048e9 0.031250 1 2
-0x412872 0.029167 0 0
-0x412c5a 0.027083 0 0
-0x403f8a 0.027083 22 0
-0x406428 0.027083 11 0
-0x407ed4 0.027083 2 1
-0x403006 0.027083 9 0
-0x40ca15 0.027083 0 0
-0x407818 0.025000 10 0
-0x411aa2 0.025000 0 0
-0x409615 0.025000 0 1
-0x41246f 0.022917 0 0
-0x40227e 0.020833 6 1
-0x408600 0.020833 0 0
-0x402665 0.020833 1 1
-0x412684 0.020833 0 0
-0x40cb86 0.020833 0 0
-0x40ce25 0.020833 1 1
+0x4067f0 0.070686 23 2
+0x406bed 0.039501 12 0
+0x4048e9 0.031185 1 2
+0x412872 0.029106 0 0
+0x412c5a 0.027027 0 0
+0x403f8a 0.027027 22 0
+0x406428 0.027027 11 0
+0x407ed4 0.027027 2 1
+0x403006 0.027027 9 0
+0x40ca15 0.027027 0 0
+0x411aa2 0.024948 0 0
+0x409615 0.024948 0 1
+0x407818 0.024948 10 0
+0x41246f 0.022869 0 0
+0x40227e 0.020790 6 1
+0x408600 0.020790 0 0
+0x402665 0.020790 1 1
+0x412684 0.020790 0 0
+0x40cb86 0.020790 0 0
+0x40ce25 0.020790 1 1
 .
 Histogram of out degree centrality:
 0.0 0.0005 0.001 0.0015 0.002 0.004 0.006 0.008 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.1 0.2 0.3 0.4 0.5 
-112 0 0 0 88 92 58 46 64 18 2 0 0 0 1 0 0 0 0 0 0 
+118 0 0 0 86 91 58 44 64 18 2 0 0 0 1 0 0 0 0 0 0 
 .
-Loose nodes 73 of total 481, thats 15.176715%
+Loose nodes 73 of total 482, thats 15.145228%
 .
 ExecSize FunctionCount ApiCount StringCount
-81408 490 850 118
+81408 491 844 115
 Per-Kilobyte ratio
-6.01906446541 10.4412342767 1.44948899371
+6.03134827044 10.3675314465 1.41263757862
 .
 Average degree connectivity per degree k:
   0 0.000000
-  1 9.724138
-  2 19.341270
-  3 19.366197
-  4 20.742958
-  5 19.734545
-  6 17.311111
-  7 20.883117
-  8 15.736111
-  9 16.594771
- 10 21.366667
- 11 13.220779
+  1 8.966667
+  2 18.629032
+  3 19.545045
+  4 20.815972
+  5 21.114286
+  6 17.804598
+  7 20.844156
+  8 15.708333
+  9 15.907407
+ 10 21.350000
+ 11 14.575758
  12 10.138889
  13 19.246154
  14 11.023810
- 15 9.333333
- 16 8.859375
+ 15 9.288889
+ 16 8.796875
  19 20.789474
  20 0.100000
- 22 3.227273
- 23 4.391304
- 24 0.000000
+ 22 3.181818
+ 23 2.173913
  29 0.000000
  35 9.257143
  37 0.108108
@@ -94,8 +104,7 @@ Average degree connectivity per degree k:
 .
 Found 4 calls to GetProcAddress
 .
-* 2016-10-22 13:24:58.778638 Dumped to Neo4J 
-* 2016-10-22 13:24:58.778657 Scanning for API patterns 
+* 2017-02-28 19:14:55.894262 Scanning for API patterns 
 For WSASEND found {'WSAStartup': '0x407818', 'gethostbyname': '0x40e18a', 'send': '0x407818'}
 For LOADRSRC found {'FindResource': '0x4058a2', 'LoadResource': '0x4058a2', 'LockResource': '0x4058a2'}
 For LOADRSRC found {'FindResource': '0x401000', 'LoadResource': '0x401000', 'LockResource': '0x401000'}
@@ -112,6 +121,9 @@ For PROCESSITER found {'CreateToolhelp32Snapshot': '0x408db8', 'Process32First':
 For PROCESSITER found {'CreateToolhelp32Snapshot': '0x40a601', 'Process32First': '0x40a582', 'Process32Next': '0x40a582'}
 For PROCESSITER found {'CreateToolhelp32Snapshot': '0x4011f4', 'Process32First': '0x4011f4', 'Process32Next': '0x4011f4'}
 For PROCESSITER found {'CreateToolhelp32Snapshot': '0x40a39e', 'Process32First': '0x40a39e', 'Process32Next': '0x40a39e'}
+For APILOADING2 found {'GetModuleHandle': '0x40b702', 'GetProcAddress': '0x40b702'}
+For APILOADING2 found {'GetModuleHandle': '0x403f47', 'GetProcAddress': '0x403f47'}
+For APILOADING2 found {'GetModuleHandle': '0x40a62b', 'GetProcAddress': '0x40a62b'}
 For CREATEPROC found {'CreateProcess': '0x40a9ab'}
 For CREATEPROC found {'CreateProcess': '0x408ff2'}
 For CREATEPROC found {'CreateProcess': '0x405052'}
@@ -132,15 +144,19 @@ For REGQUERY found {'RegQueryValue': '0x408e72', 'RegOpenKey': '0x408e72'}
 For SHELLEXEC found {'ShellExecute': '0x404e2c'}
 For SHELLEXEC found {'ShellExecute': '0x409256'}
 For SHELLEXEC found {'ShellExecute': '0x402dcc'}
-For SHELLEXEC found {'ShellExecute': '0x408eee'}
 For SHELLEXEC found {'ShellExecute': '0x408b8a'}
+For SHELLEXEC found {'ShellExecute': '0x408eee'}
 For APILOADING found {'GetProcAddress': '0x405c20', 'LoadLibrary': '0x405c20'}
 For FILEITER found {'FindNextFile': '0x40c231', 'FindClose': '0x40c231', 'FindFirstFile': '0x40c231'}
-For FILEITER found {'FindNextFile': '0x409a5f', 'FindClose': '0x409a5f', 'FindFirstFile': '0x409a5f'}
 For FILEITER found {'FindNextFile': '0x41096e', 'FindClose': '0x41096e', 'FindFirstFile': '0x41096e'}
+For FILEITER found {'FindNextFile': '0x409a5f', 'FindClose': '0x409a5f', 'FindFirstFile': '0x409a5f'}
 For FILEITER found {'FindNextFile': '0x410716', 'FindClose': '0x410716', 'FindFirstFile': '0x410716'}
 For WRITEFILE found {'WriteFile': '0x4091e6', 'CreateFile': '0x4091e6'}
 For WRITEFILE found {'WriteFile': '0x40461b', 'CreateFile': '0x40461b'}
 For WRITEFILE found {'WriteFile': '0x405139', 'CreateFile': '0x405139'}
 For WRITEFILE found {'WriteFile': '0x403f8a', 'CreateFile': '0x403f8a'}
-* 2016-10-22 13:24:58.790994 Scan finished 
+* 2017-02-28 19:14:55.906869 Stuffs all finished 
+
+__..--*** I WANNA BE A BENCHMARK WHEN I GROW UP ***--..__
+__ 0.528890 Info
+__ 0.012579 Behavior
