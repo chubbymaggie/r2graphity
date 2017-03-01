@@ -10,7 +10,7 @@ from time import time
 from datetime import datetime
 from argparse import ArgumentParser
 from base64 import b64decode
-from graphityOut import toNeo, printGraph, printGraphInfo, plotSeGraph, dumpGraphInfoCsv, toPickle, fromPickle
+from graphityOut import toNeo, printGraph, printGraphInfo, plotSeGraph, dumpGraphInfoCsv, toPickle, fromPickle, jsInfoVis
 from graphityUtils import gimmeDatApiName, sha1hash, getAllAttributes, is_ascii, Hvalue, check_pe_header
 import graphityFunc
 
@@ -81,7 +81,6 @@ def getCodeSections():
 
 	for line in sections.splitlines():
 		if re.search(execSection, line):
-		
 			for element in line.split():
 				items = element.split('=')
 				sectionData[items[0]] = items[1]	
@@ -111,11 +110,13 @@ def crossRefScan():
 	cmd = "axtj @@ sym.*"
 	finalCalls = {}
 	
-	# fixing the JSON...
+	# fixing the JSON... issue reported to radare2, keep in mind to remove workaround
 	temp = R2PY.cmd(cmd).replace('\n', ',')
 	temp = "[" + temp + "]"
 	
 	xrefj = json.loads(temp)
+	# TODO check!!
+	
 	for xrefitem in xrefj:
 		for xreflevel2 in xrefitem:
 			
@@ -220,6 +221,7 @@ def stringScan(debugDict):
 						allMyStrings.append([stringAddr, stringFuncRef, thatOneString])
 					else:
 						# TODO this is merely still useful strings, see how to fit them in the graphs and db
+						# NOTE: with character frequency analysis we could filter for useful strings here, reduce data, add to graph?
 						print "DANGLING STRING NO FUNCREF %s %s" % (stringAddr, thatOneString)
 						debugDict['stringsDangling'].append(thatOneString)
 		
@@ -255,12 +257,12 @@ def createRawGraph():
 	functions = R2PY.cmd("aflj")
 	if functions:
 		functionList=json.loads(functions)
+		#print json.dumps(functionList, indent=4, sort_keys=True)
 	else:
 		functionList = []
 
 	# figuring out code section size total	
 	sectionsList = getCodeSections()
-	
 	xlen = 0
 	for execSec in sectionsList:
 		xlen = xlen + execSec[2]
@@ -285,10 +287,12 @@ def createRawGraph():
 	
 	for item in functionList:
 		
+		#print hex(item['offset'])
 		graphity.add_node(hex(item['offset']), size=item['size'], calltype=item['calltype'], calls=[], apicallcount=0, strings=[])
 		
 	for item in functionList:
 	
+		# TODO look into new values provided by aflj
 		for xref in item['callrefs']:
 			
 			if xref['type'] == 'C':
@@ -296,8 +300,9 @@ def createRawGraph():
 				# If an edge is added, that includes a non-existent node, the node will be added, but w/o the necessary attributes
 				# Thasss why we iterate twice, can theoretically be speeded up but needs testing
 				if hex(xref['addr']) in graphity:
-					graphity.add_edge(hex(item['offset']), hex(xref['addr']), pos=hex(xref['at']))
-					refsFunc = refsFunc + 1
+					if item['offset'] != xref['addr']:
+						graphity.add_edge(hex(item['offset']), hex(xref['addr']), pos=hex(xref['at']))
+						refsFunc = refsFunc + 1
 					
 				elif hex(xref['addr']) in getIat():
 					pass
@@ -329,6 +334,7 @@ def createRawGraph():
 		refAddressCmd = "?v $FB @ " + call
 		funcAddress = R2PY.cmd(refAddressCmd)
 
+		# TODO check if funcAddress is the real function address 
 		if funcAddress in graphity:
 			
 			# node(funcAddress) has attribute calls, which contains a list of API calls
@@ -366,7 +372,7 @@ def createRawGraph():
 			stringrefs = stringrefs + 1
 			
 		else:
-			print "\nFAIL: String's function not in graph %s %s" % (stringFunc, stringData)
+			print "\n*** BIG FAIL *** String's function not in graph %s %s" % (stringFunc, stringData)
 			
 	print '* %s Graph extended with string references ' % (str(datetime.now()))
 	debugDict['stringsReferencedTotal'] = stringrefs
@@ -375,17 +381,20 @@ def createRawGraph():
 	
 	
 # Tag exports of DLLs
+# TODO : check whether exports are coming back after bugfix (?)
 def analyzeExports(graphity):
 	
 	exportsj = json.loads(R2PY.cmd("iEj"))
 	for item in exportsj:
-	
-		export_address = hex(item['vaddr'])
-		export_name = item['name']
 		
-		if export_address in graphity:	
-			graphity.node[export_address]['type'] = 'Export'
-			graphity.node[export_address]['alias'] = export_name
+		exportAddress = hex(item['vaddr'])
+		exportName = item['name']
+		
+		exportFunction = gimmeRespectiveFunction(exportAddress)
+
+		if exportFunction in graphity:	
+			graphity.node[exportFunction]['type'] = 'Export'
+			graphity.node[exportFunction]['alias'] = exportName
 			
 			
 # Removing thunks as they make my graphs fat, replace by API calls
@@ -449,10 +458,12 @@ def tagCallbacks(graphity):
 				
 			if 'SetWindowsHookEx' in call[1]:
 				addr = getCallback(call[0], 2)
-			
-			if addr in graphity:
-					graphity.node[addr]['type'] = "Callback"
-					graphity.add_edge(aNode[0], addr, pos=call[0], calltype="callback")
+
+			function = gimmeRespectiveFunction(addr)
+
+			if function in graphity:
+				graphity.node[function]['type'] = "Callback"
+				graphity.add_edge(aNode[0], function, pos=call[0], calltype="callback")
 
 
 # Parsing the handler offset out of the function arguments
@@ -466,14 +477,24 @@ def getCallback(call, argcount):
 		if 'push' in otherLine:
 			argcount = argcount - 1
 			
+		# TODO better done with a regex, bug prone
 		if not argcount:
-			address = otherLine.split()[2]
+			address = otherLine.split("push",1)[1].split()[0] 
 			if 'fcn.' in address:
 				return hex(int(address.split('.')[1], 16))
+			if '0x' in address:
+				return hex(int(address.split('0x')[1], 16))
 			else:
 				return ''
 
 
+# WORKAROUND until function detection - bug? feature? in radare is fixed and export vaddr equal actual offsets again
+def gimmeRespectiveFunction(address):
+	if address:
+		return R2PY.cmd("?v $FB @ " + address)
+	return ''
+		
+		
 # searching nodes and nearby nodes for patterns defined by graphityFunc.py
 def functionalityScan(graphity, pattern):
 	
@@ -539,12 +560,14 @@ def scanNodeForApi(anchor, seNode, patternNum):
 def graphMagix(filepath, allAtts):
 
 	global R2PY 
-	print '* %s R2 started analysis ' % str(datetime.now())
 	
 	if (os.path.isfile("cache/" + allAtts['sha1'] + ".txt") and os.path.isfile("cache/" + allAtts['sha1'] + ".dbg")):
+		print '* %s Loading graph from cache under ./cache/[sha1].txt or .dbg' % str(datetime.now())
 		graphity, debug = fromPickle(allAtts['sha1'])
 		
 	else:	
+		print '* %s R2 started analysis ' % str(datetime.now())
+	
 		BENCH['r2_start'] = time()
 	
 		R2PY = r2pipe.open(filepath)
@@ -568,7 +591,7 @@ def graphMagix(filepath, allAtts):
 		if 'DLL' in allAtts['filetype']:
 			analyzeExports(graphity)
 
-		# thunkPruning
+		# Thunk pruning, thunks are unnecessary information in the graph
 		thunkPruning(graphity)
 
 		# handler tagging
@@ -590,6 +613,7 @@ if __name__ == '__main__':
 	
 	parser = ArgumentParser()
 	parser.add_argument("input", help="Tool requires an input file or directory; directory, i.e. batch processing, only possible and feasible for csvdump option")
+	#parser.add_argument("-d", "--deactivatecache", action="store_true", help="Deactivate caching of graphs, for debugging of graph generation")
 	parser.add_argument("-p", "--printing", action="store_true", help="Print the graph as text, as in, nodes with respective content")
 	parser.add_argument("-i", "--info", action="store_true", help="Print info and stats of the graph")
 	parser.add_argument("-l", "--plotting", action="store_true", help="Plotting the graph via pyplot")
@@ -650,7 +674,11 @@ if __name__ == '__main__':
 			BENCH['info_start'] = time()
 			printGraphInfo(graphity, debug)
 			BENCH['info_end'] = time()
+			
+			#jsInfoVis(graphity, indent=2)
 	
+			# TODO look into certificate info: iC
+			
 		if args.plotting:
 			# GRAPH PLOTTING STUFF
 			#try:

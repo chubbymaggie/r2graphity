@@ -7,6 +7,7 @@ from pydotplus.graphviz import Node
 import networkx as nx
 import numpy as np
 import pickle
+import json
 from graphityUtils import gimmeDatApiName, getAllAttributes, stringScore
 
 
@@ -105,12 +106,12 @@ def toNeo(graphity, allAtts):
 	
 
 	
-# fetching NetworkX graph from Neo, still to do
+# fetching NetworkX graph from Neo, still to do; not sure if useful
 def fromNeo():
 	pass
 	
 
-# dump entire NetworkX graph to text file, supposed to work as a cache at some point to save parsing time
+# dump entire NetworkX graph + debug info to text files, graph caching to save parsing time for already parsed binaries
 def toPickle(graphity, debug, sha1):
 	
 	dumpfile = "cache/" + sha1 + ".txt"
@@ -153,6 +154,7 @@ def printGraph(graphity):
 def printGraphInfo(graphity, debug):
 	
 	# GENERAL INFO
+	
 	print ".\nGeneral graph info:"
 	allAtts = getAllAttributes(sys.argv[1])
 	print "SAMPLE " + allAtts['filename']
@@ -163,6 +165,7 @@ def printGraphInfo(graphity, debug):
 	print nx.info(graphity)
 	
 	# GRAPH PARSING INFO
+	
 	print ".\nGraph measurement data:"
 	print "%6d Total functions detected with 'aflj'" % debug['functions']
 	print "%6d Count of references to local functions" % debug['refsFunctions']
@@ -203,15 +206,18 @@ def printGraphInfo(graphity, debug):
 	indegrees = graphity.in_degree()
 	
 	# SPAGHETTI CODE METRICS
+	
 	print ".\nFat node detection with out-degree centrality, count calls, count strings:"
 	if degrees:
 		sortit = sorted(degrees, key=degrees.get, reverse=True)	
 		for val in sortit[:20]:
+			# TODO check the numbers
 			print "%s %.6f %d %d" % (val, degrees[val], len(graphity.node[val]['calls']), len(graphity.node[val]['strings']))
 
 	print '.'
 	
 	# OUT DEGREE CENTRALITY HISTOGRAM
+	
 	print "Histogram of out degree centrality:"
 	nummy = np.array(degrees.values())
 	bins = [0, 0.0005, 0.001, 0.0015, 0.002, 0.004, 0.006, 0.008, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.2, 0.3, 0.4, 0.5]	
@@ -224,6 +230,7 @@ def printGraphInfo(graphity, debug):
 	print "\n."
 	
 	# LOOSE NODE COUNT
+	
 	numInZero = 0
 	for val in indegrees:
 		if indegrees[val] == 0:
@@ -235,6 +242,7 @@ def printGraphInfo(graphity, debug):
 	print "Loose nodes %d of total %d, thats %f%%" % (numInZero, nodeNum, 100.0 * (float(numInZero) / float(nodeNum)))	
 	
 	# RATIO OF API CALLS AND STRINGS WITHING CODE SECTION
+	
 	print ".\nExecSize FunctionCount ApiCount StringCount"
 	print "%d %d %d %d" % (debug['xsectionsize'], debug['functions'], debug['apiTotal'], debug['stringsReferencedTotal']) # code section size, function count, total api, total string
 	
@@ -244,6 +252,7 @@ def printGraphInfo(graphity, debug):
 		print float(debug['functions']) / kilobytes, float(debug['apiTotal']) / kilobytes, float(debug['stringsReferencedTotal']) / kilobytes
 	
 	# AVERAGE DEGREE CONNECTIVITY
+	
 	print ".\nAverage degree connectivity per degree k:" #average nearest neighbor degree of nodes with degree k
 	avConn = nx.average_degree_connectivity(graphity)
 	for connectivity in avConn:
@@ -252,6 +261,7 @@ def printGraphInfo(graphity, debug):
 	print "."
 	
 	# GETPROCADDRESS DETECTION, not a suuuuper useful metric, but interesting to look at, different from beh. detection, cause count is total
+	
 	allCalls = nx.get_node_attributes(graphity, 'calls')
 	gpaCount = 0
 	
@@ -276,7 +286,8 @@ def printGraphInfo(graphity, debug):
 	
 def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	
-	# 	filename, filetype, filesize, codesectionsize, md5, compilationtime, addressep, sectionep, tlssections, originalfilename, sectioncount, sectiondata, functionstotal, refslocal, refsglobalvar, refsunknown, apitotal, apimisses, stringsreferenced, stringsdangling, stringsnoref, ratiofunc, ratioapi, ratiostring, getproc, createthreat, memalloc
+	# filename, filetype, filesize, codesectionsize, md5, compilationtime, addressep, sectionep, tlssections, originalfilename, sectioncount, sectiondata, functionstotal, refslocal, refsglobalvar, 
+	# refsunknown, apitotal, apimisses, stringsreferenced, stringsdangling, stringsnoref, ratiofunc, ratioapi, ratiostring, getproc, createthreat, memalloc
 
 	final = []
 	if os.path.isfile(csvfile):
@@ -306,7 +317,6 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	
 	secStuff = allAtts['sectioninfo'][:6] + allAtts['sectioninfo'][12:18] + allAtts['sectioninfo'][24:30]
 	final = final + secStuff
-	#print ";".join(map(str, secStuff)) + ";"
 
 	final.append(debug['functions'])
 	final.append(debug['refsFunctions'])
@@ -381,14 +391,16 @@ def plotSeGraph(graphity):
 			finalString = '\n'.join(finalList)
 			
 		if node.get('type') == 'Export':
-			label = "Export " + node.get('alias')
+			nodeaddr = node.to_string().split()[0]			# dirrty hack ^^
+			label = "Export " + nodeaddr + node.get('alias')
 			label = label + "\n" + finalString
 			node.set_fillcolor('skyblue') 
 			node.set_style('filled,setlinewidth(3.0)')
 			node.set_label(label)
 		
 		elif node.get('type') == 'Callback':
-			label = "Callback " + "\n" + finalString
+			nodeaddr = node.to_string().split()[0]			# dirrty hack ^^
+			label = "Callback " + nodeaddr + "\n" + finalString
 			node.set_fillcolor('darkolivegreen1') 
 			node.set_style('filled,setlinewidth(3.0)')
 			node.set_label(label)
@@ -419,4 +431,29 @@ def plotSeGraph(graphity):
 	except Exception as e:
 		print "ERROR drawing graph"
 		print str(e)
+		
+
+# Experimental Javascript InfoVis Tk data generation
+def jsInfoVis(graphity, indent=None):
+
+	json_graph = []
+	for node in graphity.nodes():
+		json_node = {
+			"id": node,
+			"name": node
+		}
+		# node data
+		json_node["data"] = graphity.node[node]
+		# adjacencies
+		if graphity[node]:
+			json_node["adjacencies"] = []
+			for neighbour in graphity[node]:
+				adjacency = {"nodeTo": neighbour}
+				# adjacency data
+				adjacency["data"] = graphity.edge[node][neighbour]
+				json_node["adjacencies"].append(adjacency)
+		json_graph.append(json_node)
+
+	print json.dumps(json_graph, indent=indent)
+	#return json.dumps(json_graph, indent=indent)
 	
