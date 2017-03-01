@@ -12,7 +12,7 @@ import struct
 # returns the sole API name
 
 def gimmeDatApiName(wholeString):
-	
+
 	separators = ['.dll_', '.sys_', '.exe_', '.sym_']
 
 	for sep in separators:
@@ -24,8 +24,8 @@ def gimmeDatApiName(wholeString):
 		elif sep.upper() in wholeString:
 			apiName = wholeString.split(sep.upper())[1].replace(']','')
 			return apiName
-	
-	return wholeString	
+
+	return wholeString
 
 
 # checks whether a string is pure ascii
@@ -36,8 +36,8 @@ def is_ascii(myString):
 		return True
 	except UnicodeDecodeError:
 		return False
-		
-# String evaluation		
+
+# String evaluation
 
 def stringScore(seString):
 
@@ -85,15 +85,15 @@ def stringScore(seString):
 	}
 
 	score = 0
-	
+
 	for i in seString:
 		ch = i.lower()
 		if ch in freqs:
 			score += freqs[ch]
-	
+
 	if len(seString) > 15:
 		return score / float(len(seString)/2)
- 
+
 	return score / float(len(seString))
 
 
@@ -119,7 +119,7 @@ def check_pe_header(filepath):
 		print("LOG - PE Parsing Error, sure this is a PE file?")
 		return False
 	return False
-	
+
 
 # SAMPLE ATTRIBUTE GETTERS
 
@@ -135,15 +135,15 @@ def check_pe_header(filepath):
  # number of section
  # original filename
  # number TLS sections
- 
+
 def sha1hash(path):
 	content = file(path, 'rb').read()
 	return sha1(content).hexdigest()
-	
+
 def md5hash(path):
 	content = file(path, 'rb').read()
 	return md5(content).hexdigest()
-	
+
 def getFilename(path):
 	return basename(path)
 
@@ -152,25 +152,25 @@ def getFiletype(path):
 
 def getFilesize(path):
 	return getsize(path)
-	
+
 def getPeSubsystem(path):
 	pass
 
 def getSsdeep(path):
 	return pydeep.hash_file(path)
-	
+
 def getImphash(pe):
 	return pe.get_imphash()
 
-def getCompilationTS(pe):	
+def getCompilationTS(pe):
 	return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(pe.FILE_HEADER.TimeDateStamp))
 
 def getEPAddress(pe):
 	return pe.OPTIONAL_HEADER.AddressOfEntryPoint
-	
+
 def getSectionCount(pe):
 	return pe.FILE_HEADER.NumberOfSections
-	
+
 def getOriginalFilename(pe):
 	oriFilename = ""
 	if hasattr(pe, 'VS_VERSIONINFO'):
@@ -213,7 +213,7 @@ def getTLSSectionCount(pe):
 				break
 			idx += 1
 	return idx
-	
+
 # Returns Entropy value for given data chunk
 def Hvalue(data):
 	if not data:
@@ -226,12 +226,12 @@ def Hvalue(data):
 			entropy += - p_x * math.log(p_x, 2)
 
 	return entropy
-	
+
 
 def getCodeSectionSize(pe):
 
 	for section in pe.sections:
-		print section		
+		print(section)
 
 def getSectionInfo(pe):
 
@@ -270,19 +270,19 @@ def getSectionInfo(pe):
 
 	secinfo = sects + vadd + ent
 	return secinfo
-	
-	
+
+
 def getAllAttributes(path):
-	
+
 	allAtts = {}
-	
+
 	allAtts['md5'] = md5hash(path)
 	allAtts['sha1'] = sha1hash(path)
 	allAtts['filename'] = getFilename(path)
 	allAtts['filetype'] = getFiletype(path)
 	allAtts['ssdeep'] = getSsdeep(path)
 	allAtts['filesize'] = getFilesize(path)
-	
+
 	try:
 		pe = pefile.PE(path)
 		if (pe.DOS_HEADER.e_magic == int(0x5a4d) and pe.NT_HEADERS.Signature == int(0x4550)):
@@ -294,7 +294,7 @@ def getAllAttributes(path):
 			allAtts['sectioninfo'] = getSectionInfo(pe)
 			allAtts['tlssections'] = getTLSSectionCount(pe)
 			allAtts['originalfilename'] = getOriginalFilename(pe)
-	
+
 	except (pefile.PEFormatError):
 		allAtts['imphash'] = ''
 		allAtts['compilationts'] = ''
@@ -304,5 +304,5 @@ def getAllAttributes(path):
 		allAtts['sectioninfo'] = ''
 		allAtts['tlssections'] = ''
 		allAtts['originalfilename'] = ''
-	
+
 	return allAtts
