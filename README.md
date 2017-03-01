@@ -52,5 +52,4 @@ pefile		https://github.com/erocarrera/pefile
 pydeep		https://github.com/kbandla/pydeep
 
 
-Watch out to install radare2 from the git repository, do not use the Debian package. Tested to run best with radare2 version 0.10.6 12650 commit: 486434036aed29275849e80dab133ea134d76860 build: 2016-10-14
-
+Watch out to install radare2 from the git repository, do not use the Debian package. Tested to run best with radare2 1.3.0-git 12650 @ linux-x86-64, commit: 486434036aed29275849e80dab133ea134d76860 build: 2016-10-14
