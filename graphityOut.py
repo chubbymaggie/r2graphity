@@ -415,7 +415,7 @@ def plotSeGraph(graphity, allAtts):
 	titleNode = Node()
 	titleNode.set_label(graphinfo)
 	titleNode.set_shape('rectangle')
-	titleNode.set_fillcolor('red')
+	titleNode.set_fillcolor('grey')
 	titleNode.set_style('filled')
 	pydotMe.add_node(titleNode)
 
@@ -434,21 +434,41 @@ def jsInfoVis(graphity, indent=None):
 	json_graph = []
 	for node in graphity.nodes():
 		json_node = {
-			"id": node,
-			"name": node
+			'id': node,
+			'name': node
 		}
 		# node data
-		json_node["data"] = graphity.node[node]
+		json_node['data'] = graphity.node[node]
+		
+		# Style
+		if graphity.node[node].get('calls') != []:
+			json_node['data']['$color'] = '#FFFF00' # yellow
+			
+		if graphity.node[node].get('type') == 'Callback':
+			json_node['data']['$dim'] = 8
+			json_node['data']['$type'] = 'square'
+			json_node['data']['$color'] = '#FF0080' # pink
+			json_node['name'] = node + " Callback"
+		
+		if graphity.node[node].get('type') == 'Export':
+			json_node['data']['$dim'] = 8
+			json_node['data']['$type'] = 'square'
+			json_node['data']['$color'] = '#3ADF00' # green
+			json_node['name'] = node + " Export"
+
+		
 		# adjacencies
 		if graphity[node]:
-			json_node["adjacencies"] = []
+			json_node['adjacencies'] = []
+			
 			for neighbour in graphity[node]:
-				adjacency = {"nodeTo": neighbour}
+				adjacency = {'nodeTo': neighbour}
 				# adjacency data
-				adjacency["data"] = graphity.edge[node][neighbour]
-				json_node["adjacencies"].append(adjacency)
+				adjacency['data'] = graphity.edge[node][neighbour]
+				json_node['adjacencies'].append(adjacency)
+		#print (json_node)
 		json_graph.append(json_node)
 
-	print(json.dumps(json_graph, indent=indent))
-	#return json.dumps(json_graph, indent=indent)
+	#print(json.dumps(json_graph, indent=indent))
+	return json.dumps(json_graph, indent=indent)
 

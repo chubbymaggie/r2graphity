@@ -219,7 +219,7 @@ def stringScan(debugDict):
 					stringFuncRef = R2PY.cmd(stringFuncRefCmd)
 					if stringFuncRef != '0x0':
 						allMyStrings.append([stringAddr, stringFuncRef, thatOneString])
-						print (thatOneString)
+						#print (thatOneString)
 					else:
 						# TODO this is merely still useful strings, see how to fit them in the graphs and db
 						# NOTE: with character frequency analysis we could filter for useful strings here, reduce data, add to graph?
@@ -662,6 +662,9 @@ if __name__ == '__main__':
 		allAtts = getAllAttributes(args.input)
 		graphity, debug = graphMagix(args.input, allAtts, args.deactivatecache)
 
+		#jsondump = open('jit/jsondump.txt', 'w')
+		#jsondump.write(jsInfoVis(graphity, indent=2))
+		#jsondump.close()
 
 		# TODO decide what to do with dangling strings/APIs (string filtering with frequency analysis?)
 
