@@ -196,8 +196,10 @@ def getEPSection(pe):
 			break
 		else:
 			pos += 1
-	return (name.decode('utf-8', 'ignore') + "|" + pos.__str__())
-
+	if name:
+		return (name.decode('utf-8', 'ignore') + "|" + pos.__str__())
+	return ''
+		
 def getTLSSectionCount(pe):
 	idx = 0
 	if (hasattr(pe, 'DIRECTORY_ENTRY_TLS') and pe.DIRECTORY_ENTRY_TLS and pe.DIRECTORY_ENTRY_TLS.struct and pe.DIRECTORY_ENTRY_TLS.struct.AddressOfCallBacks):
@@ -269,7 +271,10 @@ def getSectionInfo(pe):
 	secinfo = sects + vadd + ent
 	return secinfo
 
-
+	
+# ATTRIBUTES: md5, sha1, filename, filetype, ssdeep, filesize, imphash, compilationts, addressep, sectionep,
+# sectioncount, sectioninfo, tlssections, originalfilename
+	
 def getAllAttributes(path):
 
 	allAtts = {}

@@ -10,8 +10,10 @@ from time import time
 from datetime import datetime
 from argparse import ArgumentParser
 from base64 import b64decode
-from graphityOut import toNeo, printGraph, printGraphInfo, plotSeGraph, dumpGraphInfoCsv, toPickle, fromPickle, jsInfoVis
+from graphityOut import toNeo, printGraph, printGraphInfo, dumpGraphInfoCsv, toPickle, fromPickle
+from graphityViz import graphvizPlot, dumpJsonForJit, dumpGml
 from graphityUtils import gimmeDatApiName, sha1hash, getAllAttributes, is_ascii, Hvalue, check_pe_header
+from graphityScan import functionalityScan
 import graphityFunc
 
 
@@ -281,7 +283,7 @@ def createRawGraph():
 
 	### NetworkX Graph Structure ###
 
-	# FUNCTION as node, attributes: function address, size, calltype, list of calls, list of strings, count of calls; type[Callback, Export], alias (e.g. export name)
+	# FUNCTION as node, attributes: function address, size, calltype, list of calls, list of strings, count of calls; functiontype[Standard, Callback, Export], alias (e.g. export name)
 	# FUNCTIoN REFERENCE as edge (function address -> target address), attributes: ref offset (at)
 	# CALLBACK REFERENCE as edge (currently for threads and Windows hooks)
 	# API CALLS (list attribute of function node): address, API name
@@ -292,7 +294,7 @@ def createRawGraph():
 	for item in functionList:
 
 		#print hex(item['offset'])
-		graphity.add_node(hex(item['offset']), size=item['size'], calltype=item['calltype'], calls=[], apicallcount=0, strings=[])
+		graphity.add_node(hex(item['offset']), size=item['size'], calltype=item['calltype'], calls=[], apicallcount=0, strings=[], functiontype='Standard')
 
 	for item in functionList:
 
@@ -397,7 +399,7 @@ def analyzeExports(graphity):
 		exportFunction = gimmeRespectiveFunction(exportAddress)
 
 		if exportFunction in graphity:
-			graphity.node[exportFunction]['type'] = 'Export'
+			graphity.node[exportFunction]['functiontype'] = 'Export'
 			graphity.node[exportFunction]['alias'] = exportName
 
 
@@ -466,7 +468,7 @@ def tagCallbacks(graphity):
 			function = gimmeRespectiveFunction(addr)
 
 			if function in graphity:
-				graphity.node[function]['type'] = "Callback"
+				graphity.node[function]['functiontype'] = "Callback"
 				graphity.add_edge(aNode[0], function, pos=call[0], calltype="callback")
 
 
@@ -497,67 +499,6 @@ def gimmeRespectiveFunction(address):
 	if address:
 		return R2PY.cmd("?v $FB @ " + address)
 	return ''
-
-
-# searching nodes and nearby nodes for patterns defined by graphityFunc.py
-def functionalityScan(graphity, pattern):
-
-	# search is performed by defining "anchor" node, where initial pattern is found
-	# search then moved from there 1 level up to search surrounding nodes (number of levels could be increased)
-	# pattern lists for now are kept rather small
-	# TODO determine distance between found patterns to see which functionalities lie close to each other
-	patternNum = len(pattern)
-	anchorList = []
-
-	allCalls = nx.get_node_attributes(graphity, 'calls')
-
-	for function in allCalls:
-		for call in allCalls[function]:
-
-			api = call[1]
-			anchorpat = pattern[0]
-
-			if anchorpat in api:
-				if not list(filter(lambda daAnchor: daAnchor['address'] == function, anchorList)):
-					
-					# maintain a dict of patterns per anchor to keep track of found patterns
-					patternCheck = {}
-					for item in pattern:
-						patternCheck[item] = False
-					patternCheck[anchorpat] = function
-
-					anchorList.append({'address':function, 'patterns':patternCheck})
-
-	# anchor nodes found and more than one pattern searched for
-	if patternNum > 1 and len(anchorList) > 0:
-		for anchor in anchorList:
-
-			scanNodeForApi(anchor, anchor['address'], patternNum)
-			if False in anchor['patterns'].values():
-
-				anchorNeighbors = nx.all_neighbors(graphity, anchor['address'])
-				for neighbor in anchorNeighbors:
-					scanNodeForApi(anchor, neighbor, patternNum)
-
-	return anchorList
-
-
-# Search for a specific pattern within a node, orient by anchor pattern
-def scanNodeForApi(anchor, seNode, patternNum):
-
-	for patt in anchor['patterns']:
-
-		# anchor has a dict that saves which patterns were found already
-		for call in graphity.node[seNode]['calls']:
-			api = call[1]
-
-			# found a pattern in an api call, that hasnt been found before
-			if patt in api and anchor['patterns'][patt] == False:
-				anchor['patterns'][patt] = seNode
-
-				if not False in anchor['patterns'].values():
-					# all patterns found - done
-					break
 
 
 # super graph creation function, radare-analyses the sample, puts together all of the graph and debug info
@@ -662,14 +603,10 @@ if __name__ == '__main__':
 		allAtts = getAllAttributes(args.input)
 		graphity, debug = graphMagix(args.input, allAtts, args.deactivatecache)
 
-		#jsondump = open('jit/jsondump.txt', 'w')
-		#jsondump.write(jsInfoVis(graphity, indent=2))
-		#jsondump.close()
 
+			
 		# TODO decide what to do with dangling strings/APIs (string filtering with frequency analysis?)
 
-
-		#othergraph, otherdebug = fromPickle(allAtts['sha1'])
 
 		if args.printing:
 			# PRINT GRAPH TO CMDLINE
@@ -684,8 +621,6 @@ if __name__ == '__main__':
 			printGraphInfo(graphity, debug)
 			BENCH['info_end'] = time()
 
-			#jsInfoVis(graphity, indent=2)
-
 			# TODO look into certificate info: iC
 
 		if args.plotting:
@@ -693,7 +628,7 @@ if __name__ == '__main__':
 			#try:
 			print('* %s Plotting routine starting ' % str(datetime.now()))
 			BENCH['plotting_start'] = time()
-			plotSeGraph(graphity, allAtts)
+			graphvizPlot(graphity, allAtts)
 			BENCH['plotting_end'] = time()
 			print('* %s Plotting routine finished ' % str(datetime.now()))
 			#except:
