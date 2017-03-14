@@ -11,6 +11,7 @@ import magic
 import math
 from collections import Counter
 import json
+import uuid
 
 misp_objects_path = './misp-objects/objects'
 
@@ -19,9 +20,16 @@ class MISPObjectGenerator():
 
     def __init__(self):
         self.misp_event = MISPEvent()
+        self.uuid = str(uuid.uuid4())
+        self.links = []
 
     def _fill_object(self, obj_def, values):
-        empty_object = self._new_empty_object(obj_def)
+        empty_object = self.__new_empty_object(obj_def)
+        if self.links:
+            empty_object["ObjectReference"] = []
+            for link in self.links:
+                uuid, comment = link
+                empty_object['ObjectReference'].append({'referenced_object_uuid': uuid, 'comment': comment})
         for object_type, value in values.items():
             if value is None:
                 continue
@@ -32,10 +40,13 @@ class MISPObjectGenerator():
             empty_object['ObjectAttribute'].append({'type': object_type, 'Attribute': attribute._json()})
         return empty_object
 
-    def _new_empty_object(self, object_definiton):
+    def add_link(self, uuid, comment=None):
+        self.links.append((uuid, comment))
+
+    def __new_empty_object(self, object_definiton):
         return {'name': object_definiton['name'], 'meta-category': object_definiton['meta-category'],
-                'description': object_definiton['description'], 'version': object_definiton['version'],
-                'ObjectAttribute': []}
+                'uuid': self.uuid, 'description': object_definiton['description'],
+                'version': object_definiton['version'], 'ObjectAttribute': []}
 
 
 class FileObject(MISPObjectGenerator):
@@ -84,7 +95,6 @@ class FileObject(MISPObjectGenerator):
         file_object['size-in-bytes'] = self.size
         # file_object['authentihash'] = self.
         file_object['ssdeep'] = self.ssdeep
-        # file_object['pehash'] = self.
         # file_object['sha-224'] = self.
         # file_object['sha-384'] = self.
         file_object['sha512'] = self.sha512
@@ -117,6 +127,7 @@ class PEObject(MISPObjectGenerator):
             self.pe_type = 'exe'
         else:
             self.pe_type = 'unknown'
+        # file_object['pehash'] = self.
         # General information
         self.imphash = self.pe.get_imphash()
         all_data = self.pe.dump_dict()
@@ -141,6 +152,7 @@ class PEObject(MISPObjectGenerator):
             pos = 0
             for s in all_data['PE Sections']:
                 section = PESectionObject(s)
+                self.add_link(self.uuid, 'Section {} of PE'.format(pos))
                 if ((self.entrypoint_address >= s['VirtualAddress']['Value']) and
                         (self.entrypoint_address < (s['VirtualAddress']['Value'] + s['Misc_VirtualSize']['Value']))):
                     self.entrypoint_section = (s['Name']['Value'], pos)  # Tuple: (section_name, position)
@@ -210,9 +222,10 @@ class PESectionObject(MISPObjectGenerator):
 
 def make_objects(filepath):
     misp_file = FileObject(filepath)
-    file_object = misp_file.dump()
     try:
         misp_pe = PEObject(misp_file.data)
+        misp_file.add_link(misp_pe.uuid, 'PE indicators')
+        file_object = misp_file.dump()
         pe_object = misp_pe.dump()
         pe_sections = []
         for s in misp_pe.sections:
@@ -220,4 +233,5 @@ def make_objects(filepath):
         return file_object, pe_object, pe_sections
     except pefile.PEFormatError:
         pass
+    file_object = misp_file.dump()
     return file_object, None, None
