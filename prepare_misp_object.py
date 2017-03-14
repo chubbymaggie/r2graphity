@@ -12,11 +12,12 @@ import math
 from collections import Counter
 import json
 import uuid
+import abc
 
 misp_objects_path = './misp-objects/objects'
 
 
-class MISPObjectGenerator():
+class MISPObjectGenerator(metaclass=abc.ABCMeta):
 
     def __init__(self):
         self.misp_event = MISPEvent()
@@ -51,29 +52,38 @@ class MISPObjectGenerator():
                 'uuid': self.uuid, 'description': object_definiton['description'],
                 'version': object_definiton['version'], 'ObjectAttribute': []}
 
+    @abc.abstractmethod
+    def generate_attributes(self):
+        pass
+
+    @abc.abstractmethod
+    def dump(self):
+        pass
+
 
 class FileObject(MISPObjectGenerator):
 
     def __init__(self, filepath):
         MISPObjectGenerator.__init__(self)
-        self.filepath = filepath
-        self.size = os.path.getsize(filepath)
-        self.filename = os.path.basename(filepath)
-        with open(filepath, 'rb') as f:
-            self.pseudo_file = BytesIO(f.read())
-        self.data = self.pseudo_file.getvalue()
-        self.entropy = self.__entropy_H(self.data)
-        self.filetype = magic.from_buffer(self.data)
-        self.hashes()
         with open(os.path.join(misp_objects_path, 'file/definition.json'), 'r') as f:
             self.mo_file = json.load(f)
+        self.filepath = filepath
+        with open(self.filepath, 'rb') as f:
+            self.pseudo_file = BytesIO(f.read())
+        self.data = self.pseudo_file.getvalue()
+        self.generate_attributes()
 
-    def hashes(self):
-        self.md5 = md5(self.data).hexdigest()
-        self.sha1 = sha1(self.data).hexdigest()
-        self.sha256 = sha256(self.data).hexdigest()
-        self.sha512 = sha512(self.data).hexdigest()
-        self.ssdeep = pydeep.hash_buf(self.data).decode()
+    def generate_attributes(self):
+        self.filename = os.path.basename(self.filepath)
+        self.size = os.path.getsize(self.filepath)
+        if self.size > 0:
+            self.filetype = magic.from_buffer(self.data)
+            self.entropy = self.__entropy_H(self.data)
+            self.md5 = md5(self.data).hexdigest()
+            self.sha1 = sha1(self.data).hexdigest()
+            self.sha256 = sha256(self.data).hexdigest()
+            self.sha512 = sha512(self.data).hexdigest()
+            self.ssdeep = pydeep.hash_buf(self.data).decode()
 
     def __entropy_H(self, data):
         """Calculate the entropy of a chunk of data."""
@@ -96,23 +106,19 @@ class FileObject(MISPObjectGenerator):
         file_object = {}
         file_object['filename'] = {'value': self.filename}
         file_object['size-in-bytes'] = {'value': self.size}
-        if not self.size:
-            to_ids = False
-        else:
-            # MISPAttribute use the default value for the type
-            to_ids = None
-        # file_object['authentihash'] = self.
-        file_object['ssdeep'] = {'value': self.ssdeep, 'to_ids': to_ids}
-        # file_object['sha-224'] = self.
-        # file_object['sha-384'] = self.
-        file_object['sha512'] = {'value': self.sha512, 'to_ids': to_ids}
-        # file_object['sha512/224'] = self.
-        # file_object['sha512/256'] = self.
-        # file_object['tlsh'] = self.
-        file_object['md5'] = {'value': self.md5, 'to_ids': to_ids}
-        file_object['sha1'] = {'value': self.sha1, 'to_ids': to_ids}
-        file_object['sha256'] = {'value': self.sha256, 'to_ids': to_ids}
-        file_object['entropy'] = {'value': self.entropy, 'to_ids': to_ids}
+        if self.size > 0:
+            file_object['entropy'] = {'value': self.entropy}
+            file_object['ssdeep'] = {'value': self.ssdeep}
+            file_object['sha512'] = {'value': self.sha512}
+            file_object['md5'] = {'value': self.md5}
+            file_object['sha1'] = {'value': self.sha1}
+            file_object['sha256'] = {'value': self.sha256}
+            # file_object['authentihash'] = self.
+            # file_object['sha-224'] = self.
+            # file_object['sha-384'] = self.
+            # file_object['sha512/224'] = self.
+            # file_object['sha512/256'] = self.
+            # file_object['tlsh'] = self.
         return self._fill_object(self.mo_file, file_object)
 
 
@@ -120,13 +126,13 @@ class PEObject(MISPObjectGenerator):
 
     def __init__(self, data):
         MISPObjectGenerator.__init__(self)
-        self.data = data
         with open(os.path.join(misp_objects_path, 'pe/definition.json'), 'r') as f:
             self.mo_pe = json.load(f)
+        self.data = data
         self.pe = pefile.PE(data=self.data)
-        self.pe_attributes()
+        self.generate_attributes()
 
-    def pe_attributes(self):
+    def generate_attributes(self):
         if self.pe.is_dll():
             self.pe_type = 'dll'
         elif self.pe.is_driver():
@@ -206,37 +212,34 @@ class PESectionObject(MISPObjectGenerator):
 
     def __init__(self, section_info, data):
         MISPObjectGenerator.__init__(self)
-        self.section_info = section_info
-        self.data = data
         with open(os.path.join(misp_objects_path, 'pe-section/definition.json'), 'r') as f:
             self.mo_pe_section = json.load(f)
-        self.section_attributes()
+        self.section_info = section_info
+        self.data = data
+        self.generate_attributes()
 
-    def section_attributes(self):
+    def generate_attributes(self):
         self.name = self.section_info['Name']['Value']
         self.size = self.section_info['SizeOfRawData']['Value']
-        self.entropy = self.section_info['Entropy']
-        self.md5 = self.section_info['MD5']
-        self.sha1 = self.section_info['SHA1']
-        self.sha256 = self.section_info['SHA256']
-        self.sha512 = self.section_info['SHA512']
-        self.ssdeep = pydeep.hash_buf(self.data).decode()
+        if self.size > 0:
+            self.entropy = self.section_info['Entropy']
+            self.md5 = self.section_info['MD5']
+            self.sha1 = self.section_info['SHA1']
+            self.sha256 = self.section_info['SHA256']
+            self.sha512 = self.section_info['SHA512']
+            self.ssdeep = pydeep.hash_buf(self.data).decode()
 
     def dump(self):
         section = {}
         section['name'] = {'value': self.name}
         section['size-in-bytes'] = {'value': self.size}
-        if not self.size:
-            to_ids = False
-        else:
-            # MISPAttribute use the default value for the type
-            to_ids = None
-        section['entropy'] = {'value': self.entropy}
-        section['md5'] = {'value': self.md5, 'to_ids': to_ids}
-        section['sha1'] = {'value': self.sha1, 'to_ids': to_ids}
-        section['sha256'] = {'value': self.sha256, 'to_ids': to_ids}
-        section['sha512'] = {'value': self.sha512, 'to_ids': to_ids}
-        section['ssdeep'] = {'value': self.ssdeep, 'to_ids': to_ids}
+        if self.size > 0:
+            section['entropy'] = {'value': self.entropy}
+            section['md5'] = {'value': self.md5}
+            section['sha1'] = {'value': self.sha1}
+            section['sha256'] = {'value': self.sha256}
+            section['sha512'] = {'value': self.sha512}
+            section['ssdeep'] = {'value': self.ssdeep}
         return self._fill_object(self.mo_pe_section, section)
 
 
