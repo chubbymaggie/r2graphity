@@ -12,11 +12,12 @@ import math
 from collections import Counter
 import json
 import uuid
+import abc
 
 misp_objects_path = './misp-objects/objects'
 
 
-class MISPObjectGenerator():
+class MISPObjectGenerator(metaclass=abc.ABCMeta):
 
     def __init__(self):
         self.misp_event = MISPEvent()
@@ -31,12 +32,15 @@ class MISPObjectGenerator():
                 uuid, comment = link
                 empty_object['ObjectReference'].append({'referenced_object_uuid': uuid, 'comment': comment})
         for object_type, value in values.items():
-            if value is None:
+            if value.get('value') is None:
                 continue
-            misp_type = obj_def['attributes'][object_type]['misp-attribute']
-            correlation = obj_def['attributes'][object_type].get('disable_correlation')
             attribute = MISPAttribute(self.misp_event.describe_types)
-            attribute.set_all_values(type=misp_type, value=value, disable_correlation=correlation)
+            value['type'] = obj_def['attributes'][object_type]['misp-attribute']
+            if value.get('disable_correlation') is None:
+                value['disable_correlation'] = obj_def['attributes'][object_type].get('disable_correlation')
+            if value.get('to_ids') is None:
+                value['to_ids'] = obj_def['attributes'][object_type].get('to_ids')
+            attribute.set_all_values(**value)
             empty_object['ObjectAttribute'].append({'type': object_type, 'Attribute': attribute._json()})
         return empty_object
 
@@ -48,29 +52,38 @@ class MISPObjectGenerator():
                 'uuid': self.uuid, 'description': object_definiton['description'],
                 'version': object_definiton['version'], 'ObjectAttribute': []}
 
+    @abc.abstractmethod
+    def generate_attributes(self):
+        pass
+
+    @abc.abstractmethod
+    def dump(self):
+        pass
+
 
 class FileObject(MISPObjectGenerator):
 
     def __init__(self, filepath):
         MISPObjectGenerator.__init__(self)
-        self.filepath = filepath
-        self.size = os.path.getsize(filepath)
-        self.filename = os.path.basename(filepath)
-        with open(filepath, 'rb') as f:
-            self.pseudo_file = BytesIO(f.read())
-        self.data = self.pseudo_file.getvalue()
-        self.entropy = self.__entropy_H(self.data)
-        self.filetype = magic.from_buffer(self.data)
-        self.hashes()
         with open(os.path.join(misp_objects_path, 'file/definition.json'), 'r') as f:
             self.mo_file = json.load(f)
+        self.filepath = filepath
+        with open(self.filepath, 'rb') as f:
+            self.pseudo_file = BytesIO(f.read())
+        self.data = self.pseudo_file.getvalue()
+        self.generate_attributes()
 
-    def hashes(self):
-        self.md5 = md5(self.data).hexdigest()
-        self.sha1 = sha1(self.data).hexdigest()
-        self.sha256 = sha256(self.data).hexdigest()
-        self.sha512 = sha512(self.data).hexdigest()
-        self.ssdeep = pydeep.hash_buf(self.data).decode()
+    def generate_attributes(self):
+        self.filename = os.path.basename(self.filepath)
+        self.size = os.path.getsize(self.filepath)
+        if self.size > 0:
+            self.filetype = magic.from_buffer(self.data)
+            self.entropy = self.__entropy_H(self.data)
+            self.md5 = md5(self.data).hexdigest()
+            self.sha1 = sha1(self.data).hexdigest()
+            self.sha256 = sha256(self.data).hexdigest()
+            self.sha512 = sha512(self.data).hexdigest()
+            self.ssdeep = pydeep.hash_buf(self.data).decode()
 
     def __entropy_H(self, data):
         """Calculate the entropy of a chunk of data."""
@@ -91,20 +104,21 @@ class FileObject(MISPObjectGenerator):
 
     def dump(self):
         file_object = {}
-        file_object['filename'] = self.filename
-        file_object['size-in-bytes'] = self.size
-        # file_object['authentihash'] = self.
-        file_object['ssdeep'] = self.ssdeep
-        # file_object['sha-224'] = self.
-        # file_object['sha-384'] = self.
-        file_object['sha512'] = self.sha512
-        # file_object['sha512/224'] = self.
-        # file_object['sha512/256'] = self.
-        # file_object['tlsh'] = self.
-        file_object['md5'] = self.md5
-        file_object['sha1'] = self.sha1
-        file_object['sha256'] = self.sha256
-        file_object['entropy'] = self.entropy
+        file_object['filename'] = {'value': self.filename}
+        file_object['size-in-bytes'] = {'value': self.size}
+        if self.size > 0:
+            file_object['entropy'] = {'value': self.entropy}
+            file_object['ssdeep'] = {'value': self.ssdeep}
+            file_object['sha512'] = {'value': self.sha512}
+            file_object['md5'] = {'value': self.md5}
+            file_object['sha1'] = {'value': self.sha1}
+            file_object['sha256'] = {'value': self.sha256}
+            # file_object['authentihash'] = self.
+            # file_object['sha-224'] = self.
+            # file_object['sha-384'] = self.
+            # file_object['sha512/224'] = self.
+            # file_object['sha512/256'] = self.
+            # file_object['tlsh'] = self.
         return self._fill_object(self.mo_file, file_object)
 
 
@@ -112,13 +126,13 @@ class PEObject(MISPObjectGenerator):
 
     def __init__(self, data):
         MISPObjectGenerator.__init__(self)
-        self.data = data
         with open(os.path.join(misp_objects_path, 'pe/definition.json'), 'r') as f:
             self.mo_pe = json.load(f)
+        self.data = data
         self.pe = pefile.PE(data=self.data)
-        self.pe_attributes()
+        self.generate_attributes()
 
-    def pe_attributes(self):
+    def generate_attributes(self):
         if self.pe.is_dll():
             self.pe_type = 'dll'
         elif self.pe.is_driver():
@@ -151,8 +165,9 @@ class PEObject(MISPObjectGenerator):
         if all_data.get('PE Sections'):
             pos = 0
             for s in all_data['PE Sections']:
-                section = PESectionObject(s)
-                self.add_link(self.uuid, 'Section {} of PE'.format(pos))
+                s_obj = self.pe.sections[pos]
+                section = PESectionObject(s, s_obj.get_data())
+                self.add_link(section.uuid, 'Section {} of PE'.format(pos))
                 if ((self.entrypoint_address >= s['VirtualAddress']['Value']) and
                         (self.entrypoint_address < (s['VirtualAddress']['Value'] + s['Misc_VirtualSize']['Value']))):
                     self.entrypoint_section = (s['Name']['Value'], pos)  # Tuple: (section_name, position)
@@ -163,60 +178,68 @@ class PEObject(MISPObjectGenerator):
 
     def dump(self):
         pe_object = {}
+        pe_object['type'] = {'value': self.pe_type}
         if hasattr(self, 'imphash'):
-            pe_object['imphash'] = self.imphash
+            pe_object['imphash'] = {'value': self.imphash}
         if hasattr(self, 'original_filename'):
-            pe_object['original-filename'] = self.original_filename
+            pe_object['original-filename'] = {'value': self.original_filename}
         if hasattr(self, 'internal_filename'):
-            pe_object['internal-filename'] = self.internal_filename
+            pe_object['internal-filename'] = {'value': self.internal_filename}
         if hasattr(self, 'compilation_timestamp'):
-            pe_object['compilation-timestamp'] = self.compilation_timestamp
+            pe_object['compilation-timestamp'] = {'value': self.compilation_timestamp}
         if hasattr(self, 'entrypoint_section'):
-            pe_object['entrypoint-section|position'] = '{}|{}'.format(*self.entrypoint_section)
+            pe_object['entrypoint-section|position'] = {'value': '{}|{}'.format(*self.entrypoint_section)}
         if hasattr(self, 'entrypoint_address'):
-            pe_object['entrypoint-address'] = self.entrypoint_address
+            pe_object['entrypoint-address'] = {'value': self.entrypoint_address}
         if hasattr(self, 'file_description'):
-            pe_object['file-description'] = self.file_description
+            pe_object['file-description'] = {'value': self.file_description}
         if hasattr(self, 'file_version'):
-            pe_object['file-version'] = self.file_version
+            pe_object['file-version'] = {'value': self.file_version}
         if hasattr(self, 'lang_id'):
-            pe_object['lang-id'] = self.lang_id
+            pe_object['lang-id'] = {'value': self.lang_id}
         if hasattr(self, 'product_name'):
-            pe_object['product-name'] = self.product_name
+            pe_object['product-name'] = {'value': self.product_name}
         if hasattr(self, 'product_version'):
-            pe_object['product-version'] = self.product_version
+            pe_object['product-version'] = {'value': self.product_version}
         if hasattr(self, 'company_name'):
-            pe_object['company-name'] = self.company_name
+            pe_object['company-name'] = {'value': self.company_name}
+        if hasattr(self, 'nb_sections'):
+            pe_object['number-sections'] = {'value': self.nb_sections}
         return self._fill_object(self.mo_pe, pe_object)
 
 
 class PESectionObject(MISPObjectGenerator):
 
-    def __init__(self, section_info):
+    def __init__(self, section_info, data):
         MISPObjectGenerator.__init__(self)
-        self.section_info = section_info
         with open(os.path.join(misp_objects_path, 'pe-section/definition.json'), 'r') as f:
             self.mo_pe_section = json.load(f)
-        self.section_attributes()
+        self.section_info = section_info
+        self.data = data
+        self.generate_attributes()
 
-    def section_attributes(self):
+    def generate_attributes(self):
         self.name = self.section_info['Name']['Value']
         self.size = self.section_info['SizeOfRawData']['Value']
-        self.entropy = self.section_info['Entropy']
-        self.md5 = self.section_info['MD5']
-        self.sha1 = self.section_info['SHA1']
-        self.sha256 = self.section_info['SHA256']
-        self.sha512 = self.section_info['SHA512']
+        if self.size > 0:
+            self.entropy = self.section_info['Entropy']
+            self.md5 = self.section_info['MD5']
+            self.sha1 = self.section_info['SHA1']
+            self.sha256 = self.section_info['SHA256']
+            self.sha512 = self.section_info['SHA512']
+            self.ssdeep = pydeep.hash_buf(self.data).decode()
 
     def dump(self):
         section = {}
-        section['name'] = self.name
-        section['size-in-bytes'] = self.size
-        section['entropy'] = self.entropy
-        section['md5'] = self.md5
-        section['sha1'] = self.sha1
-        section['sha256'] = self.sha256
-        section['sha512'] = self.sha512
+        section['name'] = {'value': self.name}
+        section['size-in-bytes'] = {'value': self.size}
+        if self.size > 0:
+            section['entropy'] = {'value': self.entropy}
+            section['md5'] = {'value': self.md5}
+            section['sha1'] = {'value': self.sha1}
+            section['sha256'] = {'value': self.sha256}
+            section['sha512'] = {'value': self.sha512}
+            section['ssdeep'] = {'value': self.ssdeep}
         return self._fill_object(self.mo_pe_section, section)
 
 
@@ -235,3 +258,11 @@ def make_objects(filepath):
         pass
     file_object = misp_file.dump()
     return file_object, None, None
+
+
+if __name__ == '__main__':
+    import glob
+    for f in glob.glob('/path/to/samples/*'):
+        fo, peo, seos = make_objects(f)
+        #print(json.dumps([fo, peo, seos]))
+        #break
