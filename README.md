@@ -8,12 +8,14 @@ graphity.py [-h] [-p] [-i] [-l] [-b] [-n] [-c CSVDUMP] input
 
 positional arguments:
 
-  input           Tool requires an input file or directory; directory, i.e. batch processing, only possible and feasible for csvdump option
+  input           Tool requires an input file or directory; directory, i.e. batch processing, only possible and feasible for csvdump option and Neo4j dump
 
 
 optional arguments:
 
   -h, --help      show this help message and exit
+  
+  -d, --deactivatecache   Deactivate caching of graphs, for debugging of graph generation
   
   -p, --printing  Print the graph as text, as in, nodes with respective content
   
@@ -35,6 +37,8 @@ R2Graphity is built to construct a graph structure based on the function call gr
 Dependencies
 ============
 
+Watch out to get the Python3 packages, or install directly with pip3. 
+
 radare2		https://github.com/radare/radare2
 
 r2pipe		https://github.com/radare/radare2/wiki/R2PipeAPI
@@ -52,4 +56,5 @@ pefile		https://github.com/erocarrera/pefile
 pydeep		https://github.com/kbandla/pydeep
 
 
-Watch out to install radare2 from the git repository, do not use the Debian package. Tested to run best with radare2 1.3.0-git 12650 @ linux-x86-64, commit: 486434036aed29275849e80dab133ea134d76860 build: 2016-10-14
+Watch out to install radare2 from the git repository, do not use the Debian package. Tested to run best with radare2 1.3.0-git 13968 @ linux-x86-64, commit: 17355cbe3cd21ed1b3a91f1ee85680f9cc28fd8f build: 2017-03-05__20:31:24
+
