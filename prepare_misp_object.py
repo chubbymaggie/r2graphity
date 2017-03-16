@@ -113,6 +113,7 @@ class FileObject(MISPObjectGenerator):
             file_object['md5'] = {'value': self.md5}
             file_object['sha1'] = {'value': self.sha1}
             file_object['sha256'] = {'value': self.sha256}
+            file_object['malware-sample'] = {'value': '{}|{}'.format(self.filename, self.md5), 'data': self.pseudo_file}
             # file_object['authentihash'] = self.
             # file_object['sha-224'] = self.
             # file_object['sha-384'] = self.
