@@ -1,0 +1,12 @@
+r2pipe
+networkx
+py2neo
+pydotplus
+numpy
+python-magic
+git+https://github.com/kbandla/pydeep.git#egg=pydeep
+git+https://github.com/viper-framework/pefile.git#egg=pefile
+
+# For MISP Objects
+
+pymisp
