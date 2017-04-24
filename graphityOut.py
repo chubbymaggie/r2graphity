@@ -9,6 +9,7 @@ import pickle
 import re
 import json
 from graphityUtils import gimmeDatApiName, getAllAttributes, stringScore
+from graphityOps import fetchExtendedGraph
 
 
 def toNeo(graphity, allAtts):
@@ -154,10 +155,17 @@ def printGraph(graphity):
 	# print dangling APIs
 	# print dangling strings
 
+	# urgent TODO sort nodes before printing by address
+	
 	for item in graphity.nodes(data=True):
-		print(item[0])
+		print(item[0], item[1]['apicallcount'], item[1]['stringcount'])
 		if 'alias' in item[1]:
 			print("Node alias: " + item[1]['alias'])
+			
+		for callItem in item[1]['calls']:
+			callItem.append('C')
+		for stringItem in item[1]['strings']:
+			stringItem.append('S')
 
 		# mix up API calls and strings and sort by offset
 		callStringMerge = item[1]['calls'] + item[1]['strings']
@@ -377,7 +385,7 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	final.append(str(createThCount))
 
 	# Extended version of graphity, where strings/apis are nodes by themselves + graph has a supernode
-	exGraph = extendedGraph(graphity, allAtts)
+	exGraph = fetchExtendedGraph(graphity, allAtts)
 
 	shortestPathLen = 0
 	if createThCount > 0:
@@ -410,37 +418,4 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	dumpfile.close()
 	
 
-# TODO see whether this can be put in a location for "graph transformation"
-# Create a copy of the graphity structure, with APIs and strings as separate nodes
-def extendedGraph(graphity, allAtts):
-	
-	# copy NetworkX graph structure
-	analysisGraph = graphity.copy()
-	
-	# per node, add string/api nodes and respective edges, networkx cares about possible duplicates automatically
-	for aNode in analysisGraph.nodes(data=True):
-	
-		stringList = aNode[1]['strings']
-		for stringData in stringList:
-			analysisGraph.add_node(stringData[1], type='String')
-			analysisGraph.add_edge(aNode[0], stringData[1])
-				
-		apiList = aNode[1]['calls']
-		for apiData in apiList:
-			analysisGraph.add_node(apiData[1], type='Api')
-			analysisGraph.add_edge(aNode[0], apiData[1])
-		
-		# delete lists from nodes
-		del analysisGraph.node[aNode[0]]['calls']
-		del analysisGraph.node[aNode[0]]['strings']
-	
-	# add super node as SHA1
-	analysisGraph.add_node(allAtts['sha1'], fileSize=allAtts['filesize'], binType=allAtts['filetype'], imphash=allAtts['imphash'], compilation=allAtts['compilationts'], addressEp=allAtts['addressep'], sectionEp=allAtts['sectionep'], sectionCount=allAtts['sectioncount'], originalFilename=allAtts['originalfilename'])
-		
-	# add edges to super node
-	indegrees = graphity.in_degree()
-	for val in indegrees:
-		if indegrees[val] == 0:
-			analysisGraph.add_edge(allAtts['sha1'], val)
-		
-	return analysisGraph	
+

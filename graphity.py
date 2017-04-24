@@ -13,7 +13,7 @@ from base64 import b64decode
 from graphityOut import toNeo, fromNeo, printGraph, printGraphInfo, dumpGraphInfoCsv, toPickle, fromPickle
 from graphityViz import graphvizPlot, dumpJsonForJit, dumpGml, dumpGmlSubgraph
 from graphityUtils import gimmeDatApiName, sha1hash, getAllAttributes, is_ascii, Hvalue, check_pe_header
-from graphityScan import functionalityScan
+from graphityOps import patternScan
 import graphityFunc
 
 
@@ -39,18 +39,24 @@ def loadZigs():
 
 	try:
 		# load directory of zigs
-		print('Loading msvcrt.zig {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
+		print('Loading msvcrt.sdb {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
 
-		zigfile = '/mnt/hgfs/projects/badcoding/R2PYpe/libs/msvcrt.zig'
-		r2cmd = ". %s" % zigfile
+		zigpath = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'signatures')
+		zigfile = os.path.join(zigpath, 'msvcrt.sdb')
+		r2cmd = "zo %s" % zigfile
+		# TODO load all signatures
 		R2PY.cmd(r2cmd)
 
-		print('msvcrt.zig loaded {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
+		print('msvcrt.sdb loaded {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
 
-		toScan = getCodeSections()
-		for section in toScan:
-			r2cmd = ".z/ %d %d" % (section[0], section[1])
-			R2PY.cmd(r2cmd)
+		R2PY.cmd("e search.in = io.sections.exec")
+		# e search.in = raw --- ?
+		
+		#toScan = getCodeSections()
+		#for section in toScan:
+			
+		r2cmd = "z/" #%d %d" % (section[0], section[1])
+		R2PY.cmd(r2cmd)
 
 		print('msvcrt.zig scan on code section(s) finished {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
 
@@ -292,10 +298,14 @@ def createRawGraph():
 
 	####
 
+	# TODO add count of refs from A to B as weights to edges
+	# TODO count calls to global vars, to indirect targets
+	# TODO check for bug in apicallcount
+	
 	for item in functionList:
 
 		#print hex(item['offset'])
-		graphity.add_node(hex(item['offset']), size=item['size'], calltype=item['calltype'], calls=[], apicallcount=0, strings=[], functiontype='')
+		graphity.add_node(hex(item['offset']), size=item['size'], calltype=item['calltype'], calls=[], apicallcount=0, strings=[], stringcount=0, functiontype='')
 
 	for item in functionList:
 
@@ -348,9 +358,7 @@ def createRawGraph():
 			api = gimmeDatApiName(apiRefs[call])
 
 			graphity.node[funcAddress]['calls'].append([call, api])
-			apicount = graphity.node[funcAddress]['apicallcount']
-			graphity.node[funcAddress]['apicallcount'] = apicount + 1
-
+			
 		# detected API call reference does not resolve to a function offset, insert handling for this here
 		else:
 			print("DANGLING API CALL %s %s" % (call, apiRefs[call]))
@@ -411,7 +419,7 @@ def thunkPruning(graphity):
 
 		# most obvious thunks, other thunks exist too, len seen was 11, 13
 		# funclets that contain nothing but a jump to an import, and do not call other functions
-		if aNode[1]['apicallcount'] == 1 and aNode[1]['size'] == 6 and not graphity.successors(aNode[0]):
+		if len(aNode[1]['calls']) == 1 and aNode[1]['size'] == 6 and not graphity.successors(aNode[0]):
 
 			thunk = aNode[0]
 			thunkApi = aNode[1]['calls'][0]
@@ -523,9 +531,12 @@ def graphMagix(filepath, allAtts, deactivatecache):
 		R2PY.cmd("e anal.autoname= false")
 		R2PY.cmd("e anal.jmptbl = true")
 		R2PY.cmd("e anal.hasnext = true")
+		R2PY.cmd("e src.null = true")
 		R2PY.cmd("aaa")
-		R2PY.cmd("afr")
-		R2PY.cmd("afr @@ sym*")
+		#R2PY.cmd("afr")
+		#R2PY.cmd("afr @@ sym*")
+		
+		#loadZigs()
 
 		BENCH['r2_end'] = time()
 		print('* %s R2 finished analysis' % str(datetime.now()))
@@ -542,6 +553,11 @@ def graphMagix(filepath, allAtts, deactivatecache):
 
 		# handler tagging
 		tagCallbacks(graphity)
+		
+		# update api and string count attributes
+		for aNode in graphity.nodes(data=True):
+			aNode[1]['apicallcount'] = len(aNode[1]['calls'])
+			aNode[1]['stringcount'] = len(aNode[1]['strings'])
 
 		BENCH['graph_end'] = time()
 
@@ -565,6 +581,7 @@ if __name__ == '__main__':
 	parser.add_argument("-i", "--info", action="store_true", help="Print info and stats of the graph")
 	parser.add_argument("-l", "--plotting", action="store_true", help="Plotting the graph via pyplot")
 	parser.add_argument("-b", "--behavior", action="store_true", help="Scan for behaviors listed in graphityFunc.py")
+	parser.add_argument("-z", "--viz", action="store_true", help="Spit out GML data for Gephi and what not")
 	parser.add_argument("-n", "--neodump", action="store_true", help="Dump graph to Neo4j (configured to flush previous data from Neo, might wanna change that)")
 	parser.add_argument("-c", "--csvdump", help="Dump info data to a given csv file, appends a line per sample")
 
@@ -647,13 +664,16 @@ if __name__ == '__main__':
 			allThePatterns = graphityFunc.funcDict
 
 			for patty in allThePatterns:
-				findings = functionalityScan(graphity, allThePatterns[patty])
+				findings = patternScan(graphity, allThePatterns[patty])
 
 				for hit in findings:
 					if not False in hit['patterns'].values():
 						print("For %s found %s" % (patty, str(hit['patterns'])))
 			BENCH['behavior_end'] = time()
 
+		if args.viz:
+			# GML and stuff
+			dumpGml(graphity)
 
 
 			# TODO calculate dispersion for 2-n anchor addresses

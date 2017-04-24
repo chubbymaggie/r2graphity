@@ -3,95 +3,55 @@ import networkx as nx
 import json
 import os
 
-from graphityScan import functionalityScan
+from graphityOps import fetchExtendedSubgraph, fetchBehaviorgadgetGraph, fetchSpecialGraph
 import graphityFunc
 
 
 def dumpGml(graphity):
 
-	graphMl = graphity.copy()
+	gmlData = graphity.copy()
 	
-	for node in graphMl.node:
-		for attr in graphMl.node[node]:
-			if type(graphMl.node[node][attr]) == list:
-				listOfLists = graphMl.node[node][attr]
+	# gotta fix the lists of lists to list for gml, otherwise incompatible
+	for node in gmlData.node:
+		for attr in gmlData.node[node]:
+			if type(gmlData.node[node][attr]) == list:
+				listOfLists = gmlData.node[node][attr]
 				seList = map(' '.join, listOfLists)
-				graphMl.node[node][attr] = ' | '.join(seList)
+				gmlData.node[node][attr] = ' | '.join(seList)
 				
-	nx.write_gml(graphMl, "output/callgraph.gml")
+	nx.write_gml(gmlData, "output/callgraph.gml")
+
 	
-	
-	behaviorGraph = graphity.copy()
-		
-	allThePatterns = graphityFunc.funcDict
-	allTheFindings = []
-	for patty in allThePatterns:
-		findings = functionalityScan(graphity, allThePatterns[patty])
-		for hit in findings:
-			if not False in hit['patterns'].values():
-				for node in hit['patterns']:
-					theNode = hit['patterns'][node]
-					behaviorGraph.node[theNode][patty] = patty
-	
-	for node in behaviorGraph:
-		del behaviorGraph.node[node]['calls']
-		del behaviorGraph.node[node]['strings']
-		behaviorGraph.node[node]['behaviors'] = ''
-		for patty in allThePatterns:
-			if behaviorGraph.node[node].get(patty):
-				behaviorGraph.node[node]['behaviors'] += '|' + patty
-		if behaviorGraph.node[node]['behaviors'] != '':
-			behaviorGraph.node[node]['behaviors'] += '|'
-				
+	# generates GML for graph containing behavior gadgets, no strings/apis
+	behaviorGraph = fetchBehaviorgadgetGraph(graphity)
 	nx.write_gml(behaviorGraph, "output/behaviorgaddgets.gml")
 	
-	
-	allocGraph = graphity.copy()
-	for node in allocGraph.nodes():
-		allocGraph.node[node]['allocs'] = 0
+	allocGraph = fetchSpecialGraph(graphity, ['alloc', 'str'])
+
+	#allocGraph = graphity.copy()
+	#for node in allocGraph.nodes():
+	#	allocGraph.node[node]['allocs'] = 0
 		
-	allCalls = nx.get_node_attributes(allocGraph, 'calls')
-	for function in allCalls:
-		for call in allCalls[function]:
-			if 'alloc' in call[1].lower():
-				allocGraph.node[function]['allocs'] += 1
+	#allCalls = nx.get_node_attributes(allocGraph, 'calls')
+	#for function in allCalls:
+	#	for call in allCalls[function]:
+	#		if 'alloc' in call[1].lower():
+	#			allocGraph.node[function]['allocs'] += 1
 	
-	for node in allocGraph:
-		del allocGraph.node[node]['calls']
-		del allocGraph.node[node]['strings']
+	#for node in allocGraph:
+	#	del allocGraph.node[node]['calls']
+	#	del allocGraph.node[node]['strings']
+		
 	nx.write_gml(allocGraph, "output/allocgadgets.gml")
 
+
+# dumps the gml data for a subgraph starting at [address] with APIs/strings as dedicated nodes
 def dumpGmlSubgraph(graphity, address):
-
-	theSub = nx.DiGraph()
-	theSub.add_node(address, type='function', size=graphity.node[address]['size'], apicallcount=graphity.node[address]['apicallcount'])
-	fetchExtendedSubgraph(graphity, theSub, address)
+	subgraph = fetchExtendedSubgraph(graphity, address)
 	gmlfile = "output/subgraph_" + address + ".gml"
-	nx.write_gml(theSub, gmlfile)
+	nx.write_gml(subgraph, gmlfile)		
 
 	
-def fetchExtendedSubgraph(graphity, theSub, address):
-	
-	for acall in graphity.node[address]['calls']:
-		label = acall[0] + '|' + acall[1]
-		theSub.add_node(label, type='api', apiname=acall[1])
-		theSub.add_edge(address, label)
-	
-	for astring in graphity.node[address]['strings']:
-		label = astring[0] + '|' + astring[1]
-		theSub.add_node(label, type='string', string=astring[1])
-		theSub.add_edge(address, label)
-	
-	neighbors = graphity.successors(address)
-	
-	for neigh in neighbors:
-		theSub.add_node(neigh, type='function', size=graphity.node[neigh]['size'], apicallcount=graphity.node[neigh]['apicallcount']) # add attributes
-		theSub.add_edge(address, neigh)
-		fetchExtendedSubgraph(graphity, theSub, neigh)
-		
-	return
-		
-
 # Graph plotting with pydotplus from within NetworkX, format is dot
 def graphvizPlot(graphity, allAtts):
 
