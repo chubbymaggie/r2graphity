@@ -8,8 +8,8 @@ import numpy as np
 import pickle
 import re
 import json
-from graphityUtils import gimmeDatApiName, getAllAttributes, stringScore
-from graphityOps import fetchExtendedGraph
+from graphityUtils import gimmeDatApiName, getAllAttributes
+from graphityOps import fetchExtendedGraph, stringData
 
 
 def toNeo(graphity, allAtts):
@@ -297,15 +297,6 @@ def printGraphInfo(graphity, debug):
 
 	print("Found %d calls to GetProcAddress\n." % gpaCount)
 
-	# Strings w/o associated node, evaluated
-	#for item in debug['stringsNoRef']:
-	#       print stringScore(item), ";", item
-	#
-	#for item in debug['stringsDangling']:
-	#       print stringScore(item), ";", item
-
-	# Finding: > 0.04 makes sense
-
 	# TODO number of nodes w strings/apis vs. nodes w/o
 
 
@@ -391,7 +382,12 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	if createThCount > 0:
 		#shortestPath = nx.shortest_path(exGraph, allAtts['sha1'], 'CreateThread')[1:]
 		#allShortestPaths = nx.all_shortest_paths(exGraph, allAtts['sha1'], 'CreateThread')
-		shortestPathLen = nx.shortest_path_length(exGraph, allAtts['sha1'], 'CreateThread')
+		try:
+			shortestPathLen = nx.shortest_path_length(exGraph, allAtts['sha1'], 'CreateThread')
+			
+		except:
+			#print (exGraph.node['CreateThread'], exGraph.node[allAtts['sha1']])
+			pass
 	# add shortest path length as metric
 	final.append(str(shortestPathLen))
 		
@@ -417,5 +413,20 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	dumpfile.write(theline)
 	dumpfile.close()
 	
+	# Testing string data
+	stringStuff = stringData(graphity, debug)
+	stringCsv = "output/" + csvfile + "_" + allAtts['sha1'] + ".csv"
+	stringFile = open(stringCsv, 'w')
+	
+	for list in stringStuff:
+		list[0] = list[0].replace(',', '.') 
+		list[0] = list[0].replace(';', '.') 
+		
+		#print (list[0])
+	
+	for item in stringStuff:
+		content = ','.join(map(str, item)) + "\n"
+		stringFile.write(content)
+	stringFile.close()
 
 

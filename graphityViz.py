@@ -1,13 +1,14 @@
 from pydotplus.graphviz import Node
 import networkx as nx
+from networkx.readwrite import json_graph
 import json
 import os
 
-from graphityOps import fetchExtendedSubgraph, fetchBehaviorgadgetGraph, fetchSpecialGraph
+from graphityOps import fetchExtendedGraph, fetchExtendedSubgraph, fetchBehaviorgadgetGraph, fetchSpecialGraph
 import graphityFunc
 
 
-def dumpGml(graphity):
+def dumpGml(graphity, allAtts):
 
 	gmlData = graphity.copy()
 	
@@ -26,23 +27,13 @@ def dumpGml(graphity):
 	behaviorGraph = fetchBehaviorgadgetGraph(graphity)
 	nx.write_gml(behaviorGraph, "output/behaviorgaddgets.gml")
 	
-	allocGraph = fetchSpecialGraph(graphity, ['alloc', 'str'])
-
-	#allocGraph = graphity.copy()
-	#for node in allocGraph.nodes():
-	#	allocGraph.node[node]['allocs'] = 0
-		
-	#allCalls = nx.get_node_attributes(allocGraph, 'calls')
-	#for function in allCalls:
-	#	for call in allCalls[function]:
-	#		if 'alloc' in call[1].lower():
-	#			allocGraph.node[function]['allocs'] += 1
-	
-	#for node in allocGraph:
-	#	del allocGraph.node[node]['calls']
-	#	del allocGraph.node[node]['strings']
-		
+	# generates GML for special gadgets, handed over as list, searched for within API calls
+	allocGraph = fetchSpecialGraph(graphity, ['alloc', 'mem'])
 	nx.write_gml(allocGraph, "output/allocgadgets.gml")
+	
+	# generates GML for extended Graph, where APIs and strings are dedicated nodes
+	extendedGraph = fetchExtendedGraph(graphity, allAtts)
+	nx.write_gml(extendedGraph, "output/extendedgraph.gml")
 
 
 # dumps the gml data for a subgraph starting at [address] with APIs/strings as dedicated nodes
@@ -88,6 +79,12 @@ def graphvizPlot(graphity, allAtts):
 		elif node.get('functiontype') == 'Callback':
 			label = "Callback " + nodeaddr + "\n" + finalString
 			node.set_fillcolor('darkolivegreen1')
+			node.set_style('filled,setlinewidth(3.0)')
+			node.set_label(label)
+		
+		elif node.get('functiontype').startswith('Indirect'):
+			label = "IndirectRef " + nodeaddr + "\n" + finalString
+			node.set_fillcolor('lemonchiffon1')
 			node.set_style('filled,setlinewidth(3.0)')
 			node.set_label(label)
 
@@ -159,3 +156,12 @@ def dumpJsonForJit(graphity, indent=None):
 	#print(json.dumps(json_graph, indent=indent))
 	return json.dumps(json_graph, indent=indent)
 
+
+def dumpJsonForD3(graphity):
+
+	# TODO transform graph to visualization needs
+	data = json.dumps(json_graph.node_link_data(graphity), indent=2)
+	d3file = "d3js/d3.json"
+	d3handle = open(d3file, 'w')
+	d3handle.write(data)
+	d3handle.close()

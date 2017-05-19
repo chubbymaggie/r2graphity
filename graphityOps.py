@@ -1,7 +1,7 @@
 import networkx as nx
 import graphityFunc
+from graphityUtils import stringCharFrequency, stringCharVariance
 
-# TODO restructure this to graphityOps.py, for scanning, graph transformation, info extraction
 
 ### SCANNING ###
 
@@ -72,6 +72,31 @@ def functionalityScanForApi(graphity, anchor, seNode, patternNum):
 					break
 					
 					
+### STRINGS ###
+
+def stringData(graphity, debug):
+
+	theData = []
+	
+	allStrings = nx.get_node_attributes(graphity, 'strings')
+	for node in allStrings:
+		for string in allStrings[node]:
+			theData.append([string[1], 'ref', len(string[1]), stringCharFrequency(string[1]), stringCharVariance(string[1])])
+	
+	for item in debug['stringsDangling']:
+		theData.append([item, 'dangling', len(item), stringCharFrequency(item), stringCharVariance(item)])
+		
+	# Strings w/o associated node, evaluated
+	for item in debug['stringsNoRef']:
+		if stringCharFrequency(item) > 0.04 and len(item) > 4:
+			theData.append([item, 'noref', len(item), stringCharFrequency(item), stringCharVariance(item)])
+
+	return theData
+	# Finding: > 0.04 makes sense
+
+	# TODO number of nodes w strings/apis vs. nodes w/o
+
+					
 ### TRANSFORMATION ###
 
 # Create a copy of the graphity structure, with APIs and strings as separate nodes
@@ -99,7 +124,7 @@ def fetchExtendedGraph(graphity, allAtts):
 		del analysisGraph.node[aNode[0]]['strings']
 	
 	# add super node as SHA1
-	analysisGraph.add_node(allAtts['sha1'], fileSize=allAtts['filesize'], binType=allAtts['filetype'], imphash=allAtts['imphash'], compilation=allAtts['compilationts'], addressEp=allAtts['addressep'], sectionEp=allAtts['sectionep'], sectionCount=allAtts['sectioncount'], originalFilename=allAtts['originalfilename'])
+	analysisGraph.add_node(allAtts['sha1'], fileSize=allAtts['filesize'], binType=allAtts['filetype'], imphash=allAtts['imphash'], compilation=allAtts['compilationts'], addressEp=allAtts['addressep'], sectionEp=allAtts['sectionep'], sectionCount=allAtts['sectioncount'], originalFilename=allAtts['originalfilename'], type='supernode')
 		
 	# add edges to super node
 	indegrees = graphity.in_degree()
@@ -189,5 +214,13 @@ def fetchSpecialGraph(graphity, specials):
 	for node in specialGraph:
 		del specialGraph.node[node]['calls']
 		del specialGraph.node[node]['strings']
+		
+		# add list of all specials per node
+		specialGraph.node[node]['specialhits'] = ''
+		for spec in specials:
+			if specialGraph.node[node].get(spec):
+				specialGraph.node[node]['specialhits'] += '|' + spec
+		if specialGraph.node[node]['specialhits'] != '':
+			specialGraph.node[node]['specialhits'] += '|'
 	
 	return specialGraph

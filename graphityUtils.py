@@ -40,7 +40,7 @@ def is_ascii(myString):
 
 # String evaluation
 
-def stringScore(seString):
+def stringCharFrequency(seString):
 
 	# english language character frequencies
 	freqs = {
@@ -97,6 +97,16 @@ def stringScore(seString):
 
 	return score / float(len(seString))
 
+def stringCharVariance(seString):
+	
+	charFrequs = Counter(seString)
+	total = 0
+	for letter in charFrequs:
+		if charFrequs[letter] > 3:
+			total += charFrequs[letter]
+	#print (seString, total)
+			
+	return total / float(len(seString))
 
 # Check for PE header, return false if not a PE
 def check_pe_header(filepath):
