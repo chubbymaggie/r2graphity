@@ -4,7 +4,7 @@ from networkx.readwrite import json_graph
 import json
 import os
 
-from graphityOps import fetchExtendedGraph, fetchExtendedSubgraph, fetchBehaviorgadgetGraph, fetchSpecialGraph
+from graphityOps import fetchExtendedGraph, fetchExtendedSubgraph, fetchBehaviorgadgetGraph, fetchSpecialGraph, fetchD3Graph
 import graphityFunc
 
 
@@ -38,9 +38,10 @@ def dumpGml(graphity, allAtts):
 
 # dumps the gml data for a subgraph starting at [address] with APIs/strings as dedicated nodes
 def dumpGmlSubgraph(graphity, address):
-	subgraph = fetchExtendedSubgraph(graphity, address)
-	gmlfile = "output/subgraph_" + address + ".gml"
-	nx.write_gml(subgraph, gmlfile)		
+	if address in graphity:
+		subgraph = fetchExtendedSubgraph(graphity, address)
+		gmlfile = "output/subgraph_" + address + ".gml"
+		nx.write_gml(subgraph, gmlfile)		
 
 	
 # Graph plotting with pydotplus from within NetworkX, format is dot
@@ -160,7 +161,10 @@ def dumpJsonForJit(graphity, indent=None):
 def dumpJsonForD3(graphity):
 
 	# TODO transform graph to visualization needs
-	data = json.dumps(json_graph.node_link_data(graphity), indent=2)
+	
+	d3graph = fetchD3Graph(graphity)
+
+	data = json.dumps(json_graph.node_link_data(d3graph), indent=2)
 	d3file = "d3js/d3.json"
 	d3handle = open(d3file, 'w')
 	d3handle.write(data)

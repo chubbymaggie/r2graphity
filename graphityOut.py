@@ -311,7 +311,7 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	else:
 		try:
 			dumpfile = open(csvfile, 'w')
-			dumpfile.write("filename,filetype,filesize,codesecsize,md5,imphash,compilationtime,addressep,sectionep,tlssections,originalfilename,sectioncount,secname1,secname2,secname3,secname4,secname5,secname6,secsize1,secsize2,secsize3,secsize4,secsize5,secsize6,secent1,secent2,secent3,secent4,secent5,secent6,functionstotal,refslocal,refsglobalvar,refsunknown,apitotal,apimisses,stringsreferenced,stringsdangling,stringsnoref,ratiofunc,ratioapi,ratiostring,getprocaddress,memallocation,createthread,ctshortestpath,callbackcount,cbaveragesize,cblargestsize")
+			dumpfile.write("filename,filetype,filesize,codesecsize,md5,imphash,compilationtime,addressep,sectionep,tlssections,originalfilename,sectioncount,secname1,secname2,secname3,secname4,secname5,secname6,secsize1,secsize2,secsize3,secsize4,secsize5,secsize6,secent1,secent2,secent3,secent4,secent5,secent6,functionstotal,refslocal,refsglobalvar,refsunknown,apitotal,apimisses,stringsreferenced,stringsdangling,stringsnoref,ratiofunc,ratioapi,ratiostring,getprocaddress,memallocation,createthread,ctshortestpath,callbackcount,cbaveragesize,cblargestsize,stringsrefhisto")
 			dumpfile.write("\n")
 		except:
 			print("ERROR couldn't create the csv dump file")
@@ -408,13 +408,31 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	final.append(avSize)
 	final.append(maxSize)
 	
+	
+	# TODO convert stringdata to dictionary
+	stringStuff = stringData(graphity, debug)
+	refHistoList = []
+	# slice data to get eval column
+	for line in stringStuff:
+		if line[1] == 'ref':
+			refHistoList.append(line[3])
+	
+	nummy = np.array(refHistoList)
+	bins = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
+	histo, bin_edges = np.histogram(nummy, bins=bins)
+	histolist = []
+	for hi in histo:
+		histolist.append(str(hi))
+	final.append(','.join(histolist))
+
+	
+	
 	theline = ",".join(map(str, final)) + "\n"
 
 	dumpfile.write(theline)
 	dumpfile.close()
 	
-	# Testing string data
-	stringStuff = stringData(graphity, debug)
+	# Dumping dedicated CSV for string eval data, per binary
 	stringCsv = "output/" + csvfile + "_" + allAtts['sha1'] + ".csv"
 	stringFile = open(stringCsv, 'w')
 	
@@ -422,8 +440,6 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 		list[0] = list[0].replace(',', '.') 
 		list[0] = list[0].replace(';', '.') 
 		
-		#print (list[0])
-	
 	for item in stringStuff:
 		content = ','.join(map(str, item)) + "\n"
 		stringFile.write(content)

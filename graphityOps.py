@@ -76,26 +76,36 @@ def functionalityScanForApi(graphity, anchor, seNode, patternNum):
 
 def stringData(graphity, debug):
 
+	# string data format: 
+	# string literal,
+	# type(ref|dangling|noref), 
+	# character frequency, 
+	# char frequ with char repetition penalty
 	theData = []
 	
 	allStrings = nx.get_node_attributes(graphity, 'strings')
 	for node in allStrings:
 		for string in allStrings[node]:
-			theData.append([string[1], 'ref', len(string[1]), stringCharFrequency(string[1]), stringCharVariance(string[1])])
+			charfrequ = stringCharFrequency(string[1])
+			charvar = stringCharVariance(string[1])
+			theData.append([string[1], 'ref', len(string[1]), charfrequ, charfrequ-(charvar/10.0)])
 	
 	for item in debug['stringsDangling']:
-		theData.append([item, 'dangling', len(item), stringCharFrequency(item), stringCharVariance(item)])
-		
+		charfrequ = stringCharFrequency(item)
+		charvar = stringCharVariance(item)
+		theData.append([item, 'dangling', len(item), charfrequ, charfrequ-(charvar/10.0)])
+	
 	# Strings w/o associated node, evaluated
 	for item in debug['stringsNoRef']:
-		if stringCharFrequency(item) > 0.04 and len(item) > 4:
-			theData.append([item, 'noref', len(item), stringCharFrequency(item), stringCharVariance(item)])
-
+		charfrequ = stringCharFrequency(item)
+		charvar = stringCharVariance(item)
+		
+		# too much garbage below the 0.04
+		if charfrequ > 0.04 and len(item) > 4:
+			theData.append([item, 'noref', len(item), charfrequ, charfrequ-(charvar/10.0)])
+	
 	return theData
-	# Finding: > 0.04 makes sense
-
-	# TODO number of nodes w strings/apis vs. nodes w/o
-
+	
 					
 ### TRANSFORMATION ###
 
@@ -111,7 +121,9 @@ def fetchExtendedGraph(graphity, allAtts):
 	
 		stringList = aNode[1]['strings']
 		for stringData in stringList:
-			analysisGraph.add_node(stringData[1], type='String')
+			charfrequ = stringCharFrequency(stringData[1])
+			charvar = stringCharVariance(stringData[1]) 
+			analysisGraph.add_node(stringData[1], type='String', stringeval=charfrequ-(charvar/10.0))
 			analysisGraph.add_edge(aNode[0], stringData[1])
 				
 		apiList = aNode[1]['calls']
@@ -224,3 +236,28 @@ def fetchSpecialGraph(graphity, specials):
 			specialGraph.node[node]['specialhits'] += '|'
 	
 	return specialGraph
+	
+# TODO node eval for visualization, apis, strings and their evals, lengths, instruction entropy? 
+
+# prepare graph for visualization with D3
+def fetchD3Graph(graphity):
+
+	d3graph = graphity.copy()
+	
+	for item in d3graph.nodes(data=True):	
+		for callItem in item[1]['calls']:
+			callItem.insert(1, '[C]')
+		for stringItem in item[1]['strings']:
+			stringItem.insert(1, '[S]')
+
+		# mix up API calls and strings and sort by offset
+		callStringMerge = item[1]['calls'] + item[1]['strings']
+		callStringMerge.sort(key=lambda x: x[0])
+		
+		item[1]['content'] = callStringMerge
+	
+	for node in d3graph:
+		del d3graph.node[node]['calls']
+		del d3graph.node[node]['strings']
+		
+	return d3graph
