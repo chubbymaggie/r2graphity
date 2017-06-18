@@ -2,35 +2,54 @@
 
 
 funcDict = { 
-	'DRIVERCOMM': ['DeviceIoControl'],
-	'CREATESTARTSERVICE': ['OpenSCManager', 'CreateService', 'OpenService', 'StartService'],
+	# 
 	'CREATETHREAD': ['CreateThread'],
 	'PROCESSITER': ['CreateToolhelp32Snapshot', 'Process32First', 'Process32Next'],
-	'APILOADING': ['LoadLibrary', 'GetProcAddress'],
-	'APILOADING2': ['GetModuleHandle', 'GetProcAddress'],
-	'WRITEFILE': ['CreateFile', 'WriteFile'],
-	'READFILE': ['CreateFile', 'ReadFile'],
 	'WINHOOK': ['SetWindowsHookEx'],
-	'DRIVESITER': ['GetLogicalDriveStrings', 'GetDriveType'],
-	'FILEITER': ['FindFirstFile', 'FindNextFile', 'FindClose'],
-	'REGSETVAL': ['RegOpenKey', 'RegSetValue'],
-	'REGQUERY': ['RegOpenKey', 'RegQueryValue'],
-	'DUMPRSRC': ['FindResource', 'LoadResource', 'CreateFile', 'WriteFile'],
-	'LOADRSRC': ['FindResource', 'LoadResource', 'LockResource'],
-	'WSASEND': ['WSAStartup', 'gethostbyname', 'send'],
-	'RECV': ['recv', 'send'],
 	'RETROINJECTION': ['GetCurrentProcess', 'CreatePipe', 'DuplicateHandle'],
 	'WINEXEC': ['WinExec'],
 	'SHELLEXEC': ['ShellExecute'],
 	'CREATEPROC': ['CreateProcess'],
-	'WINDOW': ['CreateWindow', 'RegisterClass', 'DispatchMessage'],
 	'EXITSYSTEM': ['ExitWindows'],
-	'TEMPFILEWRITE': ['GetTempFileName', 'CreateFile', 'WriteFile'],
 	'REMTHREAD': ['CreateThread', 'WriteProcessMemory', 'ReadProcessMemory', 'ResumeThread'],
-	'FPRINT': ['fopen', 'fprintf', 'fclose'],
+	
+	# Autostarts & infiltration
+	'REGSETVAL': ['RegOpenKey', 'RegSetValue'],
+	'REGQUERY': ['RegOpenKey', 'RegQueryValue'],
+	'CREATESTARTSERVICE': ['OpenSCManager', 'CreateService', 'OpenService', 'StartService'],
+	'DUMPRSRC': ['FindResource', 'LoadResource', 'CreateFile', 'WriteFile'],
+	'LOADRSRC': ['FindResource', 'LoadResource', 'LockResource'],
 	'UPDATERESOURCE': ['BeginUpdateResource', 'UpdateResource', 'EndUpdateResource'],
+
+	# Dynamic API loading
+	'APILOADING': ['GetProcAddress'],
+	#'APILOADING2': ['GetModuleHandle', 'GetProcAddress'],
+	
+	# File interaction
+	'WRITEFILE': ['CreateFile', 'WriteFile'],
+	'READFILE': ['CreateFile', 'ReadFile'],
+	'TEMPFILEWRITE': ['GetTempFileName', 'CreateFile', 'WriteFile'],
+	'FPRINT': ['fopen', 'fprintf', 'fclose'],
+	
+	# Malware activity
+	'DRIVESITER': ['GetLogicalDriveStrings', 'GetDriveType'],
+	'FILEITER': ['FindFirstFile', 'FindNextFile', 'FindClose'],
+	'WINDOW': ['CreateWindow', 'RegisterClass', 'DispatchMessage'],
 	'SCREENSHOT': ['CreateCompatibleDC', 'GetDeviceCaps', 'CreateCompatibleBitmap', 'BitBlt'],
-	'CRYPT': ['CryptAcquireContext', 'CryptEncrypt']
+	'CRYPTENCRYPT': ['CryptEncrypt'],
+
+	# Network activity
+	'WSASEND': ['WSAStartup', 'gethostbyname', 'send'],
+	'RECV': ['recv'],
+	'SEND': ['send']
+	
+	
+}
+
+rbotDict = {
+	'DOWNLOAD': ['InternetOpenUrl', 'CreateFile', 'GetTickCount', 'WriteFile', 'CloseHandle', 'ShellExecute', 'CreateProcess'],
+	'DRIVEINFO': ['GetDriveType', 'GetDiskFreeSpace', 'GetLogicalDriveStrings', 'DriveSpace'],
+	'FINDFILE': ['FindFirstFile', 'FindNextFile', 'FindClose', 'ExitThread']
 }
 
 

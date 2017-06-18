@@ -8,7 +8,8 @@ import numpy as np
 import pickle
 import re
 import json
-from graphityUtils import gimmeDatApiName, getAllAttributes, stringScore
+from graphityUtils import gimmeDatApiName, getAllAttributes
+from graphityOps import fetchExtendedGraph, stringData
 
 
 def toNeo(graphity, allAtts):
@@ -154,10 +155,17 @@ def printGraph(graphity):
 	# print dangling APIs
 	# print dangling strings
 
+	# urgent TODO sort nodes before printing by address
+	
 	for item in graphity.nodes(data=True):
-		print(item[0])
+		print(item[0], item[1]['apicallcount'], item[1]['stringcount'])
 		if 'alias' in item[1]:
 			print("Node alias: " + item[1]['alias'])
+			
+		for callItem in item[1]['calls']:
+			callItem.append('C')
+		for stringItem in item[1]['strings']:
+			stringItem.append('S')
 
 		# mix up API calls and strings and sort by offset
 		callStringMerge = item[1]['calls'] + item[1]['strings']
@@ -289,15 +297,6 @@ def printGraphInfo(graphity, debug):
 
 	print("Found %d calls to GetProcAddress\n." % gpaCount)
 
-	# Strings w/o associated node, evaluated
-	#for item in debug['stringsNoRef']:
-	#       print stringScore(item), ";", item
-	#
-	#for item in debug['stringsDangling']:
-	#       print stringScore(item), ";", item
-
-	# Finding: > 0.04 makes sense
-
 	# TODO number of nodes w strings/apis vs. nodes w/o
 
 
@@ -312,7 +311,7 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	else:
 		try:
 			dumpfile = open(csvfile, 'w')
-			dumpfile.write("filename,filetype,filesize,codesecsize,md5,imphash,compilationtime,addressep,sectionep,tlssections,originalfilename,sectioncount,secname1,secname2,secname3,secname4,secname5,secname6,secsize1,secsize2,secsize3,secsize4,secsize5,secsize6,secent1,secent2,secent3,secent4,secent5,secent6,functionstotal,refslocal,refsglobalvar,refsunknown,apitotal,apimisses,stringsreferenced,stringsdangling,stringsnoref,ratiofunc,ratioapi,ratiostring,getprocaddress,memallocation,createthread,ctshortestpath,callbackcount,cbaveragesize,cblargestsize")
+			dumpfile.write("filename,filetype,filesize,codesecsize,md5,imphash,compilationtime,addressep,sectionep,tlssections,originalfilename,sectioncount,secname1,secname2,secname3,secname4,secname5,secname6,secsize1,secsize2,secsize3,secsize4,secsize5,secsize6,secent1,secent2,secent3,secent4,secent5,secent6,functionstotal,refslocal,refsglobalvar,refsunknown,apitotal,apimisses,stringsreferenced,stringsdangling,stringsnoref,ratiofunc,ratioapi,ratiostring,getprocaddress,memallocation,createthread,ctshortestpath,callbackcount,cbaveragesize,cblargestsize,stringsrefhisto")
 			dumpfile.write("\n")
 		except:
 			print("ERROR couldn't create the csv dump file")
@@ -377,13 +376,18 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	final.append(str(createThCount))
 
 	# Extended version of graphity, where strings/apis are nodes by themselves + graph has a supernode
-	exGraph = extendedGraph(graphity, allAtts)
+	exGraph = fetchExtendedGraph(graphity, allAtts)
 
 	shortestPathLen = 0
 	if createThCount > 0:
 		#shortestPath = nx.shortest_path(exGraph, allAtts['sha1'], 'CreateThread')[1:]
 		#allShortestPaths = nx.all_shortest_paths(exGraph, allAtts['sha1'], 'CreateThread')
-		shortestPathLen = nx.shortest_path_length(exGraph, allAtts['sha1'], 'CreateThread')
+		try:
+			shortestPathLen = nx.shortest_path_length(exGraph, allAtts['sha1'], 'CreateThread')
+			
+		except:
+			#print (exGraph.node['CreateThread'], exGraph.node[allAtts['sha1']])
+			pass
 	# add shortest path length as metric
 	final.append(str(shortestPathLen))
 		
@@ -404,43 +408,41 @@ def dumpGraphInfoCsv(graphity, debug, allAtts, csvfile):
 	final.append(avSize)
 	final.append(maxSize)
 	
+	
+	# TODO convert stringdata to dictionary
+	stringStuff = stringData(graphity, debug)
+	refHistoList = []
+	# slice data to get eval column
+	for line in stringStuff:
+		if line[1] == 'ref':
+			refHistoList.append(line[3])
+	
+	nummy = np.array(refHistoList)
+	bins = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
+	histo, bin_edges = np.histogram(nummy, bins=bins)
+	histolist = []
+	for hi in histo:
+		histolist.append(str(hi))
+	final.append(','.join(histolist))
+
+	
+	
 	theline = ",".join(map(str, final)) + "\n"
 
 	dumpfile.write(theline)
 	dumpfile.close()
 	
+	# Dumping dedicated CSV for string eval data, per binary
+	stringCsv = "output/" + csvfile + "_" + allAtts['sha1'] + ".csv"
+	stringFile = open(stringCsv, 'w')
+	
+	for list in stringStuff:
+		list[0] = list[0].replace(',', '.') 
+		list[0] = list[0].replace(';', '.') 
+		
+	for item in stringStuff:
+		content = ','.join(map(str, item)) + "\n"
+		stringFile.write(content)
+	stringFile.close()
 
-# TODO see whether this can be put in a location for "graph transformation"
-# Create a copy of the graphity structure, with APIs and strings as separate nodes
-def extendedGraph(graphity, allAtts):
-	
-	# copy NetworkX graph structure
-	analysisGraph = graphity.copy()
-	
-	# per node, add string/api nodes and respective edges, networkx cares about possible duplicates automatically
-	for aNode in analysisGraph.nodes(data=True):
-	
-		stringList = aNode[1]['strings']
-		for stringData in stringList:
-			analysisGraph.add_node(stringData[1], type='String')
-			analysisGraph.add_edge(aNode[0], stringData[1])
-				
-		apiList = aNode[1]['calls']
-		for apiData in apiList:
-			analysisGraph.add_node(apiData[1], type='Api')
-			analysisGraph.add_edge(aNode[0], apiData[1])
-		
-		# delete lists from nodes
-		del analysisGraph.node[aNode[0]]['calls']
-		del analysisGraph.node[aNode[0]]['strings']
-	
-	# add super node as SHA1
-	analysisGraph.add_node(allAtts['sha1'], fileSize=allAtts['filesize'], binType=allAtts['filetype'], imphash=allAtts['imphash'], compilation=allAtts['compilationts'], addressEp=allAtts['addressep'], sectionEp=allAtts['sectionep'], sectionCount=allAtts['sectioncount'], originalFilename=allAtts['originalfilename'])
-		
-	# add edges to super node
-	indegrees = graphity.in_degree()
-	for val in indegrees:
-		if indegrees[val] == 0:
-			analysisGraph.add_edge(allAtts['sha1'], val)
-		
-	return analysisGraph	
+

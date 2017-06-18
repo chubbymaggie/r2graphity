@@ -10,23 +10,25 @@ from time import time
 from datetime import datetime
 from argparse import ArgumentParser
 from base64 import b64decode
+from collections import Counter
 from graphityOut import toNeo, fromNeo, printGraph, printGraphInfo, dumpGraphInfoCsv, toPickle, fromPickle
-from graphityViz import graphvizPlot, dumpJsonForJit, dumpGml, dumpGmlSubgraph
+from graphityViz import graphvizPlot, dumpJsonForJit, dumpGml, dumpGmlSubgraph, dumpJsonForD3
 from graphityUtils import gimmeDatApiName, sha1hash, getAllAttributes, is_ascii, Hvalue, check_pe_header
-from graphityScan import functionalityScan
+from graphityOps import patternScan
 import graphityFunc
 
 
 # Works, takes its time, sometimes assigns wrong names to functions
+# DEPRECATED
 def loadFlirts():
 
 	try:
 		# load FLIRT signatures from local flirt directory
-		flirtDir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'signatures')
+		flirtDir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'flirt')
 		sigFiles = [f for f in os.listdir(flirtDir) if os.path.isfile(os.path.join(flirtDir, f))]
 
 		for sigFile in sigFiles:
-			r2cmd = "zF %s" % os.path.join(flirtDir, sigFile)
+			r2cmd = "zfs %s" % os.path.join(flirtDir, sigFile)
 			R2PY.cmd(r2cmd)
 
 	except Exception as e:
@@ -34,29 +36,45 @@ def loadFlirts():
 
 
 # Too slow for now, waiting for fix
-# DEPRECATED
 def loadZigs():
 
 	try:
 		# load directory of zigs
-		print('Loading msvcrt.zig {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
+		print('Loading msvcrt.sdb {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
 
-		zigfile = '/mnt/hgfs/projects/badcoding/R2PYpe/libs/msvcrt.zig'
-		r2cmd = ". %s" % zigfile
+		zigpath = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'signatures')
+		zigfile = os.path.join(zigpath, 'msvcrt.sdb')
+		r2cmd = "zo %s" % zigfile
+		# TODO load all signatures
 		R2PY.cmd(r2cmd)
 
-		print('msvcrt.zig loaded {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
+		print('msvcrt.sdb loaded {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
 
-		toScan = getCodeSections()
-		for section in toScan:
-			r2cmd = ".z/ %d %d" % (section[0], section[1])
-			R2PY.cmd(r2cmd)
+		R2PY.cmd("e search.in = io.sections.exec")
+		# e search.in = raw --- ?
+		
+		#toScan = getCodeSections()
+		#for section in toScan:
+			
+		r2cmd = "z/" #%d %d" % (section[0], section[1])
+		R2PY.cmd(r2cmd)
 
 		print('msvcrt.zig scan on code section(s) finished {:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
 
 	except Exception as e:
 		print(str(e))
 
+
+def flagLibraryCode(graphity):
+	
+	signList = R2PY.cmd("fs sign; fj")
+	#print (signList)
+	if signList:
+		signListJ = json.loads(signList)
+		for item in signListJ:
+			libfunction = hex(item['offset'])
+			if libfunction in graphity:
+				print (graphity.node[libfunction])
 
 # Checks whether an address is located in an executable section
 def isValidCode(callAddress, sectionsList):
@@ -169,35 +187,38 @@ def stringScan(debugDict):
 	# izzj parses entire binary
 	stringCmd = "izzj"
 	strings = R2PY.cmd(stringCmd)
-	#print (strings)
+	
 	parsedStrings = json.loads(strings)
-
+	
 	debugDict['stringsDangling'] = []
 	debugDict['stringsNoRef'] = []
 
 	i = 0
 	j = 1
-	while i < len(parsedStrings):
-		stringItem = parsedStrings[i]
+	while i < len(parsedStrings["strings"]):
+		stringItem = parsedStrings["strings"][i]
 
 		# Strings when retrieved through izzj command are BASE64 encoded
 		thatOneString = b64decode(stringItem['string']).replace(b'\\', b' \\\\ ')
 		thatOneString.replace(b'\'', b'')
 		
 		try:
+		
 			thatOneString = thatOneString.decode()
 		
 			xrefCmd = "axtj @ " + hex(stringItem['vaddr'])
 			stringXrefsJ = R2PY.cmd(xrefCmd)
-
-			if stringXrefsJ:
+			
+			# TODO this should be a list, but is returned as a string now?
+			#if stringXrefsJ != []:
+			if len(stringXrefsJ) > 2:
 				stringXrefs = json.loads(stringXrefsJ)
 
 				# check whether string item is root of list of strings
 				j = 1
 				lastItem = stringItem
-				while (i + j) < len(parsedStrings):
-					nextStringItem = parsedStrings[i + j]
+				while (i + j) < len(parsedStrings["strings"]):
+					nextStringItem = parsedStrings["strings"][i + j]
 					lastAddr = lastItem['vaddr']
 					lastSize = lastItem['size']
 
@@ -217,18 +238,18 @@ def stringScan(debugDict):
 
 				# iterate refs on string, if any
 				for ref in stringXrefs:
-					stringAddr = hex(ref['from'])
-					stringFuncRefCmd = "?v $FB @ " + stringAddr
-					stringFuncRef = R2PY.cmd(stringFuncRefCmd)
-					if stringFuncRef != '0x0':
-						allMyStrings.append([stringAddr, stringFuncRef, thatOneString])
-						#print (thatOneString)
-					else:
-						# TODO this is merely still useful strings, see how to fit them in the graphs and db
-						# NOTE: with character frequency analysis we could filter for useful strings here, reduce data, add to graph?
-						print("DANGLING STRING NO FUNCREF %s %s" % (stringAddr, thatOneString))
-						debugDict['stringsDangling'].append(thatOneString)
-						
+					
+					# sort out strings with code ref, i.e. non-strings
+					if ref['type'] != 'c' and ref['type'] != 'C':
+						stringAddr = hex(ref['from'])
+						stringFuncRef = gimmeRespectiveFunction(stringAddr)
+						if stringFuncRef != '0x0':
+							allMyStrings.append([stringAddr, stringFuncRef, thatOneString])
+						else:
+							# TODO this is merely still useful strings, see how to fit them in the graphs and db
+							print("DANGLING STRING NO FUNCREF %s %s" % (stringAddr, thatOneString))
+							debugDict['stringsDangling'].append(thatOneString)
+					
 			else:
 				debugDict['stringsNoRef'].append(thatOneString)
 						
@@ -284,18 +305,21 @@ def createRawGraph():
 
 	### NetworkX Graph Structure ###
 
-	# FUNCTION as node, attributes: function address, size, calltype, list of calls, list of strings, count of calls; functiontype[Callback, Export], alias (e.g. export name)
+	# FUNCTION as node, attributes: function address, size, calltype, list of calls, list of strings, count of calls; functiontype[Callback, Export], alias (e.g. export name), mnemonic distribution
 	# FUNCTIoN REFERENCE as edge (function address -> target address), attributes: ref offset (at)
-	# CALLBACK REFERENCE as edge (currently for threads and Windows hooks)
+	# INDIRECT REFERENCE as edge (currently for threads and Windows hooks, also indirect code and indirect data references)
 	# API CALLS (list attribute of function node): address, API name
-	# STRINGS (list attribute of function node): address, string
+	# STRINGS (list attribute of function node): address, string, evaluation
 
 	####
 
+	# TODO add count of refs from A to B as weights to edges
+	# TODO count calls to global vars, to indirect targets
+	
 	for item in functionList:
 
 		#print hex(item['offset'])
-		graphity.add_node(hex(item['offset']), size=item['size'], calltype=item['calltype'], calls=[], apicallcount=0, strings=[], functiontype='')
+		graphity.add_node(hex(item['offset']), size=item['realsz'], calltype=item['calltype'], calls=[], apicallcount=0, strings=[], stringcount=0, functiontype='')
 
 	for item in functionList:
 
@@ -315,6 +339,7 @@ def createRawGraph():
 					pass
 
 				elif not isValidCode(hex(xref['addr']), sectionsList):
+					# TODO do something
 					print("DANGLING call to address outside code section, glob var, dynamic API loading %s -> %s" % (hex(item['offset']), hex(xref['addr'])))
 					refsGlobalVar = refsGlobalVar + 1
 
@@ -327,7 +352,6 @@ def createRawGraph():
 	debugDict['refsGlobalVar'] = refsGlobalVar
 	debugDict['refsUnrecognized'] = refsUnrecognized
 
-	#loadFlirts()
 	apiRefs = crossRefScan()
 
 	callNum = len(apiRefs)
@@ -338,8 +362,7 @@ def createRawGraph():
 	for call in apiRefs:
 
 		# get the address of the function, that contains the call to a given symbol
-		refAddressCmd = "?v $FB @ " + call
-		funcAddress = R2PY.cmd(refAddressCmd)
+		funcAddress = gimmeRespectiveFunction(call)
 
 		# TODO check if funcAddress is the real function address
 		if funcAddress in graphity:
@@ -348,9 +371,7 @@ def createRawGraph():
 			api = gimmeDatApiName(apiRefs[call])
 
 			graphity.node[funcAddress]['calls'].append([call, api])
-			apicount = graphity.node[funcAddress]['apicallcount']
-			graphity.node[funcAddress]['apicallcount'] = apicount + 1
-
+			
 		# detected API call reference does not resolve to a function offset, insert handling for this here
 		else:
 			print("DANGLING API CALL %s %s" % (call, apiRefs[call]))
@@ -410,8 +431,10 @@ def thunkPruning(graphity):
 	for aNode in graphity.nodes(data=True):
 
 		# most obvious thunks, other thunks exist too, len seen was 11, 13
+		# TODO !!!!!!!! check for 64bit
+		# TODO check with radare for thunk detection?
 		# funclets that contain nothing but a jump to an import, and do not call other functions
-		if aNode[1]['apicallcount'] == 1 and aNode[1]['size'] == 6 and not graphity.successors(aNode[0]):
+		if len(aNode[1]['calls']) == 1 and aNode[1]['size'] == 6 and not graphity.successors(aNode[0]):
 
 			thunk = aNode[0]
 			thunkApi = aNode[1]['calls'][0]
@@ -427,7 +450,7 @@ def thunkPruning(graphity):
 			for aRef in thunkRefs:
 
 				thunkCallAddr = hex(aRef['from'])
-				thunkFuncRef = R2PY.cmd("?v $FB @ " + hex(aRef['from']))
+				thunkFuncRef = gimmeRespectiveFunction(thunkCallAddr)
 
 				# if thunk's xrefs include a detected function then add thunk as a regular API call to calls list of respective node
 				if thunkFuncRef != '0x0':
@@ -437,41 +460,68 @@ def thunkPruning(graphity):
 			graphity.remove_node(thunk)
 
 
-# DEPRECATED
-def fixCallbacks(apiname):
-
-	cmd = "axtj @@ sym.* | grep \"%s\"" % apiname
-	temp = R2PY.cmd(cmd).replace(']\n[', ',')
-
-	if temp:
-		callbackApis = json.loads(temp)
-		for item in callbackApis:
-			function = R2PY.cmd("?v $FB @ " + hex(item['from']))
-			R2PY.cmd("afr @ " + function)
-
-
 # Adding edges to indirectly referenced functions, thread handlers and hook functions for now only
 def tagCallbacks(graphity):
 
-	callbackList = []
 	for aNode in graphity.nodes(data=True):
 		for call in aNode[1]['calls']:
 
-			addr = ''
+			xrefTarget = ''
 			# TODO consider this bad practise, do something smarter, not sure yet what,  consider _beginthread API etc. etc.
 			# also, maybe this is fixed in radare later, so consider this code redundant by then
 			if 'CreateThread' in call[1]:
-				addr = getCallback(call[0], 3)
+				xrefTarget = getCallback(call[0], 3)
 				
 			if 'SetWindowsHookEx' in call[1]:
-				addr = getCallback(call[0], 2)
-
-			function = gimmeRespectiveFunction(addr)
+				xrefTarget = getCallback(call[0], 2)
 			
-			if function in graphity:
-				graphity.node[function]['functiontype'] = "Callback"
-				graphity.add_edge(aNode[0], function, pos=call[0], calltype="callback")
+			if xrefTarget:
+				print (xrefTarget, aNode[0])
+				addIndirectEdge(graphity, aNode[0], xrefTarget, "apicallback", "Callback")
+				
+		# implicitly filters out callbacks fixed already - gets all nodes with zero in-degre
+		# TODO see if feasible for all functions, even with such already having in edges
+	for aNode in graphity.nodes(data=True):
+		if graphity.in_degree(aNode[0]) == 0:
+			jay = R2PY.cmd("axtj @ " + aNode[0])
+			
+			if jay:
+				xrefs = json.loads(jay)
+				for xref in xrefs:
+				
+					# if xref is code its almost certainly an edge to add
+					if xref['type'] == 'c':
+						
+						# TODO circle back on jumptable-as-a-function bug from r2
+						# really ugly workaround, really really ugly..
+						if not 'dword [' in xref['opcode']:
+							addIndirectEdge(graphity, hex(xref['from']), aNode[0], "coderef", "IndirectCode")
+								
+					# if xref is data
+					if xref['type'] == 'd':
+					
+						opcd = xref['opcode']
+						# TODO run more tests on this list not sure these are all possible cases
+						# TODO make datarefs optional!
+						if opcd.startswith('push') or opcd.startswith('lea') or opcd.startswith('mov'):
+							print (hex(xref['from']), opcd)
+							addIndirectEdge(graphity, hex(xref['from']), aNode[0], "dataref", "IndirectData")
+						else:
+							# TODO look into add reg, ThreadRoutine -> as xref
+							print ("up for discussion: " + hex(xref['from']), xref['type'], xref['opcode'])
+						
 
+def addIndirectEdge(graphity, fromAddr, toAddr, calltype, functiontype):
+	
+	fromNode = gimmeRespectiveFunction(fromAddr)
+	toNode = gimmeRespectiveFunction(toAddr)
+	if fromNode in graphity and toNode in graphity:
+		graphity.node[toNode]['functiontype'] = functiontype
+		graphity.add_edge(fromNode, toNode, calltype=calltype)
+		print ("added callback edge", fromNode, toNode, calltype, "\n")
+	else:
+		print ("Something went wrong with indirect edge ", fromAddr, toAddr, calltype)
+	
 
 # Parsing the handler offset out of the function arguments
 def getCallback(call, argcount):
@@ -501,7 +551,33 @@ def gimmeRespectiveFunction(address):
 		return R2PY.cmd("?v $FB @ " + address)
 	return ''
 
+def mnemonicism(offset):
 
+	mnems = []
+	fsize = 0
+	weight = 0
+	
+	funcdump = R2PY.cmd("pdfj @ " + offset)
+	if funcdump:
+		dumpj = json.loads(funcdump)
+		for item in dumpj["ops"]:
+			mnems.append(item["type"])
+			#print (item["type"], item["opcode"])
+		fsize = dumpj["size"]
+	
+	#print ("\n" + offset + " " + str(fsize))
+	mnemdict = Counter(mnems)
+	#for mnem in sorted(mnemdict):
+	#	print (mnem, mnemdict[mnem])
+		
+	for mnem in mnemdict:
+		if mnem in ['shl', 'shr', 'mul', 'div', 'rol', 'ror', 'sar', 'load', 'store']:
+			weight += mnemdict[mnem]
+	return (weight * 10) / fsize
+
+	# TODO count how many above certain threshold, see how close they are together in the graph?
+	
+	
 # super graph creation function, radare-analyses the sample, puts together all of the graph and debug info
 def graphMagix(filepath, allAtts, deactivatecache):
 
@@ -523,9 +599,13 @@ def graphMagix(filepath, allAtts, deactivatecache):
 		R2PY.cmd("e anal.autoname= false")
 		R2PY.cmd("e anal.jmptbl = true")
 		R2PY.cmd("e anal.hasnext = true")
+		#R2PY.cmd("e src.null = true")
 		R2PY.cmd("aaa")
-		R2PY.cmd("afr")
-		R2PY.cmd("afr @@ sym*")
+		#R2PY.cmd("afr")
+		#R2PY.cmd("afr @@ sym*")
+		
+		#loadZigs()
+		#loadFlirts()
 
 		BENCH['r2_end'] = time()
 		print('* %s R2 finished analysis' % str(datetime.now()))
@@ -533,6 +613,9 @@ def graphMagix(filepath, allAtts, deactivatecache):
 		# GRAPH CREATION
 		graphity, debug = createRawGraph()
 
+		# TODO testing lib code detected
+		#flagLibraryCode(graphity)
+			
 		# DLL PROCESSING
 		if 'DLL' in allAtts['filetype']:
 			analyzeExports(graphity)
@@ -542,7 +625,16 @@ def graphMagix(filepath, allAtts, deactivatecache):
 
 		# handler tagging
 		tagCallbacks(graphity)
+		
+		# update api and string count attributes
+		for aNode in graphity.nodes(data=True):
+			aNode[1]['apicallcount'] = len(aNode[1]['calls'])
+			aNode[1]['stringcount'] = len(aNode[1]['strings'])
 
+		# calc mnemonic dist
+		for aNode in graphity.nodes():
+			graphity.node[aNode]['mnemonicism'] = mnemonicism(aNode)
+			
 		BENCH['graph_end'] = time()
 
 		# graph and debug info caching to save parsing time, potentially
@@ -561,12 +653,21 @@ if __name__ == '__main__':
 	parser = ArgumentParser()
 	parser.add_argument("input", help="Tool requires an input file or directory; directory, i.e. batch processing, only possible and feasible for csvdump option")
 	parser.add_argument("-d", "--deactivatecache", action="store_true", help="Deactivate caching of graphs, for debugging of graph generation")
+	
+	# Text output options
 	parser.add_argument("-p", "--printing", action="store_true", help="Print the graph as text, as in, nodes with respective content")
 	parser.add_argument("-i", "--info", action="store_true", help="Print info and stats of the graph")
-	parser.add_argument("-l", "--plotting", action="store_true", help="Plotting the graph via pyplot")
 	parser.add_argument("-b", "--behavior", action="store_true", help="Scan for behaviors listed in graphityFunc.py")
-	parser.add_argument("-n", "--neodump", action="store_true", help="Dump graph to Neo4j (configured to flush previous data from Neo, might wanna change that)")
-	parser.add_argument("-c", "--csvdump", help="Dump info data to a given csv file, appends a line per sample")
+	
+	# Visualization & viz data options
+	parser.add_argument("-l", "--plotting", action="store_true", help="Plotting the graph via pyplot")	
+	parser.add_argument("-g", "--gml", action="store_true", help="Spit out GML data for Gephi and what not")
+	parser.add_argument("-s", "--gmlsub", help="Define an offset in the form e.g. 0x401000 to dump the subgraph starting there")
+	parser.add_argument("-j", "--jit", action="store_true", help="Spits out JSON data, ready to be visualized within JS InfoVis as force directed graph")
+	
+	# Batch processing options
+	parser.add_argument("-n", "--neodump", action="store_true", help="Dump graph to Neo4j (configured to flush previous data from Neo, might wanna change that) - BATCH PROCESSING ONLY")
+	parser.add_argument("-c", "--csvdump", help="Dump info data to a given csv file, appends a line per sample, for testing now also dumps strings per binary in dedicated csv file - BATCH PROCESSING ONLY")
 
 	args = parser.parse_args()
 	# TODO check the path pythonically
@@ -642,20 +743,36 @@ if __name__ == '__main__':
 
 		if args.behavior:
 			# BEHAVIOR
+			# TODO enable switching of behavior dictionaries
 			print('* %s Scanning for API patterns ' % str(datetime.now()))
 			BENCH['behavior_start'] = time()
 			allThePatterns = graphityFunc.funcDict
 
 			for patty in allThePatterns:
-				findings = functionalityScan(graphity, allThePatterns[patty])
+				findings = patternScan(graphity, allThePatterns[patty])
 
 				for hit in findings:
 					if not False in hit['patterns'].values():
 						print("For %s found %s" % (patty, str(hit['patterns'])))
 			BENCH['behavior_end'] = time()
 
-
-
+		if args.gml:
+			# GML and stuff
+			BENCH['gml_start'] = time()
+			dumpGml(graphity, allAtts)
+			BENCH['gml_end'] = time()
+			
+		if args.gmlsub:
+			# TODO add bench
+			dumpGmlSubgraph(graphity, gmlsub)
+			
+		if args.jit:
+			#dumpJsonForJit(graphity, indent=2)
+			BENCH['d3_start'] = time()
+			dumpJsonForD3(graphity)
+			BENCH['d3_end'] = time()
+			
+			
 			# TODO calculate dispersion for 2-n anchor addresses
 			# TODO handling of LoadLib/GetPAddr. for "hiding something" question, follow GetProc return value
 
@@ -682,6 +799,10 @@ if __name__ == '__main__':
 			print("__ %5f Neo4j" % (BENCH['neo_end'] - BENCH['neo_start']))
 		if 'csv_start' in BENCH:
 			print("__ %5f CSV dump" % (BENCH['csv_end'] - BENCH['csv_start']))
+		if 'gml_start' in BENCH:
+			print("__ %5f GML dump" % (BENCH['gml_end'] - BENCH['gml_start']))
+		if 'd3_start' in BENCH:
+			print("__ %5f D3 dump" % (BENCH['d3_end'] - BENCH['d3_start']))
 
 	else:
 		print("Potentially not a PE file %s" % args.input)

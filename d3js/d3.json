@@ -1,0 +1,4054 @@
+{
+  "links": [
+    {
+      "pos": "0x401186",
+      "source": 5,
+      "target": 8
+    },
+    {
+      "pos": "0x401151",
+      "source": 5,
+      "target": 144
+    },
+    {
+      "pos": "0x401110",
+      "source": 5,
+      "target": 83
+    },
+    {
+      "pos": "0x4010e7",
+      "source": 5,
+      "target": 57
+    },
+    {
+      "pos": "0x40119a",
+      "source": 5,
+      "target": 121
+    },
+    {
+      "pos": "0x4011e2",
+      "source": 5,
+      "target": 122
+    },
+    {
+      "pos": "0x40111f",
+      "source": 5,
+      "target": 49
+    },
+    {
+      "pos": "0x401135",
+      "source": 5,
+      "target": 66
+    },
+    {
+      "pos": "0x40681d",
+      "source": 6,
+      "target": 124
+    },
+    {
+      "pos": "0x4067df",
+      "source": 6,
+      "target": 63
+    },
+    {
+      "pos": "0x4078d2",
+      "source": 9,
+      "target": 114
+    },
+    {
+      "pos": "0x4078db",
+      "source": 9,
+      "target": 84
+    },
+    {
+      "pos": "0x4078f3",
+      "source": 9,
+      "target": 35
+    },
+    {
+      "pos": "0x40395d",
+      "source": 11,
+      "target": 76
+    },
+    {
+      "pos": "0x4053e9",
+      "source": 12,
+      "target": 58
+    },
+    {
+      "pos": "0x405410",
+      "source": 12,
+      "target": 47
+    },
+    {
+      "pos": "0x4053a5",
+      "source": 12,
+      "target": 108
+    },
+    {
+      "pos": "0x4053f9",
+      "source": 12,
+      "target": 29
+    },
+    {
+      "pos": "0x4081a3",
+      "source": 13,
+      "target": 34
+    },
+    {
+      "pos": "0x401997",
+      "source": 15,
+      "target": 151
+    },
+    {
+      "pos": "0x401aa3",
+      "source": 15,
+      "target": 26
+    },
+    {
+      "pos": "0x401a22",
+      "source": 15,
+      "target": 122
+    },
+    {
+      "pos": "0x405ac0",
+      "source": 18,
+      "target": 130
+    },
+    {
+      "pos": "0x402249",
+      "source": 20,
+      "target": 8
+    },
+    {
+      "pos": "0x402238",
+      "source": 20,
+      "target": 151
+    },
+    {
+      "pos": "0x407892",
+      "source": 22,
+      "target": 42
+    },
+    {
+      "pos": "0x406b08",
+      "source": 22,
+      "target": 111
+    },
+    {
+      "pos": "0x4078ab",
+      "source": 22,
+      "target": 138
+    },
+    {
+      "pos": "0x405afe",
+      "source": 24,
+      "target": 106
+    },
+    {
+      "pos": "0x4025b4",
+      "source": 25,
+      "target": 83
+    },
+    {
+      "pos": "0x4025d6",
+      "source": 25,
+      "target": 66
+    },
+    {
+      "pos": "0x4025c3",
+      "source": 25,
+      "target": 49
+    },
+    {
+      "pos": "0x402585",
+      "source": 25,
+      "target": 44
+    },
+    {
+      "pos": "0x401b9c",
+      "source": 26,
+      "target": 8
+    },
+    {
+      "pos": "0x401bab",
+      "source": 26,
+      "target": 36
+    },
+    {
+      "pos": "0x401b67",
+      "source": 26,
+      "target": 144
+    },
+    {
+      "pos": "0x402106",
+      "source": 26,
+      "target": 57
+    },
+    {
+      "pos": "0x401eaf",
+      "source": 26,
+      "target": 147
+    },
+    {
+      "pos": "0x401bcd",
+      "source": 26,
+      "target": 87
+    },
+    {
+      "pos": "0x40214d",
+      "source": 26,
+      "target": 121
+    },
+    {
+      "pos": "0x401e4d",
+      "source": 26,
+      "target": 49
+    },
+    {
+      "pos": "0x401cb1",
+      "source": 26,
+      "target": 122
+    },
+    {
+      "pos": "0x4049ed",
+      "source": 27,
+      "target": 30
+    },
+    {
+      "pos": "0x402519",
+      "source": 28,
+      "target": 19
+    },
+    {
+      "pos": "0x403f6b",
+      "source": 29,
+      "target": 106
+    },
+    {
+      "pos": "0x403f62",
+      "source": 29,
+      "target": 24
+    },
+    {
+      "pos": "0x404c36",
+      "source": 30,
+      "target": 8
+    },
+    {
+      "pos": "0x404b58",
+      "source": 30,
+      "target": 58
+    },
+    {
+      "pos": "0x404b4b",
+      "source": 30,
+      "target": 138
+    },
+    {
+      "pos": "0x404b6f",
+      "source": 30,
+      "target": 148
+    },
+    {
+      "pos": "0x404b36",
+      "source": 30,
+      "target": 39
+    },
+    {
+      "pos": "0x404a1c",
+      "source": 30,
+      "target": 97
+    },
+    {
+      "pos": "0x404bf4",
+      "source": 30,
+      "target": 150
+    },
+    {
+      "pos": "0x404b51",
+      "source": 30,
+      "target": 49
+    },
+    {
+      "pos": "0x405349",
+      "source": 33,
+      "target": 58
+    },
+    {
+      "pos": "0x4052e7",
+      "source": 33,
+      "target": 108
+    },
+    {
+      "pos": "0x405377",
+      "source": 33,
+      "target": 138
+    },
+    {
+      "pos": "0x405360",
+      "source": 33,
+      "target": 148
+    },
+    {
+      "pos": "0x405300",
+      "source": 33,
+      "target": 49
+    },
+    {
+      "pos": "0x405328",
+      "source": 33,
+      "target": 29
+    },
+    {
+      "pos": "0x407a05",
+      "source": 34,
+      "target": 80
+    },
+    {
+      "pos": "0x407d55",
+      "source": 35,
+      "target": 63
+    },
+    {
+      "pos": "0x408720",
+      "source": 37,
+      "target": 69
+    },
+    {
+      "pos": "0x4086c3",
+      "source": 37,
+      "target": 45
+    },
+    {
+      "pos": "0x405a5b",
+      "source": 38,
+      "target": 130
+    },
+    {
+      "pos": "0x405a6c",
+      "source": 38,
+      "target": 23
+    },
+    {
+      "pos": "0x405a4e",
+      "source": 38,
+      "target": 141
+    },
+    {
+      "pos": "0x4080b6",
+      "source": 41,
+      "target": 13
+    },
+    {
+      "pos": "0x408095",
+      "source": 41,
+      "target": 58
+    },
+    {
+      "pos": "0x40805f",
+      "source": 41,
+      "target": 53
+    },
+    {
+      "pos": "0x4080d2",
+      "source": 41,
+      "target": 138
+    },
+    {
+      "pos": "0x40815a",
+      "source": 41,
+      "target": 148
+    },
+    {
+      "pos": "0x408018",
+      "source": 41,
+      "target": 113
+    },
+    {
+      "pos": "0x408043",
+      "source": 41,
+      "target": 59
+    },
+    {
+      "pos": "0x4080f1",
+      "source": 41,
+      "target": 107
+    },
+    {
+      "pos": "0x408141",
+      "source": 41,
+      "target": 49
+    },
+    {
+      "pos": "0x407cf4",
+      "source": 42,
+      "target": 84
+    },
+    {
+      "pos": "0x407cfc",
+      "source": 42,
+      "target": 72
+    },
+    {
+      "pos": "0x407d04",
+      "source": 42,
+      "target": 139
+    },
+    {
+      "pos": "0x407d1d",
+      "source": 42,
+      "target": 138
+    },
+    {
+      "pos": "0x402fe4",
+      "source": 44,
+      "target": 36
+    },
+    {
+      "pos": "0x402aa9",
+      "source": 44,
+      "target": 151
+    },
+    {
+      "pos": "0x403134",
+      "source": 44,
+      "target": 55
+    },
+    {
+      "pos": "0x403117",
+      "source": 44,
+      "target": 57
+    },
+    {
+      "pos": "0x402e93",
+      "source": 44,
+      "target": 21
+    },
+    {
+      "pos": "0x402b71",
+      "source": 44,
+      "target": 5
+    },
+    {
+      "pos": "0x402ed0",
+      "source": 44,
+      "target": 121
+    },
+    {
+      "pos": "0x402e03",
+      "source": 44,
+      "target": 8
+    },
+    {
+      "source": 44,
+      "target": 62,
+      "calltype": "apicallback"
+    },
+    {
+      "pos": "0x402f2f",
+      "source": 44,
+      "target": 64
+    },
+    {
+      "pos": "0x402b5d",
+      "source": 44,
+      "target": 83
+    },
+    {
+      "source": 44,
+      "target": 4,
+      "calltype": "apicallback"
+    },
+    {
+      "pos": "0x402e56",
+      "source": 44,
+      "target": 49
+    },
+    {
+      "pos": "0x404993",
+      "source": 45,
+      "target": 82
+    },
+    {
+      "pos": "0x4048bb",
+      "source": 46,
+      "target": 123
+    },
+    {
+      "pos": "0x403c90",
+      "source": 50,
+      "target": 128
+    },
+    {
+      "pos": "0x4039ae",
+      "source": 51,
+      "target": 27
+    },
+    {
+      "pos": "0x403a00",
+      "source": 51,
+      "target": 105
+    },
+    {
+      "pos": "0x4039e6",
+      "source": 51,
+      "target": 75
+    },
+    {
+      "pos": "0x40720c",
+      "source": 52,
+      "target": 82
+    },
+    {
+      "pos": "0x407258",
+      "source": 52,
+      "target": 69
+    },
+    {
+      "pos": "0x407a49",
+      "source": 53,
+      "target": 58
+    },
+    {
+      "pos": "0x407a6d",
+      "source": 53,
+      "target": 41
+    },
+    {
+      "pos": "0x403c0c",
+      "source": 55,
+      "target": 50
+    },
+    {
+      "pos": "0x4052ad",
+      "source": 56,
+      "target": 143
+    },
+    {
+      "pos": "0x40528b",
+      "source": 56,
+      "target": 108
+    },
+    {
+      "pos": "0x408657",
+      "source": 57,
+      "target": 37
+    },
+    {
+      "pos": "0x403fac",
+      "source": 58,
+      "target": 81
+    },
+    {
+      "pos": "0x40820f",
+      "source": 59,
+      "target": 58
+    },
+    {
+      "pos": "0x408231",
+      "source": 59,
+      "target": 109
+    },
+    {
+      "pos": "0x40821f",
+      "source": 59,
+      "target": 29
+    },
+    {
+      "pos": "0x403c1d",
+      "source": 61,
+      "target": 50
+    },
+    {
+      "pos": "0x402625",
+      "source": 62,
+      "target": 83
+    },
+    {
+      "pos": "0x402608",
+      "source": 62,
+      "target": 74
+    },
+    {
+      "pos": "0x402639",
+      "source": 62,
+      "target": 5
+    },
+    {
+      "pos": "0x40507b",
+      "source": 65,
+      "target": 27
+    },
+    {
+      "pos": "0x4050e1",
+      "source": 65,
+      "target": 75
+    },
+    {
+      "pos": "0x401478",
+      "source": 66,
+      "target": 8
+    },
+    {
+      "pos": "0x4014d5",
+      "source": 66,
+      "target": 36
+    },
+    {
+      "pos": "0x401358",
+      "source": 66,
+      "target": 144
+    },
+    {
+      "pos": "0x40130c",
+      "source": 66,
+      "target": 83
+    },
+    {
+      "pos": "0x4015f8",
+      "source": 66,
+      "target": 57
+    },
+    {
+      "pos": "0x401329",
+      "source": 66,
+      "target": 49
+    },
+    {
+      "pos": "0x4015b5",
+      "source": 66,
+      "target": 122
+    },
+    {
+      "pos": "0x403f90",
+      "source": 67,
+      "target": 106
+    },
+    {
+      "pos": "0x403f87",
+      "source": 67,
+      "target": 24
+    },
+    {
+      "pos": "0x407b0c",
+      "source": 69,
+      "target": 136
+    },
+    {
+      "pos": "0x407c3c",
+      "source": 69,
+      "target": 151
+    },
+    {
+      "pos": "0x403f08",
+      "source": 70,
+      "target": 56
+    },
+    {
+      "pos": "0x403ebd",
+      "source": 70,
+      "target": 73
+    },
+    {
+      "pos": "0x403ef1",
+      "source": 70,
+      "target": 33
+    },
+    {
+      "pos": "0x403ee2",
+      "source": 70,
+      "target": 93
+    },
+    {
+      "pos": "0x403eec",
+      "source": 70,
+      "target": 12
+    },
+    {
+      "pos": "0x403f35",
+      "source": 70,
+      "target": 55
+    },
+    {
+      "pos": "0x403f46",
+      "source": 70,
+      "target": 103
+    },
+    {
+      "pos": "0x403f2c",
+      "source": 70,
+      "target": 146
+    },
+    {
+      "pos": "0x403ec9",
+      "source": 70,
+      "target": 67
+    },
+    {
+      "pos": "0x403ef6",
+      "source": 70,
+      "target": 110
+    },
+    {
+      "pos": "0x403ed2",
+      "source": 70,
+      "target": 86
+    },
+    {
+      "pos": "0x401806",
+      "source": 71,
+      "target": 8
+    },
+    {
+      "pos": "0x4017cb",
+      "source": 71,
+      "target": 144
+    },
+    {
+      "pos": "0x4018df",
+      "source": 71,
+      "target": 83
+    },
+    {
+      "pos": "0x401856",
+      "source": 71,
+      "target": 125
+    },
+    {
+      "pos": "0x401954",
+      "source": 71,
+      "target": 49
+    },
+    {
+      "pos": "0x4016ff",
+      "source": 71,
+      "target": 122
+    },
+    {
+      "pos": "0x408310",
+      "source": 72,
+      "target": 138
+    },
+    {
+      "pos": "0x4058dd",
+      "source": 73,
+      "target": 10
+    },
+    {
+      "pos": "0x402496",
+      "source": 74,
+      "target": 126
+    },
+    {
+      "pos": "0x402403",
+      "source": 74,
+      "target": 83
+    },
+    {
+      "pos": "0x402470",
+      "source": 74,
+      "target": 148
+    },
+    {
+      "pos": "0x4024de",
+      "source": 74,
+      "target": 49
+    },
+    {
+      "pos": "0x402372",
+      "source": 74,
+      "target": 20
+    },
+    {
+      "pos": "0x404d3f",
+      "source": 75,
+      "target": 7
+    },
+    {
+      "pos": "0x4060d3",
+      "source": 77,
+      "target": 104
+    },
+    {
+      "pos": "0x4060e2",
+      "source": 77,
+      "target": 149
+    },
+    {
+      "pos": "0x404889",
+      "source": 79,
+      "target": 116
+    },
+    {
+      "pos": "0x407e05",
+      "source": 80,
+      "target": 136
+    },
+    {
+      "pos": "0x407f9a",
+      "source": 80,
+      "target": 151
+    },
+    {
+      "pos": "0x403fd3",
+      "source": 81,
+      "target": 133
+    },
+    {
+      "pos": "0x403fbf",
+      "source": 81,
+      "target": 88
+    },
+    {
+      "pos": "0x406d54",
+      "source": 82,
+      "target": 151
+    },
+    {
+      "pos": "0x406d64",
+      "source": 82,
+      "target": 64
+    },
+    {
+      "pos": "0x403464",
+      "source": 83,
+      "target": 96
+    },
+    {
+      "pos": "0x403481",
+      "source": 83,
+      "target": 116
+    },
+    {
+      "pos": "0x40792f",
+      "source": 84,
+      "target": 140
+    },
+    {
+      "pos": "0x4048f2",
+      "source": 85,
+      "target": 123
+    },
+    {
+      "pos": "0x4057ae",
+      "source": 86,
+      "target": 58
+    },
+    {
+      "pos": "0x40572c",
+      "source": 86,
+      "target": 29
+    },
+    {
+      "pos": "0x403587",
+      "source": 87,
+      "target": 150
+    },
+    {
+      "pos": "0x403fee",
+      "source": 88,
+      "target": 77
+    },
+    {
+      "pos": "0x406a9e",
+      "source": 89,
+      "target": 95
+    },
+    {
+      "pos": "0x406ab0",
+      "source": 89,
+      "target": 29
+    },
+    {
+      "pos": "0x4070b6",
+      "source": 90,
+      "target": 118
+    },
+    {
+      "pos": "0x4070bb",
+      "source": 90,
+      "target": 52
+    },
+    {
+      "pos": "0x406f3f",
+      "source": 90,
+      "target": 2
+    },
+    {
+      "pos": "0x407085",
+      "source": 90,
+      "target": 16
+    },
+    {
+      "pos": "0x405fca",
+      "source": 91,
+      "target": 60
+    },
+    {
+      "source": 92,
+      "target": 17,
+      "calltype": "coderef"
+    },
+    {
+      "pos": "0x4056f6",
+      "source": 93,
+      "target": 126
+    },
+    {
+      "pos": "0x40567c",
+      "source": 93,
+      "target": 58
+    },
+    {
+      "pos": "0x40569f",
+      "source": 93,
+      "target": 138
+    },
+    {
+      "pos": "0x40784e",
+      "source": 95,
+      "target": 133
+    },
+    {
+      "pos": "0x407823",
+      "source": 95,
+      "target": 77
+    },
+    {
+      "pos": "0x40785e",
+      "source": 95,
+      "target": 64
+    },
+    {
+      "pos": "0x40442d",
+      "source": 96,
+      "target": 131
+    },
+    {
+      "pos": "0x4046ef",
+      "source": 96,
+      "target": 43
+    },
+    {
+      "pos": "0x4043ff",
+      "source": 96,
+      "target": 145
+    },
+    {
+      "pos": "0x4047f5",
+      "source": 96,
+      "target": 85
+    },
+    {
+      "pos": "0x404785",
+      "source": 96,
+      "target": 46
+    },
+    {
+      "pos": "0x4043f2",
+      "source": 96,
+      "target": 99
+    },
+    {
+      "pos": "0x4046dd",
+      "source": 96,
+      "target": 3
+    },
+    {
+      "pos": "0x404625",
+      "source": 96,
+      "target": 98
+    },
+    {
+      "pos": "0x40452b",
+      "source": 96,
+      "target": 49
+    },
+    {
+      "pos": "0x4042e8",
+      "source": 96,
+      "target": 123
+    },
+    {
+      "pos": "0x406ed2",
+      "source": 97,
+      "target": 34
+    },
+    {
+      "pos": "0x406e92",
+      "source": 97,
+      "target": 53
+    },
+    {
+      "pos": "0x406ebd",
+      "source": 97,
+      "target": 49
+    },
+    {
+      "pos": "0x406a04",
+      "source": 102,
+      "target": 58
+    },
+    {
+      "pos": "0x405105",
+      "source": 103,
+      "target": 134
+    },
+    {
+      "pos": "0x405bca",
+      "source": 106,
+      "target": 8
+    },
+    {
+      "pos": "0x405c24",
+      "source": 106,
+      "target": 127
+    },
+    {
+      "pos": "0x405b88",
+      "source": 106,
+      "target": 148
+    },
+    {
+      "pos": "0x405c0e",
+      "source": 106,
+      "target": 121
+    },
+    {
+      "pos": "0x405bb0",
+      "source": 106,
+      "target": 49
+    },
+    {
+      "pos": "0x4083b1",
+      "source": 107,
+      "target": 91
+    },
+    {
+      "pos": "0x408338",
+      "source": 107,
+      "target": 58
+    },
+    {
+      "pos": "0x40842e",
+      "source": 107,
+      "target": 133
+    },
+    {
+      "pos": "0x40834c",
+      "source": 107,
+      "target": 138
+    },
+    {
+      "pos": "0x4083aa",
+      "source": 107,
+      "target": 126
+    },
+    {
+      "pos": "0x408365",
+      "source": 107,
+      "target": 48
+    },
+    {
+      "pos": "0x408380",
+      "source": 107,
+      "target": 100
+    },
+    {
+      "pos": "0x408391",
+      "source": 107,
+      "target": 77
+    },
+    {
+      "pos": "0x407302",
+      "source": 108,
+      "target": 90
+    },
+    {
+      "pos": "0x4084d9",
+      "source": 109,
+      "target": 148
+    },
+    {
+      "pos": "0x4084cc",
+      "source": 109,
+      "target": 58
+    },
+    {
+      "pos": "0x4084c5",
+      "source": 109,
+      "target": 49
+    },
+    {
+      "pos": "0x403bfb",
+      "source": 110,
+      "target": 128
+    },
+    {
+      "pos": "0x407961",
+      "source": 111,
+      "target": 114
+    },
+    {
+      "pos": "0x40845a",
+      "source": 113,
+      "target": 92
+    },
+    {
+      "pos": "0x407995",
+      "source": 114,
+      "target": 9
+    },
+    {
+      "pos": "0x403f54",
+      "source": 115,
+      "target": 61
+    },
+    {
+      "pos": "0x403f6b",
+      "source": 115,
+      "target": 106
+    },
+    {
+      "pos": "0x403f62",
+      "source": 115,
+      "target": 24
+    },
+    {
+      "pos": "0x4040e3",
+      "source": 116,
+      "target": 6
+    },
+    {
+      "pos": "0x4040ab",
+      "source": 116,
+      "target": 140
+    },
+    {
+      "pos": "0x404077",
+      "source": 116,
+      "target": 117
+    },
+    {
+      "pos": "0x404082",
+      "source": 116,
+      "target": 102
+    },
+    {
+      "source": 119,
+      "target": 1,
+      "calltype": "coderef"
+    },
+    {
+      "pos": "0x404889",
+      "source": 123,
+      "target": 116
+    },
+    {
+      "pos": "0x40598d",
+      "source": 130,
+      "target": 23
+    },
+    {
+      "source": 130,
+      "target": 40,
+      "calltype": "dataref"
+    },
+    {
+      "pos": "0x40250a",
+      "source": 132,
+      "target": 28
+    },
+    {
+      "pos": "0x4079d7",
+      "source": 137,
+      "target": 29
+    },
+    {
+      "pos": "0x406dd4",
+      "source": 138,
+      "target": 91
+    },
+    {
+      "pos": "0x406dc8",
+      "source": 138,
+      "target": 48
+    },
+    {
+      "pos": "0x4082d8",
+      "source": 139,
+      "target": 124
+    },
+    {
+      "pos": "0x4082a8",
+      "source": 139,
+      "target": 63
+    },
+    {
+      "pos": "0x4082c6",
+      "source": 139,
+      "target": 112
+    },
+    {
+      "pos": "0x4069ac",
+      "source": 140,
+      "target": 124
+    },
+    {
+      "pos": "0x4068a5",
+      "source": 140,
+      "target": 6
+    },
+    {
+      "pos": "0x403bc4",
+      "source": 142,
+      "target": 65
+    },
+    {
+      "pos": "0x406ef9",
+      "source": 143,
+      "target": 94
+    },
+    {
+      "pos": "0x4033b4",
+      "source": 144,
+      "target": 81
+    },
+    {
+      "pos": "0x40278b",
+      "source": 146,
+      "target": 51
+    },
+    {
+      "pos": "0x402a09",
+      "source": 146,
+      "target": 71
+    },
+    {
+      "pos": "0x4027b5",
+      "source": 146,
+      "target": 36
+    },
+    {
+      "pos": "0x4026c6",
+      "source": 146,
+      "target": 147
+    },
+    {
+      "pos": "0x402a4c",
+      "source": 146,
+      "target": 5
+    },
+    {
+      "pos": "0x40299f",
+      "source": 146,
+      "target": 57
+    },
+    {
+      "pos": "0x40277c",
+      "source": 146,
+      "target": 142
+    },
+    {
+      "source": 146,
+      "target": 25,
+      "calltype": "dataref"
+    },
+    {
+      "pos": "0x4027a0",
+      "source": 146,
+      "target": 11
+    },
+    {
+      "pos": "0x4029db",
+      "source": 146,
+      "target": 83
+    },
+    {
+      "pos": "0x402759",
+      "source": 146,
+      "target": 14
+    },
+    {
+      "pos": "0x402a5f",
+      "source": 146,
+      "target": 15
+    },
+    {
+      "pos": "0x40350f",
+      "source": 150,
+      "target": 45
+    }
+  ],
+  "nodes": [
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x401279",
+      "calltype": "cdecl",
+      "size": 17,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "IndirectCode",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4059dc",
+      "calltype": "cdecl",
+      "size": 14,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x4070e6",
+          "[C]",
+          "GetOEMCP"
+        ],
+        [
+          "0x4070fb",
+          "[C]",
+          "GetACP"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x4070cc",
+      "calltype": "cdecl",
+      "size": 74,
+      "apicallcount": 2
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.7692307692307693,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406c00",
+      "calltype": "cdecl",
+      "size": 117,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "Callback",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x402a97",
+          "[C]",
+          "MessageBoxA"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x402a8a",
+      "calltype": "cdecl",
+      "size": 23,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.04434589800443459,
+      "content": [
+        [
+          "0x4010de",
+          "[S]",
+          "/me "
+        ],
+        [
+          "0x401104",
+          "[S]",
+          "PRIVMSG %s :"
+        ],
+        [
+          "0x4011d5",
+          "[S]",
+          "Error: Disconnected."
+        ],
+        [
+          "0x401202",
+          "[S]",
+          "Error: Not in channel."
+        ],
+        [
+          "0x401229",
+          "[S]",
+          "PRIVMSG %s :%s \\\\ r \\\\ n"
+        ]
+      ],
+      "stringcount": 5,
+      "id": "0x4010a5",
+      "calltype": "cdecl",
+      "size": 451,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.12987012987012986,
+      "content": [
+        [
+          "0x406801",
+          "[C]",
+          "SetFilePointer"
+        ],
+        [
+          "0x40680e",
+          "[C]",
+          "GetLastError"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x4067b2",
+      "calltype": "cdecl",
+      "size": 154,
+      "apicallcount": 2
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.40625,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x404e03",
+      "calltype": "cdecl",
+      "size": 320,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.11811023622047244,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4032b0",
+      "calltype": "cdecl",
+      "size": 254,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4078c8",
+      "calltype": "cdecl",
+      "size": 59,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x405c80",
+          "[C]",
+          "HeapAlloc"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x405c73",
+      "calltype": "cdecl",
+      "size": 62,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.11494252873563218,
+      "content": [
+        [
+          "0x4038e2",
+          "[S]",
+          "SunMonTueWedThuFriSat"
+        ]
+      ],
+      "stringcount": 1,
+      "id": "0x4038c5",
+      "calltype": "cdecl",
+      "size": 174,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x4053b6",
+          "[C]",
+          "GetModuleFileNameA"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x405393",
+      "calltype": "cdecl",
+      "size": 153,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.22727272727272727,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40818b",
+      "calltype": "cdecl",
+      "size": 88,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x401054",
+      "calltype": "cdecl",
+      "size": 22,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.09202453987730061,
+      "content": [
+        [
+          "0x4019ea",
+          "[C]",
+          "recv"
+        ],
+        [
+          "0x401a15",
+          "[S]",
+          "Error: Disconnected"
+        ]
+      ],
+      "stringcount": 1,
+      "id": "0x40198f",
+      "calltype": "cdecl",
+      "size": 326,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x407116",
+      "calltype": "cdecl",
+      "size": 51,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "IndirectCode",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4084f0",
+      "calltype": "cdecl",
+      "size": 5,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x405ab1",
+      "calltype": "cdecl",
+      "size": 27,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403140",
+      "calltype": "cdecl",
+      "size": 60,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.13100436681222707,
+      "content": [
+        [
+          "0x402244",
+          "[S]",
+          "GRBot V0.1 Beta"
+        ],
+        [
+          "0x40225e",
+          "[C]",
+          "inet_addr"
+        ],
+        [
+          "0x40226e",
+          "[C]",
+          "htons"
+        ],
+        [
+          "0x402287",
+          "[C]",
+          "connect"
+        ],
+        [
+          "0x4022d4",
+          "[C]",
+          "recv"
+        ]
+      ],
+      "stringcount": 1,
+      "id": "0x402230",
+      "calltype": "cdecl",
+      "size": 229,
+      "apicallcount": 4
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.06872852233676977,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403d40",
+      "calltype": "cdecl",
+      "size": 291,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406b08",
+      "calltype": "cdecl",
+      "size": 108,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4059d2",
+      "calltype": "cdecl",
+      "size": 10,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x405acc",
+      "calltype": "cdecl",
+      "size": 57,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "IndirectData",
+      "mnemonicism": 0.15463917525773196,
+      "content": [
+        [
+          "0x402598",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x4025a8",
+          "[S]",
+          "NICK q%d \\\\ r \\\\ n"
+        ]
+      ],
+      "stringcount": 1,
+      "id": "0x402520",
+      "calltype": "cdecl",
+      "size": 194,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.05813953488372093,
+      "content": [
+        [
+          "0x401e71",
+          "[S]",
+          "PRIVMSG "
+        ],
+        [
+          "0x401ea3",
+          "[S]",
+          "ACTION "
+        ],
+        [
+          "0x401f64",
+          "[S]",
+          "MODE "
+        ],
+        [
+          "0x401fa1",
+          "[S]",
+          "MODE "
+        ],
+        [
+          "0x402101",
+          "[S]",
+          "PING "
+        ],
+        [
+          "0x40217f",
+          "[C]",
+          "send"
+        ]
+      ],
+      "stringcount": 5,
+      "id": "0x401ad5",
+      "calltype": "cdecl",
+      "size": 1720,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4049e4",
+      "calltype": "cdecl",
+      "size": 21,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x402511",
+      "calltype": "cdecl",
+      "size": 15,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403f59",
+      "calltype": "cdecl",
+      "size": 37,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.08250825082508251,
+      "content": [
+        [
+          "0x404a31",
+          "[C]",
+          "GetTimeZoneInformation"
+        ],
+        [
+          "0x404ac6",
+          "[C]",
+          "WideCharToMultiByte"
+        ],
+        [
+          "0x404b00",
+          "[C]",
+          "WideCharToMultiByte"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x4049f9",
+      "calltype": "cdecl",
+      "size": 606,
+      "apicallcount": 3
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4084f5",
+      "calltype": "cdecl",
+      "size": 11,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.7692307692307693,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4049b0",
+      "calltype": "cdecl",
+      "size": 52,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4052da",
+      "calltype": "cdecl",
+      "size": 185,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4079de",
+      "calltype": "cdecl",
+      "size": 63,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.11494252873563218,
+      "content": [
+        [
+          "0x407d5c",
+          "[C]",
+          "FlushFileBuffers"
+        ],
+        [
+          "0x407d66",
+          "[C]",
+          "GetLastError"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x407d30",
+      "calltype": "cdecl",
+      "size": 87,
+      "apicallcount": 2
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x401000",
+      "calltype": "cdecl",
+      "size": 84,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.09852216748768473,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40867d",
+      "calltype": "cdecl",
+      "size": 203,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4059ec",
+      "calltype": "cdecl",
+      "size": 197,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.15503875968992248,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406df0",
+      "calltype": "cdecl",
+      "size": 129,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "IndirectData",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40591c",
+      "calltype": "cdecl",
+      "size": 34,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.02557544757033248,
+      "content": [
+        [
+          "0x408177",
+          "[C]",
+          "SetEnvironmentVariableA"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x408004",
+      "calltype": "cdecl",
+      "size": 391,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x407cda",
+      "calltype": "cdecl",
+      "size": 86,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.8653846153846154,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406b90",
+      "calltype": "cdecl",
+      "size": 104,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.023612750885478158,
+      "content": [
+        [
+          "0x402aef",
+          "[S]",
+          "SC_Modder"
+        ],
+        [
+          "0x402b3f",
+          "[C]",
+          "GetUserNameA"
+        ],
+        [
+          "0x402b4c",
+          "[S]",
+          "Mar 19 2006"
+        ],
+        [
+          "0x402b51",
+          "[S]",
+          "Winkey bot compiled on %s is ready. Logged in as \"%s\"."
+        ],
+        [
+          "0x402b7d",
+          "[S]",
+          "say "
+        ],
+        [
+          "0x402bad",
+          "[S]",
+          "user"
+        ],
+        [
+          "0x402bd3",
+          "[C]",
+          "GetUserNameA"
+        ],
+        [
+          "0x402be0",
+          "[S]",
+          "Logged in as \"%s\"."
+        ],
+        [
+          "0x402c0c",
+          "[S]",
+          "logoff"
+        ],
+        [
+          "0x402c2d",
+          "[C]",
+          "GetCurrentProcess"
+        ],
+        [
+          "0x402c34",
+          "[C]",
+          "OpenProcessToken"
+        ],
+        [
+          "0x402c41",
+          "[S]",
+          "SeShutdownPrivilege"
+        ],
+        [
+          "0x402c48",
+          "[C]",
+          "LookupPrivilegeValueA"
+        ],
+        [
+          "0x402c78",
+          "[C]",
+          "AdjustTokenPrivileges"
+        ],
+        [
+          "0x402c85",
+          "[C]",
+          "ExitWindowsEx"
+        ],
+        [
+          "0x402c8b",
+          "[S]",
+          "Logging off . . ."
+        ],
+        [
+          "0x402ca1",
+          "[S]",
+          "shutdown"
+        ],
+        [
+          "0x402cc2",
+          "[C]",
+          "GetCurrentProcess"
+        ],
+        [
+          "0x402cc9",
+          "[C]",
+          "OpenProcessToken"
+        ],
+        [
+          "0x402cd6",
+          "[S]",
+          "SeShutdownPrivilege"
+        ],
+        [
+          "0x402cdd",
+          "[C]",
+          "LookupPrivilegeValueA"
+        ],
+        [
+          "0x402d0d",
+          "[C]",
+          "AdjustTokenPrivileges"
+        ],
+        [
+          "0x402d1a",
+          "[C]",
+          "ExitWindowsEx"
+        ],
+        [
+          "0x402d20",
+          "[S]",
+          "Shutting down computer . . ."
+        ],
+        [
+          "0x402d36",
+          "[S]",
+          "msgbox "
+        ],
+        [
+          "0x402d62",
+          "[C]",
+          "CreateThread"
+        ],
+        [
+          "0x402d6f",
+          "[S]",
+          "Popped up messagebox containing \"%s\" . . ."
+        ],
+        [
+          "0x402d9b",
+          "[S]",
+          "listwin"
+        ],
+        [
+          "0x402db7",
+          "[C]",
+          "GetForegroundWindow"
+        ],
+        [
+          "0x402dcc",
+          "[C]",
+          "GetDesktopWindow"
+        ],
+        [
+          "0x402de1",
+          "[S]",
+          "Error: Couldn't grab top window."
+        ],
+        [
+          "0x402df7",
+          "[S]",
+          "Windows open on this computer: "
+        ],
+        [
+          "0x402e2d",
+          "[C]",
+          "SendMessageA"
+        ],
+        [
+          "0x402ea4",
+          "[C]",
+          "GetWindow"
+        ],
+        [
+          "0x402ef5",
+          "[S]",
+          "exec "
+        ],
+        [
+          "0x402fa2",
+          "[C]",
+          "CreateProcessA"
+        ],
+        [
+          "0x402fb3",
+          "[S]",
+          "Error executing cmd \"%s\"."
+        ],
+        [
+          "0x402ffb",
+          "[S]",
+          "Executed \"%s\" with param \"%s\"."
+        ],
+        [
+          "0x403027",
+          "[S]",
+          "grcrash "
+        ],
+        [
+          "0x403053",
+          "[C]",
+          "CreateThread"
+        ],
+        [
+          "0x403060",
+          "[S]",
+          "clswnd "
+        ],
+        [
+          "0x403085",
+          "[C]",
+          "FindWindowA"
+        ],
+        [
+          "0x4030a1",
+          "[S]",
+          "Couldn't find window \"%s\"."
+        ],
+        [
+          "0x4030d5",
+          "[C]",
+          "SendMessageA"
+        ],
+        [
+          "0x4030e2",
+          "[S]",
+          "Closed window \"%s\"."
+        ],
+        [
+          "0x40310b",
+          "[S]",
+          "exit"
+        ],
+        [
+          "0x403123",
+          "[S]",
+          "/QUIT :Exit cmd"
+        ]
+      ],
+      "stringcount": 26,
+      "id": "0x402aa1",
+      "calltype": "cdecl",
+      "size": 1694,
+      "apicallcount": 21
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.08547008547008547,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x404935",
+      "calltype": "cdecl",
+      "size": 117,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4048a1",
+      "calltype": "cdecl",
+      "size": 49,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.022935779816513763,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40542c",
+      "calltype": "cdecl",
+      "size": 436,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x405cb1",
+      "calltype": "cdecl",
+      "size": 43,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4033c0",
+      "calltype": "cdecl",
+      "size": 123,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x403c36",
+          "[C]",
+          "GetCurrentProcess"
+        ],
+        [
+          "0x403c3d",
+          "[C]",
+          "TerminateProcess"
+        ],
+        [
+          "0x403cb7",
+          "[C]",
+          "ExitProcess"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x403c26",
+      "calltype": "cdecl",
+      "size": 153,
+      "apicallcount": 3
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.22727272727272727,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40399b",
+      "calltype": "cdecl",
+      "size": 352,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.07712082262210797,
+      "content": [
+        [
+          "0x407186",
+          "[C]",
+          "GetCPInfo"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x407172",
+      "calltype": "cdecl",
+      "size": 389,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x407a40",
+          "[C]",
+          "WideCharToMultiByte"
+        ],
+        [
+          "0x407a62",
+          "[C]",
+          "WideCharToMultiByte"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x407a1d",
+      "calltype": "cdecl",
+      "size": 110,
+      "apicallcount": 2
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x401268",
+      "calltype": "cdecl",
+      "size": 17,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403c04",
+      "calltype": "cdecl",
+      "size": 17,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x405282",
+      "calltype": "cdecl",
+      "size": 88,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4085d0",
+      "calltype": "cdecl",
+      "size": 173,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403fa2",
+      "calltype": "cdecl",
+      "size": 18,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4081e3",
+      "calltype": "cdecl",
+      "size": 103,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.18018018018018017,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4073a0",
+      "calltype": "cdecl",
+      "size": 222,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403c15",
+      "calltype": "cdecl",
+      "size": 17,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "Callback",
+      "mnemonicism": 0.14084507042253522,
+      "content": [
+        [
+          "0x402619",
+          "[S]",
+          "Server \"%s\" crashed."
+        ],
+        [
+          "0x402644",
+          "[S]",
+          "Couldn't crash \"%s\"."
+        ]
+      ],
+      "stringcount": 2,
+      "id": "0x4025e2",
+      "calltype": "cdecl",
+      "size": 142,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.16393442622950818,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4077b6",
+      "calltype": "cdecl",
+      "size": 61,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.45454545454545453,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403ce0",
+      "calltype": "cdecl",
+      "size": 88,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.20618556701030927,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40503c",
+      "calltype": "cdecl",
+      "size": 194,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.01824817518248175,
+      "content": [
+        [
+          "0x4012b4",
+          "[S]",
+          "PART "
+        ],
+        [
+          "0x4012dd",
+          "[S]",
+          "JOIN "
+        ],
+        [
+          "0x401300",
+          "[S]",
+          "PART %s \\\\ r \\\\ n"
+        ],
+        [
+          "0x401343",
+          "[C]",
+          "send"
+        ],
+        [
+          "0x4013fd",
+          "[S]",
+          "PRIVMSG "
+        ],
+        [
+          "0x4015c9",
+          "[S]",
+          ":%s NICK "
+        ],
+        [
+          "0x401687",
+          "[C]",
+          "send"
+        ],
+        [
+          "0x4016b2",
+          "[C]",
+          "WSAGetLastError"
+        ]
+      ],
+      "stringcount": 5,
+      "id": "0x40128a",
+      "calltype": "cdecl",
+      "size": 1096,
+      "apicallcount": 3
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x403f9b",
+          "[C]",
+          "ExitProcess"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x403f7e",
+      "calltype": "cdecl",
+      "size": 35,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x408748",
+      "calltype": "cdecl",
+      "size": 1020,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x407acd",
+          "[C]",
+          "LCMapStringW"
+        ],
+        [
+          "0x407ae9",
+          "[C]",
+          "LCMapStringA"
+        ],
+        [
+          "0x407b32",
+          "[C]",
+          "LCMapStringA"
+        ],
+        [
+          "0x407b6a",
+          "[C]",
+          "MultiByteToWideChar"
+        ],
+        [
+          "0x407bc2",
+          "[C]",
+          "MultiByteToWideChar"
+        ],
+        [
+          "0x407bd8",
+          "[C]",
+          "LCMapStringW"
+        ],
+        [
+          "0x407c0b",
+          "[C]",
+          "LCMapStringW"
+        ],
+        [
+          "0x407c73",
+          "[C]",
+          "LCMapStringW"
+        ],
+        [
+          "0x407c98",
+          "[C]",
+          "WideCharToMultiByte"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x407a8b",
+      "calltype": "cdecl",
+      "size": 511,
+      "apicallcount": 9
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0851063829787234,
+      "content": [
+        [
+          "0x403e89",
+          "[C]",
+          "GetVersion"
+        ],
+        [
+          "0x403ed7",
+          "[C]",
+          "GetCommandLineA"
+        ],
+        [
+          "0x403f02",
+          "[C]",
+          "GetStartupInfoA"
+        ],
+        [
+          "0x403f25",
+          "[C]",
+          "GetModuleHandleA"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x403e63",
+      "calltype": "cdecl",
+      "size": 235,
+      "apicallcount": 4
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.028530670470756064,
+      "content": [
+        [
+          "0x4016f2",
+          "[S]",
+          "Warning: No port specified, using default"
+        ],
+        [
+          "0x40170c",
+          "[S]",
+          "Error: No hostname specified."
+        ],
+        [
+          "0x40172d",
+          "[S]",
+          "Error: No nickname specified."
+        ],
+        [
+          "0x401756",
+          "[S]",
+          "Warning: already connected"
+        ],
+        [
+          "0x401814",
+          "[C]",
+          "socket"
+        ],
+        [
+          "0x40182e",
+          "[C]",
+          "WSAGetLastError"
+        ],
+        [
+          "0x40186c",
+          "[S]",
+          "Error: Couldn't resolve hostname."
+        ],
+        [
+          "0x401890",
+          "[S]",
+          "Error: Couldn't connect to hostname."
+        ],
+        [
+          "0x4018ab",
+          "[C]",
+          "Sleep"
+        ],
+        [
+          "0x4018d3",
+          "[S]",
+          "NICK %s \\\\ r \\\\ n"
+        ],
+        [
+          "0x40190a",
+          "[C]",
+          "send"
+        ],
+        [
+          "0x401920",
+          "[S]",
+          "Error sending packet."
+        ],
+        [
+          "0x40193b",
+          "[S]",
+          "USER blah blah blah blah \\\\ r \\\\ n"
+        ],
+        [
+          "0x40196e",
+          "[C]",
+          "send"
+        ]
+      ],
+      "stringcount": 9,
+      "id": "0x4016d2",
+      "calltype": "cdecl",
+      "size": 701,
+      "apicallcount": 5
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4082fd",
+      "calltype": "cdecl",
+      "size": 43,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x4058ce",
+          "[C]",
+          "HeapCreate"
+        ],
+        [
+          "0x4058ec",
+          "[C]",
+          "HeapDestroy"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x4058bd",
+      "calltype": "cdecl",
+      "size": 60,
+      "apicallcount": 2
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.20080321285140562,
+      "content": [
+        [
+          "0x402325",
+          "[C]",
+          "socket"
+        ],
+        [
+          "0x402330",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x402339",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x402340",
+          "[S]",
+          "%d%d"
+        ],
+        [
+          "0x402354",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x4023cb",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x4023d2",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x4023dc",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x4023e6",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x4023f0",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x4023f7",
+          "[S]",
+          "%d%d%d%d%d"
+        ],
+        [
+          "0x402421",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x40242f",
+          "[C]",
+          "Sleep"
+        ],
+        [
+          "0x402435",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x402443",
+          "[C]",
+          "Sleep"
+        ],
+        [
+          "0x402449",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x40245c",
+          "[C]",
+          "Sleep"
+        ],
+        [
+          "0x4024f8",
+          "[C]",
+          "send"
+        ]
+      ],
+      "stringcount": 2,
+      "id": "0x402315",
+      "calltype": "cdecl",
+      "size": 498,
+      "apicallcount": 16
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.07009345794392523,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x404c57",
+      "calltype": "cdecl",
+      "size": 428,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.5,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403973",
+      "calltype": "cdecl",
+      "size": 40,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.15444015444015444,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406007",
+      "calltype": "cdecl",
+      "size": 777,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40484c",
+      "calltype": "cdecl",
+      "size": 3,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40484f",
+      "calltype": "cdecl",
+      "size": 29,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x407dc5",
+          "[C]",
+          "CompareStringW"
+        ],
+        [
+          "0x407de2",
+          "[C]",
+          "CompareStringA"
+        ],
+        [
+          "0x407e40",
+          "[C]",
+          "CompareStringA"
+        ],
+        [
+          "0x407e91",
+          "[C]",
+          "GetCPInfo"
+        ],
+        [
+          "0x407f10",
+          "[C]",
+          "MultiByteToWideChar"
+        ],
+        [
+          "0x407f71",
+          "[C]",
+          "MultiByteToWideChar"
+        ],
+        [
+          "0x407f84",
+          "[C]",
+          "MultiByteToWideChar"
+        ],
+        [
+          "0x407fd0",
+          "[C]",
+          "MultiByteToWideChar"
+        ],
+        [
+          "0x407fe8",
+          "[C]",
+          "CompareStringW"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x407d87",
+      "calltype": "cdecl",
+      "size": 597,
+      "apicallcount": 9
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403fb4",
+      "calltype": "cdecl",
+      "size": 44,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x406cb4",
+          "[C]",
+          "GetStringTypeW"
+        ],
+        [
+          "0x406cce",
+          "[C]",
+          "GetStringTypeA"
+        ],
+        [
+          "0x406d02",
+          "[C]",
+          "GetStringTypeA"
+        ],
+        [
+          "0x406d3a",
+          "[C]",
+          "MultiByteToWideChar"
+        ],
+        [
+          "0x406d90",
+          "[C]",
+          "MultiByteToWideChar"
+        ],
+        [
+          "0x406da2",
+          "[C]",
+          "GetStringTypeW"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x406c75",
+      "calltype": "cdecl",
+      "size": 318,
+      "apicallcount": 6
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40343b",
+      "calltype": "cdecl",
+      "size": 82,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x407903",
+      "calltype": "cdecl",
+      "size": 92,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4048d2",
+      "calltype": "cdecl",
+      "size": 56,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0234192037470726,
+      "content": [
+        [
+          "0x40576b",
+          "[C]",
+          "GetStartupInfoA"
+        ],
+        [
+          "0x405811",
+          "[C]",
+          "GetFileType"
+        ],
+        [
+          "0x40586a",
+          "[C]",
+          "GetStdHandle"
+        ],
+        [
+          "0x405878",
+          "[C]",
+          "GetFileType"
+        ],
+        [
+          "0x4058af",
+          "[C]",
+          "SetHandleCount"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x405712",
+      "calltype": "cdecl",
+      "size": 427,
+      "apicallcount": 5
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403583",
+      "calltype": "cdecl",
+      "size": 11,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x40400e",
+          "[C]",
+          "HeapAlloc"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x403fe0",
+      "calltype": "cdecl",
+      "size": 54,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.06060606060606061,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406a63",
+      "calltype": "cdecl",
+      "size": 165,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.19559902200489,
+      "content": [
+        [
+          "0x406f7b",
+          "[C]",
+          "GetCPInfo"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x406f33",
+      "calltype": "cdecl",
+      "size": 409,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.2096177558569667,
+      "content": [
+        [
+          "0x405f33",
+          "[C]",
+          "VirtualFree"
+        ],
+        [
+          "0x405f8e",
+          "[C]",
+          "VirtualFree"
+        ],
+        [
+          "0x405fa0",
+          "[C]",
+          "HeapFree"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x405cdc",
+      "calltype": "cdecl",
+      "size": 811,
+      "apicallcount": 3
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.1595744680851064,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x408500",
+      "calltype": "cdecl",
+      "size": 188,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.032679738562091505,
+      "content": [
+        [
+          "0x4055fb",
+          "[C]",
+          "GetEnvironmentStringsW"
+        ],
+        [
+          "0x40560f",
+          "[C]",
+          "GetEnvironmentStrings"
+        ],
+        [
+          "0x40563b",
+          "[C]",
+          "GetEnvironmentStringsW"
+        ],
+        [
+          "0x405673",
+          "[C]",
+          "WideCharToMultiByte"
+        ],
+        [
+          "0x405695",
+          "[C]",
+          "WideCharToMultiByte"
+        ],
+        [
+          "0x4056ae",
+          "[C]",
+          "FreeEnvironmentStringsW"
+        ],
+        [
+          "0x4056c1",
+          "[C]",
+          "GetEnvironmentStrings"
+        ],
+        [
+          "0x4056ff",
+          "[C]",
+          "FreeEnvironmentStringsA"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x4055e0",
+      "calltype": "cdecl",
+      "size": 306,
+      "apicallcount": 8
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x406f1a",
+          "[S]",
+          "         (((((                  H"
+        ]
+      ],
+      "stringcount": 1,
+      "id": "0x406f02",
+      "calltype": "cdecl",
+      "size": 49,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.08,
+      "content": [
+        [
+          "0x407838",
+          "[C]",
+          "HeapAlloc"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x4077f3",
+      "calltype": "cdecl",
+      "size": 125,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.015608740894901144,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40412b",
+      "calltype": "cdecl",
+      "size": 1922,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406e74",
+      "calltype": "cdecl",
+      "size": 125,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x404917",
+      "calltype": "cdecl",
+      "size": 16,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x404927",
+      "calltype": "cdecl",
+      "size": 14,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.22427440633245382,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4064bc",
+      "calltype": "cdecl",
+      "size": 758,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x408b44",
+      "calltype": "cdecl",
+      "size": 1020,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4069f9",
+      "calltype": "cdecl",
+      "size": 68,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x405236",
+          "[C]",
+          "UnhandledExceptionFilter"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x4050fe",
+      "calltype": "cdecl",
+      "size": 321,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.05649717514124294,
+      "content": [
+        [
+          "0x406338",
+          "[C]",
+          "HeapReAlloc"
+        ],
+        [
+          "0x40636c",
+          "[C]",
+          "HeapAlloc"
+        ],
+        [
+          "0x406386",
+          "[C]",
+          "VirtualAlloc"
+        ],
+        [
+          "0x40639d",
+          "[C]",
+          "HeapFree"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x406310",
+      "calltype": "cdecl",
+      "size": 177,
+      "apicallcount": 4
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.40160642570281124,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x404f43",
+      "calltype": "cdecl",
+      "size": 249,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.029498525073746312,
+      "content": [
+        [
+          "0x405b72",
+          "[C]",
+          "GetModuleFileNameA"
+        ],
+        [
+          "0x405b82",
+          "[S]",
+          "<program name unknown>"
+        ],
+        [
+          "0x405bd8",
+          "[S]",
+          "Runtime Error! \\\\ n \\\\ nProgram: "
+        ],
+        [
+          "0x405c1e",
+          "[S]",
+          "Microsoft Visual C++ Runtime Library"
+        ],
+        [
+          "0x405c48",
+          "[C]",
+          "GetStdHandle"
+        ],
+        [
+          "0x405c4f",
+          "[C]",
+          "WriteFile"
+        ]
+      ],
+      "stringcount": 3,
+      "id": "0x405b05",
+      "calltype": "cdecl",
+      "size": 339,
+      "apicallcount": 3
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x4083d7",
+          "[C]",
+          "HeapAlloc"
+        ],
+        [
+          "0x408418",
+          "[C]",
+          "HeapReAlloc"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x408328",
+      "calltype": "cdecl",
+      "size": 288,
+      "apicallcount": 2
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4072f7",
+      "calltype": "cdecl",
+      "size": 28,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4084bb",
+      "calltype": "cdecl",
+      "size": 43,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403bd7",
+      "calltype": "cdecl",
+      "size": 45,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40795f",
+      "calltype": "cdecl",
+      "size": 9,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.16393442622950818,
+      "content": [
+        [
+          "0x40778f",
+          "[C]",
+          "SetStdHandle"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x40773c",
+      "calltype": "cdecl",
+      "size": 122,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.08695652173913043,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x408448",
+      "calltype": "cdecl",
+      "size": 115,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x407968",
+      "calltype": "cdecl",
+      "size": 109,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403f4e",
+      "calltype": "cdecl",
+      "size": 11,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.036101083032490974,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x404016",
+      "calltype": "cdecl",
+      "size": 277,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.2631578947368421,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406a3d",
+      "calltype": "cdecl",
+      "size": 38,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 1.2195121951219512,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x407149",
+      "calltype": "cdecl",
+      "size": 41,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4059c9",
+      "calltype": "cdecl",
+      "size": 23,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4059a6",
+      "calltype": "cdecl",
+      "size": 35,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4031d0",
+      "calltype": "cdecl",
+      "size": 224,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40106a",
+      "calltype": "cdecl",
+      "size": 59,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40486c",
+      "calltype": "cdecl",
+      "size": 53,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4076d5",
+      "calltype": "cdecl",
+      "size": 103,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x4021a1",
+          "[C]",
+          "htons"
+        ],
+        [
+          "0x4021ae",
+          "[C]",
+          "inet_addr"
+        ],
+        [
+          "0x4021c7",
+          "[C]",
+          "gethostbyname"
+        ],
+        [
+          "0x4021e7",
+          "[C]",
+          "inet_ntoa"
+        ],
+        [
+          "0x4021ed",
+          "[C]",
+          "inet_addr"
+        ],
+        [
+          "0x40220b",
+          "[C]",
+          "connect"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x40218d",
+      "calltype": "cdecl",
+      "size": 151,
+      "apicallcount": 6
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.18018018018018017,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403590",
+      "calltype": "cdecl",
+      "size": 222,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x407320",
+          "[S]",
+          "user32.dll"
+        ],
+        [
+          "0x407325",
+          "[C]",
+          "LoadLibraryA"
+        ],
+        [
+          "0x407337",
+          "[S]",
+          "MessageBoxA"
+        ],
+        [
+          "0x40733d",
+          "[C]",
+          "GetProcAddress"
+        ],
+        [
+          "0x407348",
+          "[S]",
+          "GetActiveWindow"
+        ],
+        [
+          "0x40734e",
+          "[C]",
+          "GetProcAddress"
+        ],
+        [
+          "0x407350",
+          "[S]",
+          "GetLastActivePopup"
+        ],
+        [
+          "0x40735b",
+          "[C]",
+          "GetProcAddress"
+        ]
+      ],
+      "stringcount": 4,
+      "id": "0x407313",
+      "calltype": "cdecl",
+      "size": 137,
+      "apicallcount": 4
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403cbf",
+      "calltype": "cdecl",
+      "size": 26,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403fa1",
+      "calltype": "cdecl",
+      "size": 1,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40593e",
+      "calltype": "cdecl",
+      "size": 104,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40490a",
+      "calltype": "cdecl",
+      "size": 13,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x402507",
+      "calltype": "cdecl",
+      "size": 10,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x405c58",
+      "calltype": "cdecl",
+      "size": 27,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x40523f",
+      "calltype": "cdecl",
+      "size": 67,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x408f40",
+      "calltype": "cdecl",
+      "size": 200,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x407caf",
+      "calltype": "cdecl",
+      "size": 43,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4079d5",
+      "calltype": "cdecl",
+      "size": 9,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x406de5",
+          "[C]",
+          "HeapFree"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x406dbe",
+      "calltype": "cdecl",
+      "size": 47,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.11173184357541899,
+      "content": [
+        [
+          "0x4082af",
+          "[C]",
+          "CloseHandle"
+        ],
+        [
+          "0x4082b9",
+          "[C]",
+          "GetLastError"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x40824a",
+      "calltype": "cdecl",
+      "size": 179,
+      "apicallcount": 2
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.046620046620046623,
+      "content": [
+        [
+          "0x406924",
+          "[C]",
+          "WriteFile"
+        ],
+        [
+          "0x406971",
+          "[C]",
+          "GetLastError"
+        ],
+        [
+          "0x406989",
+          "[C]",
+          "WriteFile"
+        ],
+        [
+          "0x40699e",
+          "[C]",
+          "GetLastError"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x40684c",
+      "calltype": "cdecl",
+      "size": 429,
+      "apicallcount": 4
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x405907",
+          "[S]",
+          "]_^["
+        ],
+        [
+          "0x40590f",
+          "[C]",
+          "RtlUnwind"
+        ]
+      ],
+      "stringcount": 1,
+      "id": "0x4058fc",
+      "calltype": "cdecl",
+      "size": 32,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x403b08",
+          "[C]",
+          "GetLocalTime"
+        ],
+        [
+          "0x403b12",
+          "[C]",
+          "GetSystemTime"
+        ],
+        [
+          "0x403b67",
+          "[C]",
+          "GetTimeZoneInformation"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x403afb",
+      "calltype": "cdecl",
+      "size": 220,
+      "apicallcount": 3
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x406ef1",
+      "calltype": "cdecl",
+      "size": 17,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4033ae",
+      "calltype": "cdecl",
+      "size": 14,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [
+        [
+          "0x406b65",
+          "[C]",
+          "WideCharToMultiByte"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x406b1c",
+      "calltype": "cdecl",
+      "size": 104,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.06666666666666667,
+      "content": [
+        [
+          "0x40267a",
+          "[S]",
+          "\"C: \\\\ windows \\\\ rundll23.exe\""
+        ],
+        [
+          "0x402686",
+          "[C]",
+          "lstrcpyA"
+        ],
+        [
+          "0x4026b2",
+          "[C]",
+          "GetModuleFileNameA"
+        ],
+        [
+          "0x4026ba",
+          "[S]",
+          "C: \\\\ Windows \\\\ rundll23.exe"
+        ],
+        [
+          "0x4026d4",
+          "[S]",
+          "C: \\\\ Windows \\\\ rundll23.exe"
+        ],
+        [
+          "0x4026e0",
+          "[C]",
+          "CopyFileA"
+        ],
+        [
+          "0x4026f4",
+          "[S]",
+          "SOFTWARE \\\\ Microsoft \\\\ Windows \\\\ CurrentVersion \\\\ Run"
+        ],
+        [
+          "0x4026fe",
+          "[C]",
+          "RegOpenKeyExA"
+        ],
+        [
+          "0x402720",
+          "[S]",
+          "Windows Network Services"
+        ],
+        [
+          "0x40272c",
+          "[C]",
+          "RegSetValueExA"
+        ],
+        [
+          "0x402744",
+          "[C]",
+          "WSAStartup"
+        ],
+        [
+          "0x4029b5",
+          "[C]",
+          "GetTickCount"
+        ],
+        [
+          "0x4029cf",
+          "[S]",
+          "%c%d"
+        ],
+        [
+          "0x4029ff",
+          "[S]",
+          "irc.rizon.net"
+        ],
+        [
+          "0x402a22",
+          "[C]",
+          "Sleep"
+        ],
+        [
+          "0x402a42",
+          "[S]",
+          "/join #scbot"
+        ],
+        [
+          "0x402a77",
+          "[C]",
+          "Sleep"
+        ]
+      ],
+      "stringcount": 8,
+      "id": "0x402670",
+      "calltype": "cdecl",
+      "size": 1050,
+      "apicallcount": 9
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4034c0",
+      "calltype": "cdecl",
+      "size": 56,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4031c0",
+      "calltype": "cdecl",
+      "size": 134,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.1593625498007968,
+      "content": [
+        [
+          "0x406412",
+          "[C]",
+          "VirtualAlloc"
+        ]
+      ],
+      "stringcount": 0,
+      "id": "0x4063c1",
+      "calltype": "cdecl",
+      "size": 251,
+      "apicallcount": 1
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x4034f8",
+      "calltype": "cdecl",
+      "size": 139,
+      "apicallcount": 0
+    },
+    {
+      "functiontype": "",
+      "mnemonicism": 0.0,
+      "content": [],
+      "stringcount": 0,
+      "id": "0x403490",
+      "calltype": "cdecl",
+      "size": 47,
+      "apicallcount": 0
+    }
+  ],
+  "directed": true,
+  "multigraph": false,
+  "graph": {}
+}
